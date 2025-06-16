@@ -30,7 +30,7 @@ const Home: React.FC = () => {
       <AppBar position="fixed" sx={{ background: 'rgba(10, 10, 10, 0.9)', backdropFilter: 'blur(10px)' }}>
         <Toolbar>
           <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-            <img src="/hearth-website/logo.png" alt="Hearth Engine" style={{ height: 40, marginRight: 12 }} />
+            <img src={`/hearth-website/logo.png?v=${Date.now()}`} alt="Hearth Engine" style={{ height: 40, marginRight: 12, backgroundColor: 'transparent' }} />
             <Typography variant="h6" sx={{ fontWeight: 700 }}>
               Hearth Engine
             </Typography>
