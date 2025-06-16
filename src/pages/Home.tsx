@@ -29,9 +29,12 @@ const Home: React.FC = () => {
       {/* Navigation */}
       <AppBar position="fixed" sx={{ background: 'rgba(10, 10, 10, 0.9)', backdropFilter: 'blur(10px)' }}>
         <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 700 }}>
-            Hearth Engine
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+            <img src="/hearth-website/logo.png" alt="Hearth Engine" style={{ height: 40, marginRight: 12 }} />
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              Hearth Engine
+            </Typography>
+          </Box>
           <Button color="inherit" component={Link} to="/docs" startIcon={<MenuBook />}>
             Docs
           </Button>
@@ -60,7 +63,7 @@ const Home: React.FC = () => {
               <Typography
                 variant="h1"
                 sx={{
-                  background: 'linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)',
+                  background: 'linear-gradient(135deg, #ff4500 0%, #ff6b35 100%)',
                   backgroundClip: 'text',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
@@ -113,17 +116,38 @@ const Home: React.FC = () => {
                   sx={{
                     width: '100%',
                     height: 400,
-                    background: 'url(/demo-placeholder.jpg) center/cover',
+                    background: '#111',
                     borderRadius: 1,
                     display: 'flex',
-                    alignItems: 'flex-end',
-                    justifyContent: 'space-around',
-                    p: 2,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    position: 'relative',
+                    overflow: 'hidden',
                   }}
                 >
-                  <Chip label="60+ FPS" color="primary" />
-                  <Chip label="1M+ Voxels" color="primary" />
-                  <Chip label="Real Physics" color="primary" />
+                  <img 
+                    src="/hearth-website/logo.png" 
+                    alt="Hearth Engine Logo" 
+                    style={{ 
+                      width: 200, 
+                      height: 200, 
+                      objectFit: 'contain',
+                      filter: 'drop-shadow(0 0 40px #ff4500)',
+                    }} 
+                  />
+                  <Box sx={{ 
+                    position: 'absolute', 
+                    bottom: 16, 
+                    display: 'flex', 
+                    gap: 2,
+                    width: '100%',
+                    justifyContent: 'center',
+                  }}>
+                    <Chip label="60+ FPS" color="primary" />
+                    <Chip label="1M+ Voxels" color="primary" />
+                    <Chip label="Real Physics" color="primary" />
+                  </Box>
                 </Box>
               </Paper>
             </Grid>

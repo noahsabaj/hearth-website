@@ -1,6 +1,10 @@
-# Hearth Engine Website
+<div align="center">
+  <img src="public/logo.png" alt="Hearth Engine Logo" width="150"/>
+  
+  # Hearth Engine Website
 
-Official website for the Hearth Engine, built with React and Material-UI.
+  Official website for the Hearth Engine, built with React and Material-UI.
+</div>
 
 ## Development
 

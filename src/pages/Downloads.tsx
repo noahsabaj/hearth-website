@@ -77,9 +77,12 @@ const Downloads: React.FC = () => {
       {/* Navigation */}
       <AppBar position="fixed" sx={{ background: 'rgba(10, 10, 10, 0.9)', backdropFilter: 'blur(10px)' }}>
         <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 700 }}>
-            Hearth Engine
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+            <img src="/hearth-website/logo.png" alt="Hearth Engine" style={{ height: 40, marginRight: 12 }} />
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              Hearth Engine
+            </Typography>
+          </Box>
           <Button color="inherit" component={Link} to="/" startIcon={<Home />}>
             Home
           </Button>
