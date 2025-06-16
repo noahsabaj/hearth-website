@@ -23,6 +23,7 @@ const Documentation: React.FC = () => {
     { title: 'Installation', id: 'installation' },
     { title: 'Basic Usage', id: 'basic-usage' },
     { title: 'Core Concepts', id: 'core-concepts' },
+    { title: 'Cargo Commands', id: 'cargo-commands' },
     { title: 'API Reference', id: 'api-reference' },
   ];
 
@@ -182,6 +183,167 @@ world.simulate_physics(dt);`}
                 <Typography variant="body1" paragraph>
                   Computations are performed on the GPU whenever possible, allowing for massive
                   parallelization and scale.
+                </Typography>
+              </Box>
+
+              <Divider sx={{ my: 4 }} />
+
+              <Box id="cargo-commands" sx={{ mb: 6 }}>
+                <Typography variant="h3" gutterBottom>
+                  Cargo Commands Reference
+                </Typography>
+                <Typography variant="body1" paragraph>
+                  Cargo is Rust's build system and package manager. Here's a comprehensive guide
+                  to Cargo commands you'll use when developing with Hearth Engine.
+                </Typography>
+
+                <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
+                  Essential Daily Commands
+                </Typography>
+                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
+                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+{`cargo check      # Quick syntax/type check (no compilation)
+cargo build      # Compile in debug mode
+cargo run        # Build and run the default binary
+cargo test       # Run all tests
+cargo clippy     # Run linter for code quality
+cargo fmt        # Auto-format code`}
+                  </Typography>
+                </Paper>
+
+                <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
+                  Build & Run Commands
+                </Typography>
+                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
+                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+{`# Building
+cargo build              # Debug build (fast compile, slow runtime)
+cargo build --release    # Release build (slow compile, fast runtime)
+cargo clean              # Remove build artifacts
+
+# Running
+cargo run                      # Run default binary
+cargo run --bin <name>         # Run specific binary
+cargo run --example <name>     # Run example
+cargo run -- <args>            # Pass arguments to program
+cargo run --release            # Run optimized version`}
+                  </Typography>
+                </Paper>
+
+                <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
+                  Testing & Debugging
+                </Typography>
+                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
+                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+{`# Testing
+cargo test                     # Run all tests
+cargo test <pattern>           # Run tests matching pattern
+cargo test -- --nocapture      # Show println! output
+cargo test --release           # Test in release mode
+cargo bench                    # Run benchmarks
+
+# Debugging & Inspection
+cargo check              # Fast syntax check
+cargo clippy             # Advanced linting
+cargo fmt                # Format code
+cargo tree               # Show dependency tree
+cargo audit              # Security vulnerability check
+cargo outdated           # Check for updates`}
+                  </Typography>
+                </Paper>
+
+                <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
+                  Package Management
+                </Typography>
+                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
+                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+{`# Dependencies
+cargo add <crate>              # Add dependency
+cargo add <crate>@<version>    # Add specific version
+cargo add <crate> --features "feat1,feat2"
+cargo remove <crate>           # Remove dependency
+cargo update                   # Update all dependencies
+cargo search <term>            # Search crates.io
+
+# Documentation
+cargo doc                # Generate docs
+cargo doc --open         # Generate and open docs`}
+                  </Typography>
+                </Paper>
+
+                <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
+                  Performance Analysis
+                </Typography>
+                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
+                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+{`# Profiling (requires additional tools)
+cargo flamegraph         # CPU profiling visualization
+cargo bloat              # Analyze binary size
+cargo asm <function>     # Show assembly code
+
+# Development workflow
+cargo watch -x check     # Auto-check on file changes
+cargo watch -x test      # Auto-test on file changes
+cargo watch -x run       # Auto-run on file changes`}
+                  </Typography>
+                </Paper>
+
+                <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
+                  Hearth Engine Specific Workflow
+                </Typography>
+                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
+                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+{`# Quick development cycle
+cargo check && cargo clippy && cargo test
+
+# Performance testing
+cargo build --release && cargo run --release
+
+# Before committing
+cargo fmt && cargo clippy && cargo test
+
+# Build with specific features
+cargo build --features "vulkan"
+cargo build --features "debug-ui,profiler"`}
+                  </Typography>
+                </Paper>
+
+                <Typography variant="h5" gutterBottom sx={{ mt: 3 }}>
+                  Pro Tips
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemText 
+                      primary="Use cargo check frequently" 
+                      secondary="It's 10x faster than cargo build for catching errors"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText 
+                      primary="Run cargo clippy before commits" 
+                      secondary="Catches common mistakes and suggests improvements"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText 
+                      primary="Use --release for performance testing" 
+                      secondary="Debug builds can be 100x slower than release builds"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText 
+                      primary="Install cargo-watch" 
+                      secondary="Greatly improves development experience with auto-rebuilds"
+                    />
+                  </ListItem>
+                </List>
+
+                <Typography variant="body1" paragraph sx={{ mt: 3 }}>
+                  For a complete reference guide with advanced commands and troubleshooting, see the{' '}
+                  <Link to="https://github.com/noahsabaj/hearth-engine/blob/main/docs/guides/CARGO_COMMANDS_GUIDE.md">
+                    full Cargo Commands Guide
+                  </Link>{' '}
+                  in the engine documentation.
                 </Typography>
               </Box>
 
