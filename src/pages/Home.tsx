@@ -107,7 +107,7 @@ const Home: React.FC = () => {
                 sx={{
                   p: 2,
                   borderRadius: 2,
-                  background: '#111',
+                  background: 'rgba(17, 17, 17, 0.8)',
                   position: 'relative',
                   overflow: 'hidden',
                 }}
@@ -116,7 +116,7 @@ const Home: React.FC = () => {
                   sx={{
                     width: '100%',
                     height: 400,
-                    background: '#111',
+                    background: 'transparent',
                     borderRadius: 1,
                     display: 'flex',
                     flexDirection: 'column',
@@ -127,13 +127,14 @@ const Home: React.FC = () => {
                   }}
                 >
                   <img 
-                    src="/hearth-website/logo.png" 
+                    src={`/hearth-website/logo.png?v=${Date.now()}`} 
                     alt="Hearth Engine Logo" 
                     style={{ 
                       width: 200, 
                       height: 200, 
                       objectFit: 'contain',
                       filter: 'drop-shadow(0 0 40px #ff4500)',
+                      backgroundColor: 'transparent',
                     }} 
                   />
                   <Box sx={{ 
