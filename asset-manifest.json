@@ -1,9 +1,9 @@
 {
   "files": {
     "main.css": "/hearth-website/static/css/main.776d0f75.css",
-    "main.js": "/hearth-website/static/js/main.c4941cf8.js",
+    "main.js": "/hearth-website/static/js/main.05b9bdd1.js",
     "static/js/210.80cf2fbd.chunk.js": "/hearth-website/static/js/210.80cf2fbd.chunk.js",
-    "static/js/478.3b2c8f93.chunk.js": "/hearth-website/static/js/478.3b2c8f93.chunk.js",
+    "static/js/478.aa540113.chunk.js": "/hearth-website/static/js/478.aa540113.chunk.js",
     "static/js/563.460e03c9.chunk.js": "/hearth-website/static/js/563.460e03c9.chunk.js",
     "static/js/844.23edd117.chunk.js": "/hearth-website/static/js/844.23edd117.chunk.js",
     "static/js/760.08a5df31.chunk.js": "/hearth-website/static/js/760.08a5df31.chunk.js",
@@ -18,6 +18,6 @@
   },
   "entrypoints": [
     "static/css/main.776d0f75.css",
-    "static/js/main.c4941cf8.js"
+    "static/js/main.05b9bdd1.js"
   ]
 }
