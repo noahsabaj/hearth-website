@@ -1,6 +1,6 @@
-import React from 'react';
-import { Chip } from '@mui/material';
 import { AccessTime } from '@mui/icons-material';
+import { Chip } from '@mui/material';
+import React, { memo, useMemo } from 'react';
 
 interface ReadingTimeProps {
   text: string;
@@ -15,15 +15,17 @@ const calculateReadingTime = (text: string): number => {
   return Math.max(1, readingTime); // Minimum 1 minute
 };
 
-const ReadingTime: React.FC<ReadingTimeProps> = ({ text, className }) => {
-  const readingTime = calculateReadingTime(text);
+const ReadingTime: React.FC<ReadingTimeProps> = memo(({ text, className }) => {
+  const readingTime = useMemo(() => calculateReadingTime(text), [text]);
 
   return (
     <Chip
-      icon={<AccessTime />}
+      icon={<AccessTime aria-hidden='true' />}
       label={`${readingTime} min read`}
-      size="small"
-      className={className}
+      size='small'
+      {...(className && { className })}
+      aria-label={`Estimated reading time: ${readingTime} minute${readingTime > 1 ? 's' : ''}`}
+      role='img'
       sx={{
         backgroundColor: 'rgba(255, 69, 0, 0.1)',
         color: '#ff4500',
@@ -40,9 +42,15 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({ text, className }) => {
           transform: 'translateY(-1px)',
           boxShadow: '0 2px 8px rgba(255, 69, 0, 0.2)',
         },
+        '&:focus': {
+          outline: '2px solid #ff4500',
+          outlineOffset: '2px',
+        },
       }}
     />
   );
-};
+});
+
+ReadingTime.displayName = 'ReadingTime';
 
 export default ReadingTime;

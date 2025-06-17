@@ -1,0 +1,21 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-vscode.vscode-typescript-next",
+    "bradlc.vscode-tailwindcss",
+    "christian-kohler.path-intellisense",
+    "formulahendry.auto-rename-tag",
+    "ms-vscode.vscode-json",
+    "ms-vscode.vscode-css-peek",
+    "zignd.html-css-class-completion",
+    "ms-vscode.vscode-jest",
+    "usernamehw.errorlens",
+    "gruntfuggly.todo-tree",
+    "mikestead.dotenv",
+    "ms-vscode.vscode-typescript-tslint-plugin"
+  ],
+  "unwantedRecommendations": [
+    "ms-vscode.vscode-typescript-tslint-plugin"
+  ]
+}

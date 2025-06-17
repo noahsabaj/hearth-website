@@ -1,0 +1,176 @@
+name: 📚 Documentation
+description: Report an issue with documentation or suggest improvements
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve our documentation! Please fill out this form to report issues or suggest improvements.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please confirm you have completed these steps before submitting
+      options:
+        - label: I have searched existing issues to ensure this is not a duplicate
+          required: true
+        - label: I have read the current documentation
+          required: true
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation is this about?
+      options:
+        - README.md
+        - CONTRIBUTING.md
+        - Code Comments/JSDoc
+        - Website Content
+        - Setup Instructions
+        - Component Documentation
+        - API Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      description: What type of documentation issue is this?
+      options:
+        - Missing Information
+        - Incorrect Information
+        - Outdated Information
+        - Unclear/Confusing Content
+        - Typo/Grammar Error
+        - Broken Link
+        - Suggestion for Improvement
+        - New Documentation Needed
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Location
+      description: Where is the documentation issue located?
+      placeholder: |
+        Please provide:
+        - File name (e.g., README.md, src/components/Button.tsx)
+        - Section or line number (if applicable)
+        - URL (if it's on the website)
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-content
+    attributes:
+      label: Current Content
+      description: What does the current documentation say? (if applicable)
+      placeholder: Copy the current text that has issues...
+
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: Issue Description
+      description: Describe the problem with the current documentation
+      placeholder: |
+        Clearly explain:
+        - What is wrong or missing
+        - Why it's confusing or problematic
+        - How it affects users/developers
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested-improvement
+    attributes:
+      label: Suggested Improvement
+      description: How should the documentation be improved?
+      placeholder: |
+        Provide:
+        - Suggested new content
+        - Better explanation
+        - Additional information needed
+        - Structural improvements
+    validations:
+      required: true
+
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Target Audience
+      description: Who would benefit from this documentation improvement?
+      options:
+        - New Users/Beginners
+        - Experienced Developers
+        - Contributors
+        - All Users
+        - Specific User Group
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-impact
+    attributes:
+      label: User Impact
+      description: How does this documentation issue affect users?
+      placeholder: |
+        Describe the impact:
+        - Prevents users from getting started
+        - Causes confusion during development
+        - Leads to incorrect implementation
+        - Makes contribution difficult
+        - Other impacts...
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this documentation fix?
+      options:
+        - Low - Minor improvement
+        - Medium - Noticeable improvement
+        - High - Important for user experience
+        - Critical - Blocks users from completing tasks
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples or References
+      description: Any examples or references that might help?
+      placeholder: |
+        - Links to good documentation examples
+        - Code examples that should be included
+        - Screenshots of confusing parts
+        - References to related documentation
+
+  - type: checkboxes
+    id: help-offer
+    attributes:
+      label: Contribution Offer
+      description: Can you help improve this documentation?
+      options:
+        - label: I can write the improved documentation
+        - label: I can help review proposed changes
+        - label: I can provide additional examples
+        - label: I can test the updated documentation
+        - label: I prefer to just report the issue
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other information that might be helpful
+      placeholder: |
+        - Context about when you encountered this issue
+        - Your experience level with the project
+        - Any workarounds you found
+        - Related issues or discussions

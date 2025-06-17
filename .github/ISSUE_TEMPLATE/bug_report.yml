@@ -1,0 +1,177 @@
+name: 🐛 Bug Report
+description: Create a report to help us improve the Hearth Engine Website
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug! Please fill out this form to help us understand and fix the issue.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please confirm you have completed these steps before submitting
+      options:
+        - label: I have searched existing issues to ensure this is not a duplicate
+          required: true
+        - label: I have updated to the latest version and the issue still exists
+          required: true
+        - label: I have read the Contributing Guidelines
+          required: true
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is
+      placeholder: Describe the bug in detail...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Clear steps to reproduce the issue
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen
+      placeholder: A clear description of what you expected to happen...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happened
+      placeholder: A clear description of what actually happened...
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain your problem
+      placeholder: Drag and drop images here or paste image URLs...
+
+  - type: dropdown
+    id: environment-os
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      options:
+        - Windows
+        - macOS
+        - Linux (Ubuntu)
+        - Linux (Other)
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment-browser
+    attributes:
+      label: Browser
+      description: What browser are you using?
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: environment-browser-version
+    attributes:
+      label: Browser Version
+      description: What version of the browser are you using?
+      placeholder: e.g., 120.0.6099.109
+    validations:
+      required: true
+
+  - type: input
+    id: environment-node
+    attributes:
+      label: Node.js Version
+      description: What version of Node.js are you using? (if applicable)
+      placeholder: e.g., 18.17.0
+
+  - type: input
+    id: environment-npm
+    attributes:
+      label: npm Version
+      description: What version of npm are you using? (if applicable)
+      placeholder: e.g., 9.6.7
+
+  - type: dropdown
+    id: device-type
+    attributes:
+      label: Device Type
+      description: What type of device are you using?
+      options:
+        - Desktop
+        - Mobile
+        - Tablet
+    validations:
+      required: true
+
+  - type: input
+    id: viewport-size
+    attributes:
+      label: Viewport Size
+      description: What is your browser viewport size? (if relevant)
+      placeholder: e.g., 1920x1080
+
+  - type: textarea
+    id: console-errors
+    attributes:
+      label: Console Errors
+      description: Any errors shown in the browser console?
+      placeholder: |
+        Please open browser dev tools (F12) and paste any error messages from the Console tab.
+        If no errors, write "No console errors"
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context about the problem
+      placeholder: Add any other context about the problem here...
+
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Impact Level
+      description: How severe is this bug?
+      options:
+        - label: Critical - Site is completely unusable
+        - label: High - Major functionality is broken
+        - label: Medium - Some features don't work as expected
+        - label: Low - Minor visual or usability issue
+
+  - type: checkboxes
+    id: contributing
+    attributes:
+      label: Contributing
+      description: Would you like to help fix this issue?
+      options:
+        - label: I would like to work on fixing this bug
+        - label: I need guidance on how to fix this
+        - label: I can provide additional testing

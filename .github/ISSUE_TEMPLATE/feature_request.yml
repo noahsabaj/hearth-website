@@ -1,0 +1,193 @@
+name: ✨ Feature Request
+description: Suggest an idea for the Hearth Engine Website
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a new feature! Please fill out this form to help us understand your idea.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please confirm you have completed these steps before submitting
+      options:
+        - label: I have searched existing issues to ensure this is not a duplicate
+          required: true
+        - label: I have checked the project roadmap and this feature is not already planned
+          required: true
+        - label: I have read the Contributing Guidelines
+          required: true
+
+  - type: textarea
+    id: problem-description
+    attributes:
+      label: Problem Description
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like
+      placeholder: A clear and concise description of what you want to happen...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternative-solutions
+    attributes:
+      label: Alternative Solutions
+      description: Describe alternatives you've considered
+      placeholder: A clear and concise description of any alternative solutions or features you've considered...
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: Feature Type
+      description: What type of feature is this?
+      options:
+        - UI/UX Improvement
+        - New Page/Section
+        - Component Enhancement
+        - Performance Optimization
+        - Accessibility Improvement
+        - Developer Experience
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How important is this feature to you?
+      options:
+        - Low - Nice to have
+        - Medium - Would improve user experience
+        - High - Important for project success
+        - Critical - Essential for project goals
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: target-audience
+    attributes:
+      label: Target Audience
+      description: Who would benefit from this feature? (Select all that apply)
+      options:
+        - label: End users visiting the website
+        - label: Developers working on the project
+        - label: Content creators/maintainers
+        - label: Mobile users
+        - label: Desktop users
+        - label: Users with accessibility needs
+        - label: Search engines/SEO
+
+  - type: textarea
+    id: user-stories
+    attributes:
+      label: User Stories
+      description: Describe how users would interact with this feature
+      placeholder: |
+        As a [type of user], I want [feature] so that [benefit].
+        
+        Example:
+        - As a visitor, I want to search documentation so that I can quickly find relevant information.
+        - As a developer, I want code examples to be copyable so that I can easily implement features.
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What specific requirements must be met for this feature to be considered complete?
+      placeholder: |
+        - [ ] Feature works on desktop browsers
+        - [ ] Feature works on mobile devices
+        - [ ] Feature is accessible (WCAG compliant)
+        - [ ] Feature has appropriate tests
+        - [ ] Feature is documented
+
+  - type: textarea
+    id: mockups-wireframes
+    attributes:
+      label: Mockups/Wireframes
+      description: If you have visual ideas, please share them
+      placeholder: |
+        Attach images, links to designs, or describe the visual layout you envision.
+        You can drag and drop images here or paste URLs.
+
+  - type: textarea
+    id: technical-considerations
+    attributes:
+      label: Technical Considerations
+      description: Any technical aspects to consider?
+      placeholder: |
+        - Dependencies that might be needed
+        - Performance implications
+        - Compatibility requirements
+        - Integration with existing features
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Estimated Complexity
+      description: How complex do you think this feature would be to implement?
+      options:
+        - Simple - Small change or addition
+        - Moderate - Requires some new code/components
+        - Complex - Significant development effort
+        - Major - Large-scale feature requiring substantial work
+        - Unknown - Not sure about complexity
+
+  - type: checkboxes
+    id: implementation-help
+    attributes:
+      label: Implementation Help
+      description: Are you willing to help implement this feature?
+      options:
+        - label: I can implement this feature myself
+        - label: I can help with implementation if guided
+        - label: I can help with testing and feedback
+        - label: I can help with documentation
+        - label: I can provide design assets
+        - label: I prefer to just suggest the idea
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context, examples, or references
+      placeholder: |
+        - Links to similar features on other sites
+        - References to design systems or patterns
+        - Any additional information that might be helpful
+
+  - type: checkboxes
+    id: breaking-changes
+    attributes:
+      label: Breaking Changes
+      description: Would this feature potentially introduce breaking changes?
+      options:
+        - label: This feature might require breaking changes
+        - label: This feature should be backward compatible
+        - label: Not sure about breaking changes
+
+  - type: textarea
+    id: success-metrics
+    attributes:
+      label: Success Metrics
+      description: How would you measure the success of this feature?
+      placeholder: |
+        How would we know this feature is working well?
+        - User engagement metrics
+        - Performance improvements
+        - Accessibility compliance
+        - Developer experience improvements

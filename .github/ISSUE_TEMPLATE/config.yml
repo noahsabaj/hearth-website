@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Questions & Discussions
+    url: https://github.com/noahsabaj/hearth-engine/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: 🎮 Main Hearth Engine Repository
+    url: https://github.com/noahsabaj/hearth-engine
+    about: Issues related to the Hearth Engine itself (not the website)
+  - name: 💬 Discord Community
+    url: https://discord.gg/hearth
+    about: Join our Discord server for real-time chat and support
+  - name: 📖 Documentation
+    url: https://noahsabaj.github.io/hearth-website/#/docs
+    about: Check our documentation before reporting issues

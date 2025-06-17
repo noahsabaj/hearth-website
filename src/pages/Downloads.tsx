@@ -1,4 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import {
+  GitHub,
+  Home,
+  MenuBook,
+  Download,
+  Computer,
+  Apple,
+  Window,
+  Refresh,
+  Warning,
+} from '@mui/icons-material';
 import {
   Box,
   Container,
@@ -12,51 +22,119 @@ import {
   Toolbar,
   IconButton,
   Chip,
-  CircularProgress,
   Alert,
   Grid,
 } from '@mui/material';
-import {
-  GitHub,
-  Home,
-  MenuBook,
-  Download,
-  Computer,
-  Apple,
-  Window,
-} from '@mui/icons-material';
+import React, { useState, useEffect, memo } from 'react';
 import { Link } from 'react-router-dom';
-import ReadingTime from '../components/ReadingTime';
 
+import ReadingTime from '../components/ReadingTime';
+import SkeletonLoader from '../components/SkeletonLoader';
+
+/**
+ * Interface for GitHub release data
+ */
 interface Release {
+  /** Git tag name for the release */
   tag_name: string;
+  /** Human-readable release name */
   name: string;
+  /** ISO date string when release was published */
   published_at: string;
+  /** Release notes/description in markdown */
   body: string;
+  /** Array of downloadable assets */
   assets: {
+    /** Asset filename */
     name: string;
+    /** Direct download URL */
     browser_download_url: string;
+    /** File size in bytes */
     size: number;
   }[];
 }
 
-const Downloads: React.FC = () => {
+/**
+ * Downloads page component - Displays latest Hearth Engine releases
+ *
+ * Features:
+ * - Fetches release data from GitHub API
+ * - Platform-specific download detection
+ * - Error handling with retry functionality
+ * - Loading states and skeleton placeholders
+ * - Formatted release notes and file sizes
+ * - Responsive grid layout
+ *
+ * @returns Downloads page with release listings and download links
+ */
+const Downloads: React.FC = memo(() => {
   const [releases, setReleases] = useState<Release[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+
+  const fetchReleases = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Add timeout for better error handling
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+      const response = await fetch(
+        'https://api.github.com/repos/noahsabaj/hearth-engine/releases',
+        {
+          signal: controller.signal,
+          headers: {
+            Accept: 'application/vnd.github.v3+json',
+          },
+        }
+      );
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!Array.isArray(data)) {
+        throw new Error('Invalid response format');
+      }
+
+      setReleases(data.slice(0, 3)); // Show only latest 3 releases
+      setRetryCount(0);
+    } catch (err) {
+      console.error('Failed to fetch releases:', err);
+      let errorMessage = 'Failed to fetch releases';
+
+      if (err instanceof Error) {
+        if (err.name === 'AbortError') {
+          errorMessage = 'Request timed out. Please check your connection and try again.';
+        } else if (err.message.includes('HTTP error')) {
+          errorMessage = `GitHub API error: ${err.message}`;
+        } else if (err.message.includes('Failed to fetch')) {
+          errorMessage = 'Network error. Please check your internet connection.';
+        } else {
+          errorMessage = err.message;
+        }
+      }
+
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRetry = () => {
+    setRetryCount(prev => prev + 1);
+    fetchReleases();
+  };
 
   useEffect(() => {
-    // Fetch releases from GitHub API
-    fetch('https://api.github.com/repos/noahsabaj/hearth-engine/releases')
-      .then((res) => res.json())
-      .then((data) => {
-        setReleases(data.slice(0, 3)); // Show only latest 3 releases
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError('Failed to fetch releases');
-        setLoading(false);
-      });
+    fetchReleases();
   }, []);
 
   const formatBytes = (bytes: number) => {
@@ -64,7 +142,7 @@ const Downloads: React.FC = () => {
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
   };
 
   const getOSIcon = (filename: string) => {
@@ -74,60 +152,92 @@ const Downloads: React.FC = () => {
   };
 
   return (
-    <Box>
+    <Box component='main' role='main'>
       {/* Navigation */}
-      <AppBar position="fixed" sx={{ background: 'rgba(10, 10, 10, 0.9)', backdropFilter: 'blur(10px)' }}>
+      <AppBar
+        position='fixed'
+        sx={{ background: 'rgba(10, 10, 10, 0.9)', backdropFilter: 'blur(10px)' }}
+        component='nav'
+        role='navigation'
+        aria-label='Main navigation'
+      >
         <Toolbar>
           <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-            <img src={`/hearth-website/logo.png?v=${Date.now()}`} alt="Hearth Engine" style={{ height: 40, marginRight: 12, backgroundColor: 'transparent' }} />
-            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+            <img
+              src={`/hearth-website/logo.png?v=${Date.now()}`}
+              alt='Hearth Engine - Next-generation voxel game engine logo'
+              style={{ height: 40, marginRight: 12, backgroundColor: 'transparent' }}
+            />
+            <Typography variant='h6' sx={{ fontWeight: 700 }} component='div'>
               Hearth Engine
             </Typography>
           </Box>
-          <Button color="inherit" component={Link} to="/" startIcon={<Home />}>
-            Home
-          </Button>
-          <Button color="inherit" component={Link} to="/docs" startIcon={<MenuBook />}>
-            Docs
-          </Button>
-          <IconButton color="inherit" href="https://github.com/noahsabaj/hearth-engine" target="_blank">
-            <GitHub />
-          </IconButton>
+          <Box component='nav' role='navigation' aria-label='Page navigation'>
+            <Button
+              color='inherit'
+              component={Link}
+              to='/'
+              startIcon={<Home aria-hidden='true' />}
+              aria-label='Go to home page'
+            >
+              Home
+            </Button>
+            <Button
+              color='inherit'
+              component={Link}
+              to='/docs'
+              startIcon={<MenuBook aria-hidden='true' />}
+              aria-label='Go to documentation'
+            >
+              Docs
+            </Button>
+            <IconButton
+              color='inherit'
+              href='https://github.com/noahsabaj/hearth-engine'
+              target='_blank'
+              rel='noopener noreferrer'
+              aria-label='View Hearth Engine on GitHub (opens in new tab)'
+            >
+              <GitHub />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="lg" sx={{ mt: 10, pb: 6 }}>
-        <Typography variant="h2" gutterBottom>
+      <Container maxWidth='lg' sx={{ mt: 10, pb: 6 }}>
+        <Typography variant='h1' gutterBottom component='h1' id='main-content'>
           Downloads
         </Typography>
-        <Typography variant="body1" color="text.secondary" paragraph>
-          Download the latest version of Hearth Engine for your platform. All releases include
-          the core engine, examples, and documentation.
+        <Typography variant='body1' color='text.secondary' paragraph>
+          Download the latest version of Hearth Engine for your platform. All releases include the
+          core engine, examples, and documentation.
         </Typography>
 
         {/* Quick Download Section */}
-        <Paper sx={{ p: 4, mb: 6, background: 'linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%)' }}>
-          <Typography variant="h4" gutterBottom>
+        <Paper
+          sx={{ p: 4, mb: 6, background: 'linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%)' }}
+        >
+          <Typography variant='h4' gutterBottom component='h2' id='quick-install-heading'>
             Quick Install
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant='h6' gutterBottom component='h3'>
                 Using Cargo (Recommended)
               </Typography>
               <Paper sx={{ p: 2, bgcolor: '#0a0a0a' }}>
-                <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+                <Typography variant='body2' component='pre' sx={{ fontFamily: 'monospace' }}>
                   cargo install hearth-engine
                 </Typography>
               </Paper>
             </Grid>
             <Grid item xs={12} md={6}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant='h6' gutterBottom component='h3'>
                 From Source
               </Typography>
               <Paper sx={{ p: 2, bgcolor: '#0a0a0a' }}>
-                <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
-{`git clone https://github.com/noahsabaj/hearth-engine
+                <Typography variant='body2' component='pre' sx={{ fontFamily: 'monospace' }}>
+                  {`git clone https://github.com/noahsabaj/hearth-engine
 cd hearth-engine
 cargo build --release`}
                 </Typography>
@@ -137,74 +247,113 @@ cargo build --release`}
         </Paper>
 
         {/* Releases Section */}
-        <Typography variant="h4" gutterBottom sx={{ mt: 6, mb: 3 }}>
+        <Typography variant='h4' gutterBottom sx={{ mt: 6, mb: 3 }}>
           Binary Releases
         </Typography>
 
-        {loading && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
-            <CircularProgress />
-          </Box>
+        {error && (
+          <Alert
+            severity='error'
+            sx={{
+              mb: 3,
+              '& .MuiAlert-message': { width: '100%' },
+            }}
+            action={
+              <Button
+                color='inherit'
+                size='small'
+                onClick={handleRetry}
+                startIcon={<Refresh />}
+                disabled={loading}
+                sx={{ whiteSpace: 'nowrap' }}
+              >
+                {retryCount > 0 ? `Retry (${retryCount})` : 'Retry'}
+              </Button>
+            }
+            icon={<Warning />}
+          >
+            <Box>
+              <Typography variant='subtitle2' sx={{ fontWeight: 600, mb: 1 }}>
+                Unable to load releases
+              </Typography>
+              <Typography variant='body2'>{error}</Typography>
+              {retryCount > 2 && (
+                <Typography variant='body2' sx={{ mt: 1, fontStyle: 'italic' }}>
+                  Having trouble? Try refreshing the page or check your internet connection.
+                </Typography>
+              )}
+            </Box>
+          </Alert>
         )}
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 3 }}>
-            {error}
-          </Alert>
+        {loading && (
+          <Box sx={{ mt: 3 }}>
+            <SkeletonLoader variant='release' count={3} animation='wave' />
+          </Box>
         )}
 
         {!loading && !error && releases.length === 0 && (
           <Paper sx={{ p: 4, textAlign: 'center' }}>
-            <Typography variant="body1" color="text.secondary">
+            <Typography variant='body1' color='text.secondary'>
               No releases available yet. Please build from source using the instructions above.
             </Typography>
           </Paper>
         )}
 
         {releases.map((release, index) => (
-          <Card key={release.tag_name} sx={{ 
-            mb: 3, 
-            bgcolor: index === 0 ? '#1a1a1a' : '#0a0a0a',
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            cursor: 'pointer',
-            '&:hover': {
-              transform: 'translateY(-4px)',
-              boxShadow: index === 0 
-                ? '0 16px 32px rgba(255, 69, 0, 0.3)' 
-                : '0 16px 32px rgba(0, 0, 0, 0.5)',
-              bgcolor: index === 0 ? '#2a2a2a' : '#1a1a1a',
-            },
-          }}>
+          <Card
+            key={release.tag_name}
+            sx={{
+              mb: 3,
+              bgcolor: index === 0 ? '#1a1a1a' : '#0a0a0a',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              cursor: 'pointer',
+              '&:hover': {
+                transform: 'translateY(-4px)',
+                boxShadow:
+                  index === 0
+                    ? '0 16px 32px rgba(255, 69, 0, 0.3)'
+                    : '0 16px 32px rgba(0, 0, 0, 0.5)',
+                bgcolor: index === 0 ? '#2a2a2a' : '#1a1a1a',
+              },
+            }}
+          >
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                <Typography variant="h5" sx={{ flexGrow: 1 }}>
+                <Typography variant='h5' sx={{ flexGrow: 1 }}>
                   {release.name || release.tag_name}
                 </Typography>
-                <ReadingTime text={release.body || "Release notes and download information"} />
-                {index === 0 && <Chip label="Latest" color="primary" size="small" />}
+                <ReadingTime text={release.body || 'Release notes and download information'} />
+                {index === 0 && <Chip label='Latest' color='primary' size='small' />}
               </Box>
-              <Typography variant="body2" color="text.secondary" paragraph>
+              <Typography variant='body2' color='text.secondary' paragraph>
                 Released on {new Date(release.published_at).toLocaleDateString()}
               </Typography>
-              <Typography variant="body2" paragraph sx={{ whiteSpace: 'pre-wrap' }}>
+              <Typography variant='body2' paragraph sx={{ whiteSpace: 'pre-wrap' }}>
                 {release.body.split('\n').slice(0, 3).join('\n')}...
               </Typography>
-              
+
               {release.assets.length > 0 && (
                 <Grid container spacing={2} sx={{ mt: 2 }}>
-                  {release.assets.map((asset) => (
+                  {release.assets.map(asset => (
                     <Grid item xs={12} sm={6} md={4} key={asset.name}>
                       <Button
                         fullWidth
-                        variant="outlined"
+                        variant='outlined'
                         startIcon={getOSIcon(asset.name)}
                         endIcon={<Download />}
                         href={asset.browser_download_url}
                         sx={{ justifyContent: 'space-between' }}
                       >
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                          <Typography variant="body2">{asset.name}</Typography>
-                          <Typography variant="caption" color="text.secondary">
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                          }}
+                        >
+                          <Typography variant='body2'>{asset.name}</Typography>
+                          <Typography variant='caption' color='text.secondary'>
                             {formatBytes(asset.size)}
                           </Typography>
                         </Box>
@@ -216,9 +365,9 @@ cargo build --release`}
             </CardContent>
             <CardActions>
               <Button
-                size="small"
+                size='small'
                 href={`https://github.com/noahsabaj/hearth-engine/releases/tag/${release.tag_name}`}
-                target="_blank"
+                target='_blank'
               >
                 View Release Notes
               </Button>
@@ -228,15 +377,15 @@ cargo build --release`}
 
         {/* System Requirements */}
         <Paper sx={{ p: 4, mt: 6 }}>
-          <Typography variant="h4" gutterBottom>
+          <Typography variant='h4' gutterBottom>
             System Requirements
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant='h6' gutterBottom>
                 Minimum
               </Typography>
-              <Typography variant="body2" component="ul">
+              <Typography variant='body2' component='ul'>
                 <li>OS: Windows 10, macOS 10.15, or Linux (Ubuntu 20.04+)</li>
                 <li>Processor: Dual-core 2.5 GHz</li>
                 <li>Memory: 4 GB RAM</li>
@@ -245,10 +394,10 @@ cargo build --release`}
               </Typography>
             </Grid>
             <Grid item xs={12} md={6}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant='h6' gutterBottom>
                 Recommended
               </Typography>
-              <Typography variant="body2" component="ul">
+              <Typography variant='body2' component='ul'>
                 <li>OS: Latest version of Windows, macOS, or Linux</li>
                 <li>Processor: Quad-core 3.5 GHz</li>
                 <li>Memory: 16 GB RAM</li>
@@ -261,6 +410,8 @@ cargo build --release`}
       </Container>
     </Box>
   );
-};
+});
+
+Downloads.displayName = 'Downloads';
 
 export default Downloads;

@@ -1,0 +1,56 @@
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.rulers": [100],
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.suggest.autoImports": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.format.enable": false,
+  "eslint.lintTask.enable": true,
+  "prettier.requireConfig": true,
+  "prettier.useEditorConfig": false,
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/build": true,
+    "**/dist": true,
+    "**/.git": true,
+    "**/coverage": true,
+    "**/*.log": true
+  },
+  "files.associations": {
+    "*.css": "css",
+    "*.scss": "scss"
+  },
+  "emmet.includeLanguages": {
+    "typescript": "typescriptreact",
+    "javascript": "javascriptreact"
+  },
+  "files.autoSave": "onFocusChange",
+  "breadcrumbs.enabled": true,
+  "problems.decorations.enabled": true,
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.revealIfOpen": true
+}

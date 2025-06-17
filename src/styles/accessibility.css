@@ -1,0 +1,250 @@
+/* Accessibility CSS Utilities for Hearth Engine Website */
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Show screen reader content on focus */
+.sr-only-focusable:active,
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Skip links */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #ff4500;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+  font-weight: 600;
+  z-index: 9999;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --primary-color: #ff6b00;
+    --text-color: #ffffff;
+    --background-color: #000000;
+    --border-color: #ffffff;
+  }
+  
+  .MuiButton-root {
+    border: 2px solid currentColor !important;
+  }
+  
+  .MuiCard-root {
+    border: 2px solid rgba(255, 255, 255, 0.5) !important;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Disable all framer-motion animations */
+  .motion-safe {
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
+/* Enhanced focus indicators */
+:focus-visible {
+  outline: 3px solid #ff4500 !important;
+  outline-offset: 2px !important;
+  border-radius: 4px;
+}
+
+/* Remove default focus styles only when :focus-visible is supported */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Improved focus for interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #ff4500;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 1px rgba(255, 69, 0, 0.3);
+}
+
+/* Touch target sizing */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Color blind friendly indicators */
+.status-success::before {
+  content: "✓ ";
+  color: #4caf50;
+}
+
+.status-error::before {
+  content: "✗ ";
+  color: #f44336;
+}
+
+.status-warning::before {
+  content: "⚠ ";
+  color: #ff9800;
+}
+
+.status-info::before {
+  content: "ℹ ";
+  color: #2196f3;
+}
+
+/* Enhanced readability */
+.readable-content {
+  line-height: 1.6;
+  max-width: 70ch;
+  margin: 0 auto;
+}
+
+.readable-content p {
+  margin-bottom: 1em;
+}
+
+/* Dark mode specific accessibility */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+  
+  /* Ensure sufficient contrast for text */
+  body {
+    color: #e0e0e0;
+    background-color: #0a0a0a;
+  }
+  
+  /* Enhance focus visibility in dark mode */
+  :focus-visible {
+    outline-color: #ff6b35;
+    box-shadow: 0 0 0 1px rgba(255, 107, 53, 0.3);
+  }
+}
+
+/* Print accessibility */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+  
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+}
+
+/* Large text preferences */
+@media (min-resolution: 192dpi) {
+  body {
+    font-weight: 400;
+  }
+}
+
+/* Animation control utility classes */
+.respect-motion-preference {
+  animation-duration: 0.5s;
+  transition-duration: 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .respect-motion-preference {
+    animation-duration: 0.01ms;
+    transition-duration: 0.01ms;
+  }
+}
+
+/* ARIA live region styling */
+.live-region {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Keyboard navigation helpers */
+.keyboard-navigation:focus-within {
+  outline: 2px solid #ff4500;
+  outline-offset: 2px;
+}
+
+/* Content grouping for better navigation */
+.content-group {
+  margin-bottom: 2rem;
+}
+
+.content-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Error state accessibility */
+.error-state {
+  border: 2px solid #f44336;
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+.error-state::before {
+  content: "Error: ";
+  font-weight: bold;
+  color: #f44336;
+}
+
+/* Success state accessibility */
+.success-state {
+  border: 2px solid #4caf50;
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.success-state::before {
+  content: "Success: ";
+  font-weight: bold;
+  color: #4caf50;
+}
