@@ -47,14 +47,35 @@ const Documentation: React.FC = () => {
       }));
 
       const headerOffset = 120; // Account for header height + some padding
-      const currentSection = sectionElements.find(({ element }) => {
-        if (!element) return false;
-        const rect = element.getBoundingClientRect();
-        return rect.top <= headerOffset && rect.bottom > headerOffset;
-      });
+      
+      // Check if we're at the bottom of the page
+      const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 10;
+      
+      if (isAtBottom) {
+        // If at bottom, activate the last section
+        setActiveSection(sections[sections.length - 1].id);
+      } else {
+        // Normal detection logic
+        let currentSection = sectionElements.find(({ element }) => {
+          if (!element) return false;
+          const rect = element.getBoundingClientRect();
+          return rect.top <= headerOffset && rect.bottom > headerOffset;
+        });
 
-      if (currentSection) {
-        setActiveSection(currentSection.id);
+        // If no section found with normal logic, find the closest one above the threshold
+        if (!currentSection) {
+          const visibleSections = sectionElements
+            .filter(({ element }) => element && element.getBoundingClientRect().top <= headerOffset)
+            .reverse(); // Get the last one that's above the threshold
+          
+          if (visibleSections.length > 0) {
+            currentSection = visibleSections[0];
+          }
+        }
+
+        if (currentSection) {
+          setActiveSection(currentSection.id);
+        }
       }
     };
 
