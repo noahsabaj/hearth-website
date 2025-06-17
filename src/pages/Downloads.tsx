@@ -1,8 +1,4 @@
 import {
-  GitHub,
-  Home,
-  MenuBook,
-  Download,
   Computer,
   Apple,
   Window,
@@ -18,18 +14,18 @@ import {
   Card,
   CardContent,
   CardActions,
-  AppBar,
-  Toolbar,
-  IconButton,
   Chip,
   Alert,
   Grid,
 } from '@mui/material';
 import React, { useState, useEffect, memo } from 'react';
-import { Link } from 'react-router-dom';
 
+import EditOnGitHub from '../components/EditOnGitHub';
+import NavigationBar from '../components/NavigationBar';
 import ReadingTime from '../components/ReadingTime';
 import SkeletonLoader from '../components/SkeletonLoader';
+import LoadingProgress from '../components/LoadingProgress';
+import DownloadButton from '../components/DownloadButton';
 
 /**
  * Interface for GitHub release data
@@ -72,15 +68,23 @@ const Downloads: React.FC = memo(() => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [loadingMessage, setLoadingMessage] = useState('Connecting to GitHub...');
 
   const fetchReleases = async () => {
     try {
       setLoading(true);
       setError(null);
+      setLoadingProgress(0);
+      setLoadingMessage('Connecting to GitHub...');
 
       // Add timeout for better error handling
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+      // Simulate progress for connection
+      setLoadingProgress(20);
+      setLoadingMessage('Fetching latest releases...');
 
       const response = await fetch(
         'https://api.github.com/repos/noahsabaj/hearth-engine/releases',
@@ -98,7 +102,13 @@ const Downloads: React.FC = memo(() => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      setLoadingProgress(50);
+      setLoadingMessage('Processing release data...');
+
       const data = await response.json();
+      
+      setLoadingProgress(80);
+      setLoadingMessage('Finalizing...');
 
       if (!Array.isArray(data)) {
         throw new Error('Invalid response format');
@@ -106,6 +116,11 @@ const Downloads: React.FC = memo(() => {
 
       setReleases(data.slice(0, 3)); // Show only latest 3 releases
       setRetryCount(0);
+      setLoadingProgress(100);
+      setLoadingMessage('Complete!');
+      
+      // Brief delay to show completion
+      setTimeout(() => setLoading(false), 300);
     } catch (err) {
       console.error('Failed to fetch releases:', err);
       let errorMessage = 'Failed to fetch releases';
@@ -137,13 +152,6 @@ const Downloads: React.FC = memo(() => {
     fetchReleases();
   }, []);
 
-  const formatBytes = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
-  };
 
   const getOSIcon = (filename: string) => {
     if (filename.includes('windows')) return <Window />;
@@ -154,60 +162,16 @@ const Downloads: React.FC = memo(() => {
   return (
     <Box component='main' role='main'>
       {/* Navigation */}
-      <AppBar
-        position='fixed'
-        sx={{ background: 'rgba(10, 10, 10, 0.9)', backdropFilter: 'blur(10px)' }}
-        component='nav'
-        role='navigation'
-        aria-label='Main navigation'
-      >
-        <Toolbar>
-          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-            <img
-              src={`/hearth-website/logo.png?v=${Date.now()}`}
-              alt='Hearth Engine - Next-generation voxel game engine logo'
-              style={{ height: 40, marginRight: 12, backgroundColor: 'transparent' }}
-            />
-            <Typography variant='h6' sx={{ fontWeight: 700 }} component='div'>
-              Hearth Engine
-            </Typography>
-          </Box>
-          <Box component='nav' role='navigation' aria-label='Page navigation'>
-            <Button
-              color='inherit'
-              component={Link}
-              to='/'
-              startIcon={<Home aria-hidden='true' />}
-              aria-label='Go to home page'
-            >
-              Home
-            </Button>
-            <Button
-              color='inherit'
-              component={Link}
-              to='/docs'
-              startIcon={<MenuBook aria-hidden='true' />}
-              aria-label='Go to documentation'
-            >
-              Docs
-            </Button>
-            <IconButton
-              color='inherit'
-              href='https://github.com/noahsabaj/hearth-engine'
-              target='_blank'
-              rel='noopener noreferrer'
-              aria-label='View Hearth Engine on GitHub (opens in new tab)'
-            >
-              <GitHub />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
+      <NavigationBar variant='downloads' />
 
       <Container maxWidth='lg' sx={{ mt: 10, pb: 6 }}>
-        <Typography variant='h1' gutterBottom component='h1' id='main-content'>
-          Downloads
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+          <Typography variant='h1' gutterBottom component='h1' id='main-content' sx={{ mb: 0 }}>
+            Downloads
+          </Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          <EditOnGitHub filePath="src/pages/Downloads.tsx" />
+        </Box>
         <Typography variant='body1' color='text.secondary' paragraph>
           Download the latest version of Hearth Engine for your platform. All releases include the
           core engine, examples, and documentation.
@@ -288,6 +252,26 @@ cargo build --release`}
 
         {loading && (
           <Box sx={{ mt: 3 }}>
+            <LoadingProgress
+              variant='linear'
+              progress={loadingProgress}
+              indeterminate={loadingProgress === 0}
+              showPercentage
+              showTimeRemaining
+              estimatedTime={3}
+              message={loadingMessage}
+              tips={[
+                'Hearth Engine uses Vulkan for high-performance graphics',
+                'Check out our documentation for getting started guides',
+                'Join our community Discord for support and updates',
+                'All releases include example projects to help you begin',
+                'Our engine supports both 2D and 3D voxel games'
+              ]}
+              tipInterval={3000}
+              color='primary'
+              size='medium'
+              sx={{ mb: 4 }}
+            />
             <SkeletonLoader variant='release' count={3} animation='wave' />
           </Box>
         )}
@@ -337,27 +321,15 @@ cargo build --release`}
                 <Grid container spacing={2} sx={{ mt: 2 }}>
                   {release.assets.map(asset => (
                     <Grid item xs={12} sm={6} md={4} key={asset.name}>
-                      <Button
-                        fullWidth
-                        variant='outlined'
-                        startIcon={getOSIcon(asset.name)}
-                        endIcon={<Download />}
-                        href={asset.browser_download_url}
-                        sx={{ justifyContent: 'space-between' }}
-                      >
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'flex-start',
-                          }}
-                        >
-                          <Typography variant='body2'>{asset.name}</Typography>
-                          <Typography variant='caption' color='text.secondary'>
-                            {formatBytes(asset.size)}
-                          </Typography>
-                        </Box>
-                      </Button>
+                      <DownloadButton
+                        url={asset.browser_download_url}
+                        filename={asset.name}
+                        size={asset.size}
+                        icon={getOSIcon(asset.name)}
+                        onDownloadStart={() => console.log(`Downloading ${asset.name}...`)}
+                        onDownloadComplete={() => console.log(`Downloaded ${asset.name} successfully!`)}
+                        onDownloadError={(error) => console.error(`Failed to download ${asset.name}:`, error)}
+                      />
                     </Grid>
                   ))}
                 </Grid>

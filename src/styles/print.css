@@ -1,0 +1,702 @@
+/* Comprehensive Print Stylesheet for Hearth Engine Website
+   ========================================================= */
+
+@media print {
+  /* ==========================================
+     1. BASIC RESET AND SETUP
+     ========================================== */
+  
+  /* Force light background and dark text for readability */
+  * {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  /* Set page margins and basic typography */
+  @page {
+    margin: 2.5cm;
+    size: A4;
+    
+    /* Page header with title */
+    @top-center {
+      content: "Hearth Engine Documentation";
+      font-family: Georgia, serif;
+      font-size: 10pt;
+      color: #666;
+    }
+    
+    /* Page numbers */
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+      font-family: Georgia, serif;
+      font-size: 10pt;
+      color: #666;
+    }
+  }
+  
+  /* Ensure proper page margins for content */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Georgia, 'Times New Roman', serif !important;
+    font-size: 12pt !important;
+    line-height: 1.6 !important;
+    color: #000 !important;
+    background: #fff !important;
+  }
+  
+  /* ==========================================
+     2. HIDE INTERACTIVE AND NON-PRINT ELEMENTS
+     ========================================== */
+  
+  /* Hide navigation, buttons, and interactive controls */
+  .MuiAppBar-root,
+  nav,
+  header nav,
+  aside,
+  .sidebar,
+  .MuiToolbar-root,
+  .MuiIconButton-root,
+  .MuiButton-root,
+  button,
+  .skip-link,
+  #root > a[href="#main-content"],
+  .MuiFab-root,
+  .scroll-to-top,
+  [role="navigation"],
+  .navigation,
+  .nav-menu,
+  .mobile-menu,
+  .search-box,
+  .theme-toggle,
+  .language-selector,
+  video,
+  audio,
+  iframe,
+  .interactive-card,
+  .ripple-button,
+  .page-transition,
+  .skeleton-loader,
+  .loading-spinner,
+  .MuiCircularProgress-root,
+  .social-links,
+  .share-buttons,
+  .comments-section,
+  .chat-widget,
+  .cookie-banner,
+  .newsletter-signup,
+  footer,
+  .action-buttons,
+  .MuiToggleButton-root,
+  .MuiToggleButtonGroup-root {
+    display: none !important;
+  }
+  
+  /* ==========================================
+     3. TYPOGRAPHY OPTIMIZATION
+     ========================================== */
+  
+  /* Headings */
+  h1, h2, h3, h4, h5, h6,
+  .MuiTypography-h1,
+  .MuiTypography-h2,
+  .MuiTypography-h3,
+  .MuiTypography-h4,
+  .MuiTypography-h5,
+  .MuiTypography-h6 {
+    font-family: Georgia, 'Times New Roman', serif !important;
+    color: #000 !important;
+    page-break-after: avoid;
+    page-break-inside: avoid;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-weight: bold !important;
+  }
+  
+  h1, .MuiTypography-h1 {
+    font-size: 24pt !important;
+    border-bottom: 2pt solid #000;
+    padding-bottom: 0.5em;
+  }
+  
+  h2, .MuiTypography-h2 {
+    font-size: 20pt !important;
+    border-bottom: 1pt solid #666;
+    padding-bottom: 0.3em;
+  }
+  
+  h3, .MuiTypography-h3 {
+    font-size: 16pt !important;
+  }
+  
+  h4, .MuiTypography-h4 {
+    font-size: 14pt !important;
+  }
+  
+  h5, .MuiTypography-h5,
+  h6, .MuiTypography-h6 {
+    font-size: 12pt !important;
+  }
+  
+  /* Body text */
+  p, li, td, th,
+  .MuiTypography-body1,
+  .MuiTypography-body2 {
+    font-family: Georgia, 'Times New Roman', serif !important;
+    font-size: 12pt !important;
+    line-height: 1.6 !important;
+    color: #000 !important;
+    orphans: 3;
+    widows: 3;
+  }
+  
+  /* ==========================================
+     4. LINKS OPTIMIZATION
+     ========================================== */
+  
+  /* Show URLs after links */
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+    color: #666;
+    word-wrap: break-word;
+  }
+  
+  /* Don't show URLs for internal anchors or mailto/tel links */
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after,
+  a[href^="mailto:"]:after,
+  a[href^="tel:"]:after {
+    content: "";
+  }
+  
+  /* Style links for print */
+  a, a:visited {
+    color: #000 !important;
+    text-decoration: underline !important;
+    font-weight: bold;
+  }
+  
+  /* ==========================================
+     5. CONTENT LAYOUT
+     ========================================== */
+  
+  /* Main content area */
+  main,
+  .main-content,
+  #main-content,
+  article,
+  .MuiContainer-root {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Remove multi-column layouts */
+  .MuiGrid-root {
+    display: block !important;
+    width: 100% !important;
+  }
+  
+  .MuiGrid-item {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 1em !important;
+  }
+  
+  /* ==========================================
+     6. CODE BLOCKS OPTIMIZATION
+     ========================================== */
+  
+  /* Code blocks */
+  pre, code,
+  .code-block,
+  .MuiPaper-root pre {
+    font-family: 'Courier New', monospace !important;
+    font-size: 10pt !important;
+    background: #f5f5f5 !important;
+    border: 1pt solid #ddd !important;
+    padding: 0.5em !important;
+    margin: 1em 0 !important;
+    page-break-inside: avoid;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+  
+  /* CodeBlock component specific */
+  .MuiPaper-root[role="img"] pre table {
+    width: 100% !important;
+    border-spacing: 0 !important;
+  }
+  
+  /* Show line numbers in print if they were visible */
+  .MuiPaper-root[role="img"] pre td:first-child {
+    color: #666 !important;
+    padding-right: 1em !important;
+    border-right: 1pt solid #ddd !important;
+  }
+  
+  /* Inline code */
+  code:not(pre code) {
+    padding: 0.1em 0.3em !important;
+    background: #f0f0f0 !important;
+    border: 1pt solid #ddd !important;
+    border-radius: 3px !important;
+  }
+  
+  /* Syntax highlighting - convert to grayscale */
+  .token.comment,
+  .token.prolog,
+  .token.doctype,
+  .token.cdata,
+  .comment {
+    color: #666 !important;
+    font-style: italic !important;
+  }
+  
+  .token.punctuation {
+    color: #333 !important;
+  }
+  
+  .token.property,
+  .token.tag,
+  .token.boolean,
+  .token.number,
+  .token.constant,
+  .token.symbol,
+  .token.deleted,
+  .keyword,
+  .number {
+    color: #000 !important;
+    font-weight: bold !important;
+  }
+  
+  .token.selector,
+  .token.attr-name,
+  .token.string,
+  .token.char,
+  .token.builtin,
+  .token.inserted,
+  .string,
+  .type,
+  .function,
+  .macro,
+  .attribute {
+    color: #333 !important;
+  }
+  
+  /* ==========================================
+     7. TABLES OPTIMIZATION
+     ========================================== */
+  
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 1em 0 !important;
+    page-break-inside: avoid;
+  }
+  
+  table, th, td {
+    border: 1pt solid #000 !important;
+  }
+  
+  th, td {
+    padding: 0.5em !important;
+    text-align: left !important;
+  }
+  
+  th {
+    background: #f0f0f0 !important;
+    font-weight: bold !important;
+  }
+  
+  /* Zebra striping for better readability */
+  tr:nth-child(even) {
+    background: #f9f9f9 !important;
+  }
+  
+  /* ==========================================
+     8. IMAGES AND MEDIA
+     ========================================== */
+  
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+    page-break-after: avoid;
+    display: block;
+    margin: 1em auto;
+  }
+  
+  /* Image captions */
+  figure {
+    margin: 1em 0 !important;
+    page-break-inside: avoid;
+  }
+  
+  figcaption {
+    font-size: 10pt !important;
+    color: #666 !important;
+    text-align: center !important;
+    margin-top: 0.5em !important;
+  }
+  
+  /* ==========================================
+     9. LISTS OPTIMIZATION
+     ========================================== */
+  
+  ul, ol {
+    padding-left: 2em !important;
+    margin: 1em 0 !important;
+  }
+  
+  li {
+    margin-bottom: 0.5em !important;
+    page-break-inside: avoid;
+  }
+  
+  /* Nested lists */
+  li ul, li ol {
+    margin-top: 0.5em !important;
+    margin-bottom: 0.5em !important;
+  }
+  
+  /* ==========================================
+     10. PAGE BREAKS
+     ========================================== */
+  
+  /* Force page breaks before major sections */
+  .page-break-before,
+  .chapter,
+  .major-section {
+    page-break-before: always;
+  }
+  
+  /* Avoid breaks after headings */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  
+  /* Keep related content together */
+  blockquote,
+  .MuiPaper-root,
+  .MuiCard-root,
+  .feature-box,
+  .info-box {
+    page-break-inside: avoid;
+  }
+  
+  /* ==========================================
+     11. MATERIAL-UI SPECIFIC
+     ========================================== */
+  
+  /* Cards and Papers */
+  .MuiPaper-root,
+  .MuiCard-root {
+    border: 1pt solid #000 !important;
+    padding: 1em !important;
+    margin: 1em 0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+  
+  /* Chips and badges */
+  .MuiChip-root {
+    border: 1pt solid #000 !important;
+    padding: 0.2em 0.5em !important;
+    margin: 0.2em !important;
+    display: inline-block !important;
+    border-radius: 3px !important;
+  }
+  
+  /* ==========================================
+     12. DOCUMENTATION SPECIFIC
+     ========================================== */
+  
+  /* Table of contents */
+  .table-of-contents,
+  .toc {
+    border: 1pt solid #000 !important;
+    padding: 1em !important;
+    margin: 1em 0 !important;
+    page-break-inside: avoid;
+  }
+  
+  .table-of-contents a:after,
+  .toc a:after {
+    content: " (page " target-counter(attr(href), page) ")";
+  }
+  
+  /* API documentation */
+  .api-endpoint {
+    border: 1pt solid #000 !important;
+    padding: 1em !important;
+    margin: 1em 0 !important;
+    page-break-inside: avoid;
+  }
+  
+  .api-method {
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+  }
+  
+  /* Code examples */
+  .code-example {
+    border: 1pt solid #666 !important;
+    padding: 1em !important;
+    margin: 1em 0 !important;
+    page-break-inside: avoid;
+  }
+  
+  /* ==========================================
+     13. READING TIME AND METADATA
+     ========================================== */
+  
+  /* Show reading time and metadata */
+  .reading-time {
+    display: block !important;
+    font-size: 10pt !important;
+    color: #666 !important;
+    margin-bottom: 1em !important;
+  }
+  
+  .metadata,
+  .article-info {
+    font-size: 10pt !important;
+    color: #666 !important;
+    border-top: 1pt solid #ccc !important;
+    border-bottom: 1pt solid #ccc !important;
+    padding: 0.5em 0 !important;
+    margin: 1em 0 !important;
+  }
+  
+  /* ==========================================
+     14. BLOCKQUOTES AND CALLOUTS
+     ========================================== */
+  
+  blockquote {
+    border-left: 3pt solid #666 !important;
+    padding-left: 1em !important;
+    margin: 1em 0 !important;
+    font-style: italic !important;
+    page-break-inside: avoid;
+  }
+  
+  /* Callout boxes */
+  .callout,
+  .alert,
+  .warning,
+  .info,
+  .success {
+    border: 1pt solid #000 !important;
+    padding: 1em !important;
+    margin: 1em 0 !important;
+    page-break-inside: avoid;
+  }
+  
+  .callout-title {
+    font-weight: bold !important;
+    margin-bottom: 0.5em !important;
+  }
+  
+  /* ==========================================
+     15. DOCUMENTATION PAGE SPECIFIC
+     ========================================== */
+  
+  /* Documentation navigation sidebar */
+  .documentation-sidebar,
+  .MuiDrawer-root {
+    display: none !important;
+  }
+  
+  /* Documentation content should fill the page */
+  .documentation-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+  }
+  
+  /* Section headers in documentation */
+  .documentation-section {
+    page-break-before: always;
+    padding-top: 2em;
+  }
+  
+  .documentation-section:first-child {
+    page-break-before: auto;
+  }
+  
+  /* Edit on GitHub links */
+  .edit-on-github {
+    display: none !important;
+  }
+  
+  /* Feedback widgets */
+  .feedback-widget {
+    display: none !important;
+  }
+  
+  /* Related articles - convert to simple list */
+  .related-articles {
+    border: 1pt solid #000 !important;
+    padding: 1em !important;
+    margin: 2em 0 !important;
+  }
+  
+  .related-articles h3 {
+    font-size: 14pt !important;
+    margin-bottom: 0.5em !important;
+  }
+  
+  .related-articles a {
+    display: block !important;
+    margin-bottom: 0.5em !important;
+  }
+  
+  /* Last updated info */
+  .last-updated {
+    font-size: 10pt !important;
+    color: #666 !important;
+    margin-bottom: 1em !important;
+  }
+  
+  /* ==========================================
+     16. FINAL ADJUSTMENTS
+     ========================================== */
+  
+  /* Remove all transitions and animations */
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  /* Ensure abbreviations are explained */
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+  
+  /* Page numbers for cross-references */
+  a.cross-reference:after {
+    content: " (see page " target-counter(attr(href), page) ")";
+  }
+  
+  /* Copyright and legal notices */
+  .copyright,
+  .legal {
+    font-size: 10pt !important;
+    text-align: center !important;
+    margin-top: 2em !important;
+    padding-top: 1em !important;
+    border-top: 1pt solid #000 !important;
+  }
+  
+  /* ==========================================
+     17. DOWNLOADS PAGE SPECIFIC
+     ========================================== */
+  
+  /* Download cards */
+  .download-card,
+  .release-card {
+    page-break-inside: avoid;
+    border: 1pt solid #000 !important;
+    margin-bottom: 1em !important;
+  }
+  
+  /* Download buttons - show URL instead */
+  .download-button:after {
+    content: " (Download from: " attr(href) ")";
+    font-size: 10pt;
+    color: #666;
+  }
+  
+  /* Platform icons */
+  .platform-icon {
+    display: none !important;
+  }
+  
+  /* Release notes */
+  .release-notes {
+    font-size: 11pt !important;
+    line-height: 1.5 !important;
+  }
+  
+  /* ==========================================
+   18. FAQ PAGE SPECIFIC
+   ========================================== */
+  
+  /* Accordions - expand all for print */
+  .MuiAccordion-root {
+    border: 1pt solid #000 !important;
+    margin-bottom: 1em !important;
+    page-break-inside: avoid;
+  }
+  
+  .MuiAccordionSummary-root {
+    font-weight: bold !important;
+    font-size: 14pt !important;
+    border-bottom: 1pt solid #666 !important;
+  }
+  
+  .MuiAccordionDetails-root {
+    display: block !important;
+    padding: 1em !important;
+  }
+  
+  /* Hide expand icons */
+  .MuiAccordionSummary-expandIconWrapper {
+    display: none !important;
+  }
+  
+  /* Search box */
+  .search-box,
+  .faq-search {
+    display: none !important;
+  }
+  
+  /* Category chips */
+  .category-chip {
+    border: 1pt solid #000 !important;
+    padding: 0.2em 0.5em !important;
+    margin: 0.2em !important;
+    display: inline-block !important;
+  }
+}
+
+/* ==========================================
+   18. HIGH-RESOLUTION PRINT
+   ========================================== */
+
+@media print and (min-resolution: 300dpi) {
+  /* Sharper borders for high-res printing */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* ==========================================
+   19. LANDSCAPE ORIENTATION
+   ========================================== */
+
+@media print and (orientation: landscape) {
+  @page {
+    size: A4 landscape;
+    margin: 2cm;
+  }
+  
+  /* Adjust column layouts for landscape */
+  .two-column {
+    column-count: 2;
+    column-gap: 2em;
+  }
+}

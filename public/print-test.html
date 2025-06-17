@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Test - Hearth Engine</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .print-button {
+            background: #ff4500;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        .test-section {
+            margin: 30px 0;
+            border: 1px solid #ddd;
+            padding: 20px;
+        }
+        pre {
+            background: #1e1e1e;
+            color: #fff;
+            padding: 15px;
+            overflow-x: auto;
+        }
+        @media print {
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Hearth Engine Print Test Page</h1>
+    
+    <button class="print-button" onclick="window.print()">Test Print Preview</button>
+    
+    <div class="test-section">
+        <h2>1. Typography Test</h2>
+        <p>This is a paragraph of text to test print typography. It should appear in a serif font when printed.</p>
+        <h3>Subheading Level 3</h3>
+        <p>Another paragraph with a <a href="https://example.com">link that should show URL in print</a>.</p>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Code Block Test</h2>
+        <pre><code>// This is a code block
+function testPrint() {
+    console.log("Testing print styles");
+    return true;
+}</code></pre>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Interactive Elements Test</h2>
+        <p>The button below should be hidden in print:</p>
+        <button>This button should not appear in print</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Table Test</h2>
+        <table border="1" style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <th>Feature</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>Print Styles</td>
+                <td>Implemented</td>
+            </tr>
+            <tr>
+                <td>CodeBlock Enhancements</td>
+                <td>Complete</td>
+            </tr>
+        </table>
+    </div>
+    
+    <script>
+        console.log("Print test page loaded. Click 'Test Print Preview' to check print styles.");
+    </script>
+</body>
+</html>

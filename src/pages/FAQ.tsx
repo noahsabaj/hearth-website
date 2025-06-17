@@ -1,11 +1,11 @@
 import {
   ExpandMore,
   Search,
-  GitHub,
   HelpOutline,
   Speed,
   Build,
   Download,
+  GitHub,
 } from '@mui/icons-material';
 import {
   Box,
@@ -18,14 +18,13 @@ import {
   InputAdornment,
   Paper,
   Chip,
-  AppBar,
-  Toolbar,
-  IconButton,
 } from '@mui/material';
 import React, { useState, useMemo, memo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AnimatedSection } from '../components/PageTransition';
+import EditOnGitHub from '../components/EditOnGitHub';
+import NavigationBar from '../components/NavigationBar';
 
 interface FAQItem {
   id: string;
@@ -141,60 +140,7 @@ const FAQ: React.FC = memo(() => {
   return (
     <Box component='main' role='main'>
       {/* Navigation */}
-      <AppBar
-        position='fixed'
-        sx={{ background: 'rgba(10, 10, 10, 0.9)', backdropFilter: 'blur(10px)' }}
-        component='nav'
-        role='navigation'
-      >
-        <Toolbar>
-          <Typography variant='h6' sx={{ flexGrow: 1, fontWeight: 700 }}>
-            <Link to='/' style={{ color: 'inherit', textDecoration: 'none' }}>
-              Hearth Engine
-            </Link>
-          </Typography>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <IconButton
-              component={Link}
-              to='/'
-              color='inherit'
-              aria-label='Home'
-              sx={{ '&:hover': { color: '#ff4500' } }}
-            >
-              Home
-            </IconButton>
-            <IconButton
-              component={Link}
-              to='/docs'
-              color='inherit'
-              aria-label='Documentation'
-              sx={{ '&:hover': { color: '#ff4500' } }}
-            >
-              Docs
-            </IconButton>
-            <IconButton
-              component={Link}
-              to='/downloads'
-              color='inherit'
-              aria-label='Downloads'
-              sx={{ '&:hover': { color: '#ff4500' } }}
-            >
-              Downloads
-            </IconButton>
-            <IconButton
-              component='a'
-              href='https://github.com/noahsabaj/hearth-engine'
-              target='_blank'
-              rel='noopener noreferrer'
-              color='inherit'
-              aria-label='GitHub Repository'
-              sx={{ '&:hover': { color: '#ff4500' } }}
-            >
-              <GitHub />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
+      <NavigationBar variant='faq' />
 
       <Container maxWidth='lg' sx={{ mt: 10, pb: 6 }}>
         <AnimatedSection delay={0.2}>
@@ -325,6 +271,15 @@ const FAQ: React.FC = memo(() => {
                           border: `1px solid ${categories[faq.category].color}40`,
                         }}
                       />
+                      <Box sx={{ flexGrow: 1 }} />
+                      {expandedAccordion === faq.id && (
+                        <EditOnGitHub 
+                          filePath="src/pages/FAQ.tsx" 
+                          variant="improve" 
+                          size="small"
+                          sx={{ mr: 1 }}
+                        />
+                      )}
                     </Box>
                   </AccordionSummary>
                   <AccordionDetails>

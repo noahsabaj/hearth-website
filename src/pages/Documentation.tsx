@@ -1,4 +1,3 @@
-import { GitHub, Home, Download } from '@mui/icons-material';
 import {
   Box,
   Container,
@@ -8,18 +7,45 @@ import {
   ListItem,
   ListItemText,
   Divider,
-  AppBar,
-  Toolbar,
-  Button,
-  IconButton,
   Grid,
   LinearProgress,
+  Drawer,
+  IconButton,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
+import { Menu as MenuIcon, Close } from '@mui/icons-material';
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 
 import CodeBlock from '../components/CodeBlock';
+import EditOnGitHub from '../components/EditOnGitHub';
+import NavigationBar from '../components/NavigationBar';
 import ReadingTime from '../components/ReadingTime';
+import RelatedArticles from '../components/RelatedArticles';
+import FeedbackWidget from '../components/FeedbackWidget';
+import LastUpdated from '../components/LastUpdated';
+import { useKeyboardShortcutsContext } from '../contexts/KeyboardShortcutsContext';
+
+// Last updated dates for each documentation section
+// In a real application, these could be fetched from Git history or a CMS
+const SECTION_UPDATES = {
+  gettingStarted: new Date('2025-01-15T10:30:00'),
+  installation: new Date('2025-01-14T14:45:00'),
+  basicUsage: new Date('2025-01-13T09:15:00'),
+  coreConcepts: new Date('2025-01-10T16:20:00'),
+  cargoCommands: new Date('2025-01-16T11:00:00'),
+  apiReference: new Date('2025-01-12T13:30:00'),
+};
+
+// GitHub edit history URLs for each section
+const GITHUB_EDIT_URLS = {
+  gettingStarted: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/getting-started.md',
+  installation: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/installation.md',
+  basicUsage: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/basic-usage.md',
+  coreConcepts: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/core-concepts.md',
+  cargoCommands: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/cargo-commands.md',
+  apiReference: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/api-reference.md',
+};
 
 // Full section content for accurate reading time calculation
 const SECTION_CONTENT = {
@@ -174,8 +200,24 @@ For a complete reference guide with advanced commands and troubleshooting, see t
 };
 
 const Documentation: React.FC = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('getting-started');
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
+  const { setSidebarToggleCallback, setNavigationCallbacks, showToast } = useKeyboardShortcutsContext();
+  
+  const handleNavigateToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const headerHeight = 80; // AppBar height + some padding
+      const elementPosition = element.offsetTop - headerHeight;
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   const sections = useMemo(
     () => [
@@ -188,6 +230,39 @@ const Documentation: React.FC = () => {
     ],
     []
   );
+
+  // Set up keyboard navigation
+  useEffect(() => {
+    setSidebarToggleCallback(() => {
+      setSidebarOpen(prev => !prev);
+    });
+
+    const navigateUp = () => {
+      const currentIndex = sections.findIndex(s => s.id === activeSection);
+      if (currentIndex > 0) {
+        const newSection = sections[currentIndex - 1];
+        if (newSection) {
+          handleNavigateToSection(newSection.id);
+          setActiveSection(newSection.id);
+          showToast(`Navigated to ${newSection.title}`);
+        }
+      }
+    };
+
+    const navigateDown = () => {
+      const currentIndex = sections.findIndex(s => s.id === activeSection);
+      if (currentIndex < sections.length - 1) {
+        const newSection = sections[currentIndex + 1];
+        if (newSection) {
+          handleNavigateToSection(newSection.id);
+          setActiveSection(newSection.id);
+          showToast(`Navigated to ${newSection.title}`);
+        }
+      }
+    };
+
+    setNavigationCallbacks(navigateUp, navigateDown);
+  }, [setSidebarToggleCallback, setNavigationCallbacks, sections, activeSection, handleNavigateToSection, showToast]);
 
   useEffect(() => {
     let ticking = false;
@@ -257,55 +332,7 @@ const Documentation: React.FC = () => {
   return (
     <Box component='main' role='main'>
       {/* Navigation */}
-      <AppBar
-        position='fixed'
-        sx={{ background: 'rgba(10, 10, 10, 0.9)', backdropFilter: 'blur(10px)' }}
-        component='nav'
-        role='navigation'
-        aria-label='Main navigation'
-      >
-        <Toolbar>
-          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-            <img
-              src={`/hearth-website/logo.png?v=${Date.now()}`}
-              alt='Hearth Engine - Next-generation voxel game engine logo'
-              style={{ height: 40, marginRight: 12, backgroundColor: 'transparent' }}
-            />
-            <Typography variant='h6' sx={{ fontWeight: 700 }} component='div'>
-              Hearth Engine
-            </Typography>
-          </Box>
-          <Box component='nav' role='navigation' aria-label='Page navigation'>
-            <Button
-              color='inherit'
-              component={Link}
-              to='/'
-              startIcon={<Home aria-hidden='true' />}
-              aria-label='Go to home page'
-            >
-              Home
-            </Button>
-            <Button
-              color='inherit'
-              component={Link}
-              to='/downloads'
-              startIcon={<Download aria-hidden='true' />}
-              aria-label='Go to downloads page'
-            >
-              Downloads
-            </Button>
-            <IconButton
-              color='inherit'
-              href='https://github.com/noahsabaj/hearth-engine'
-              target='_blank'
-              rel='noopener noreferrer'
-              aria-label='View Hearth Engine on GitHub (opens in new tab)'
-            >
-              <GitHub />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
+      <NavigationBar variant='docs' />
 
       {/* Reading Progress Bar */}
       <LinearProgress
@@ -327,9 +354,30 @@ const Documentation: React.FC = () => {
       />
 
       <Container maxWidth='lg' sx={{ mt: 10 }}>
+        {/* Mobile menu button */}
+        {isMobile && (
+          <IconButton
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            sx={{
+              position: 'fixed',
+              left: 16,
+              top: 80,
+              zIndex: 1201,
+              backgroundColor: theme.palette.background.paper,
+              boxShadow: 2,
+              '&:hover': {
+                backgroundColor: theme.palette.background.paper,
+              },
+            }}
+            aria-label='Toggle documentation sidebar'
+          >
+            {sidebarOpen ? <Close /> : <MenuIcon />}
+          </IconButton>
+        )}
+        
         <Grid container spacing={4}>
           {/* Sidebar */}
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={3} sx={{ display: { xs: 'none', md: 'block' } }}>
             <Paper
               component='nav'
               role='navigation'
@@ -391,6 +439,69 @@ const Documentation: React.FC = () => {
             </Paper>
           </Grid>
 
+          {/* Mobile Sidebar Drawer */}
+          <Drawer
+            anchor='left'
+            open={isMobile && sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            sx={{
+              display: { xs: 'block', md: 'none' },
+              '& .MuiDrawer-paper': {
+                width: 280,
+                backgroundColor: theme.palette.background.paper,
+                top: 64,
+              },
+            }}
+          >
+            <Box sx={{ p: 2 }}>
+              <Typography variant='h6' gutterBottom component='h2'>
+                Documentation
+              </Typography>
+              <List role='list'>
+                {sections.map(section => (
+                  <ListItem
+                    key={section.id}
+                    component='button'
+                    onClick={() => {
+                      handleNavigateToSection(section.id);
+                      setSidebarOpen(false);
+                    }}
+                    sx={{
+                      cursor: 'pointer',
+                      borderRadius: 1,
+                      mb: 0.5,
+                      transition: 'all 0.2s ease',
+                      backgroundColor:
+                        activeSection === section.id ? 'rgba(255, 69, 0, 0.1)' : 'transparent',
+                      borderLeft:
+                        activeSection === section.id
+                          ? '3px solid #ff4500'
+                          : '3px solid transparent',
+                      '&:hover': {
+                        backgroundColor:
+                          activeSection === section.id
+                            ? 'rgba(255, 69, 0, 0.15)'
+                            : 'rgba(255, 255, 255, 0.05)',
+                        transform: 'translateX(4px)',
+                      },
+                    }}
+                  >
+                    <ListItemText
+                      primary={section.title}
+                      sx={{
+                        '& .MuiListItemText-primary': {
+                          fontWeight: activeSection === section.id ? 600 : 400,
+                          color:
+                            activeSection === section.id ? '#ff4500' : 'rgba(255, 255, 255, 0.9)',
+                        },
+                      }}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          </Drawer>
+
           {/* Main Content */}
           <Grid item xs={12} md={9}>
             <Box component='article' role='main' id='main-content' sx={{ pb: 6 }}>
@@ -408,13 +519,19 @@ const Documentation: React.FC = () => {
                 component='section'
                 id='getting-started'
                 aria-labelledby='getting-started-heading'
-                sx={{ mb: 6 }}
+                sx={{ mb: 6, position: 'relative' }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
                   <Typography variant='h3' id='getting-started-heading' component='h2'>
                     Getting Started
                   </Typography>
                   <ReadingTime text={SECTION_CONTENT.gettingStarted} />
+                  <LastUpdated 
+                    date={SECTION_UPDATES.gettingStarted} 
+                    githubEditUrl={GITHUB_EDIT_URLS.gettingStarted}
+                  />
+                  <Box sx={{ flexGrow: 1 }} />
+                  <EditOnGitHub filePath="src/pages/Documentation.tsx" />
                 </Box>
                 <Typography variant='body1' paragraph>
                   Hearth Engine is a next-generation voxel game engine built with Rust. It provides
@@ -442,6 +559,11 @@ fn main() {
     engine.run(MyGame);
 }`}
                 </CodeBlock>
+                <RelatedArticles 
+                  currentSection="getting-started" 
+                  onNavigate={handleNavigateToSection} 
+                />
+                <FeedbackWidget sectionId="getting-started" sectionTitle="Getting Started" />
               </Box>
 
               <Divider sx={{ my: 4 }} />
@@ -450,13 +572,19 @@ fn main() {
                 component='section'
                 id='installation'
                 aria-labelledby='installation-heading'
-                sx={{ mb: 6 }}
+                sx={{ mb: 6, position: 'relative' }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
                   <Typography variant='h3' id='installation-heading' component='h2'>
                     Installation
                   </Typography>
                   <ReadingTime text={SECTION_CONTENT.installation} />
+                  <LastUpdated 
+                    date={SECTION_UPDATES.installation} 
+                    githubEditUrl={GITHUB_EDIT_URLS.installation}
+                  />
+                  <Box sx={{ flexGrow: 1 }} />
+                  <EditOnGitHub filePath="src/pages/Documentation.tsx" />
                 </Box>
                 <Typography variant='body1' paragraph>
                   Add Hearth Engine to your project's dependencies:
@@ -470,6 +598,11 @@ hearth-engine = "0.35"`}
                   Make sure you have Rust 1.70+ installed. The engine requires a GPU with Vulkan,
                   DirectX 12, or Metal support.
                 </Typography>
+                <RelatedArticles 
+                  currentSection="installation" 
+                  onNavigate={handleNavigateToSection} 
+                />
+                <FeedbackWidget sectionId="installation" sectionTitle="Installation" />
               </Box>
 
               <Divider sx={{ my: 4 }} />
@@ -478,13 +611,19 @@ hearth-engine = "0.35"`}
                 component='section'
                 id='basic-usage'
                 aria-labelledby='basic-usage-heading'
-                sx={{ mb: 6 }}
+                sx={{ mb: 6, position: 'relative' }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
                   <Typography variant='h3' id='basic-usage-heading' component='h2'>
                     Basic Usage
                   </Typography>
                   <ReadingTime text={SECTION_CONTENT.basicUsage} />
+                  <LastUpdated 
+                    date={SECTION_UPDATES.basicUsage} 
+                    githubEditUrl={GITHUB_EDIT_URLS.basicUsage}
+                  />
+                  <Box sx={{ flexGrow: 1 }} />
+                  <EditOnGitHub filePath="src/pages/Documentation.tsx" />
                 </Box>
                 <Typography variant='body1' paragraph>
                   Creating a simple voxel world with Hearth Engine is straightforward:
@@ -503,6 +642,11 @@ world.set_voxel(vec3(10, 20, 30), VoxelType::Stone);
 // Apply physics simulation
 world.simulate_physics(dt);`}
                 </CodeBlock>
+                <RelatedArticles 
+                  currentSection="basic-usage" 
+                  onNavigate={handleNavigateToSection} 
+                />
+                <FeedbackWidget sectionId="basic-usage" sectionTitle="Basic Usage" />
               </Box>
 
               <Divider sx={{ my: 4 }} />
@@ -511,13 +655,19 @@ world.simulate_physics(dt);`}
                 component='section'
                 id='core-concepts'
                 aria-labelledby='core-concepts-heading'
-                sx={{ mb: 6 }}
+                sx={{ mb: 6, position: 'relative' }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
                   <Typography variant='h3' id='core-concepts-heading' component='h2'>
                     Core Concepts
                   </Typography>
                   <ReadingTime text={SECTION_CONTENT.coreConcepts} />
+                  <LastUpdated 
+                    date={SECTION_UPDATES.coreConcepts} 
+                    githubEditUrl={GITHUB_EDIT_URLS.coreConcepts}
+                  />
+                  <Box sx={{ flexGrow: 1 }} />
+                  <EditOnGitHub filePath="src/pages/Documentation.tsx" />
                 </Box>
                 <Typography variant='h4' gutterBottom sx={{ mt: 3 }}>
                   Data-Oriented Design
@@ -533,6 +683,11 @@ world.simulate_physics(dt);`}
                   Computations are performed on the GPU whenever possible, allowing for massive
                   parallelization and scale.
                 </Typography>
+                <RelatedArticles 
+                  currentSection="core-concepts" 
+                  onNavigate={handleNavigateToSection} 
+                />
+                <FeedbackWidget sectionId="core-concepts" sectionTitle="Core Concepts" />
               </Box>
 
               <Divider sx={{ my: 4 }} />
@@ -541,13 +696,19 @@ world.simulate_physics(dt);`}
                 component='section'
                 id='cargo-commands'
                 aria-labelledby='cargo-commands-heading'
-                sx={{ mb: 6 }}
+                sx={{ mb: 6, position: 'relative' }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
                   <Typography variant='h3' id='cargo-commands-heading' component='h2'>
                     Cargo Commands Reference
                   </Typography>
                   <ReadingTime text={SECTION_CONTENT.cargoCommands} />
+                  <LastUpdated 
+                    date={SECTION_UPDATES.cargoCommands} 
+                    githubEditUrl={GITHUB_EDIT_URLS.cargoCommands}
+                  />
+                  <Box sx={{ flexGrow: 1 }} />
+                  <EditOnGitHub filePath="src/pages/Documentation.tsx" />
                 </Box>
                 <Typography variant='body1' paragraph>
                   Cargo is Rust's build system and package manager. Here's a comprehensive guide to
@@ -695,6 +856,11 @@ cargo build --features "debug-ui,profiler"`}
                   </a>{' '}
                   in the engine documentation.
                 </Typography>
+                <RelatedArticles 
+                  currentSection="cargo-commands" 
+                  onNavigate={handleNavigateToSection} 
+                />
+                <FeedbackWidget sectionId="cargo-commands" sectionTitle="Cargo Commands" />
               </Box>
 
               <Divider sx={{ my: 4 }} />
@@ -703,13 +869,19 @@ cargo build --features "debug-ui,profiler"`}
                 component='section'
                 id='api-reference'
                 aria-labelledby='api-reference-heading'
-                sx={{ mb: 6 }}
+                sx={{ mb: 6, position: 'relative' }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
                   <Typography variant='h3' id='api-reference-heading' component='h2'>
                     API Reference
                   </Typography>
                   <ReadingTime text={SECTION_CONTENT.apiReference} />
+                  <LastUpdated 
+                    date={SECTION_UPDATES.apiReference} 
+                    githubEditUrl={GITHUB_EDIT_URLS.apiReference}
+                  />
+                  <Box sx={{ flexGrow: 1 }} />
+                  <EditOnGitHub filePath="src/pages/Documentation.tsx" />
                 </Box>
                 <Typography variant='body1' paragraph>
                   For detailed API documentation, see the{' '}
@@ -732,6 +904,11 @@ cargo build --features "debug-ui,profiler"`}
                   </a>
                   .
                 </Typography>
+                <RelatedArticles 
+                  currentSection="api-reference" 
+                  onNavigate={handleNavigateToSection} 
+                />
+                <FeedbackWidget sectionId="api-reference" sectionTitle="API Reference" />
               </Box>
             </Box>
           </Grid>

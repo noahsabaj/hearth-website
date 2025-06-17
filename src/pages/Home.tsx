@@ -6,9 +6,6 @@ import {
   Button,
   Card,
   CardContent,
-  AppBar,
-  Toolbar,
-  IconButton,
   Paper,
   Chip,
   Grid,
@@ -16,42 +13,14 @@ import {
 import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 
+import NavigationBar from '../components/NavigationBar';
 import ReadingTime from '../components/ReadingTime';
 
 const Home: React.FC = memo(() => {
   return (
     <Box>
       {/* Navigation */}
-      <AppBar
-        position='fixed'
-        sx={{ background: 'rgba(10, 10, 10, 0.9)', backdropFilter: 'blur(10px)' }}
-      >
-        <Toolbar>
-          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-            <img
-              src={`/hearth-website/logo.png?v=${Date.now()}`}
-              alt='Hearth Engine'
-              style={{ height: 40, marginRight: 12, backgroundColor: 'transparent' }}
-            />
-            <Typography variant='h6' sx={{ fontWeight: 700 }}>
-              Hearth Engine
-            </Typography>
-          </Box>
-          <Button color='inherit' component={Link} to='/docs' startIcon={<MenuBook />}>
-            Docs
-          </Button>
-          <Button color='inherit' component={Link} to='/downloads' startIcon={<Download />}>
-            Downloads
-          </Button>
-          <IconButton
-            color='inherit'
-            href='https://github.com/noahsabaj/hearth-engine'
-            target='_blank'
-          >
-            <GitHub />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+      <NavigationBar variant='home' />
 
       {/* Hero Section */}
       <Box

@@ -1,14 +1,16 @@
-import { Box, CircularProgress } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import React, { Suspense } from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { Suspense, useState, useEffect } from 'react';
+import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 import './styles/accessibility.css';
+import './styles/print.css';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import PageTransition from './components/PageTransition';
 import ScrollToTop from './components/ScrollToTop';
+import PageLoader from './components/PageLoader';
+import { KeyboardShortcutsProvider } from './contexts/KeyboardShortcutsContext';
 
 // Lazy load pages for better performance
 const Home = React.lazy(() => import('./pages/Home'));
@@ -16,6 +18,9 @@ const Documentation = React.lazy(() => import('./pages/Documentation'));
 const Downloads = React.lazy(() => import('./pages/Downloads'));
 const FAQ = React.lazy(() => import('./pages/FAQ'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
+const FeedbackDemo = React.lazy(() => import('./pages/FeedbackDemo'));
+const CodeBlockDemo = React.lazy(() => import('./pages/CodeBlockDemo'));
+const LoadingDemo = React.lazy(() => import('./pages/LoadingDemo'));
 
 const theme = createTheme({
   palette: {
@@ -126,20 +131,74 @@ const theme = createTheme({
   },
 });
 
-// Loading component for lazy-loaded routes
-const PageLoader: React.FC = () => (
-  <Box
-    sx={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '100vh',
-      backgroundColor: '#0a0a0a',
-    }}
-  >
-    <CircularProgress sx={{ color: '#ff4500' }} size={60} />
-  </Box>
-);
+// Route-specific loader component
+const RouteLoader: React.FC = () => {
+  const location = useLocation();
+  const [pageName, setPageName] = useState('');
+  
+  useEffect(() => {
+    // Determine page name based on route
+    const path = location.pathname;
+    if (path === '/') setPageName('Home');
+    else if (path === '/docs') setPageName('Documentation');
+    else if (path === '/downloads') setPageName('Downloads');
+    else if (path === '/faq') setPageName('FAQ');
+    else if (path === '/feedback-demo') setPageName('Feedback Demo');
+    else if (path === '/codeblock-demo') setPageName('CodeBlock Demo');
+    else if (path === '/loading-demo') setPageName('Loading Demo');
+    else setPageName('Page');
+  }, [location]);
+  
+  return <PageLoader pageName={pageName} estimatedTime={2} />;
+};
+
+// Wrapper to provide location context
+const AppContent: React.FC = () => {
+  return (
+    <>
+      {/* Skip to main content link for keyboard users */}
+      <a
+        href='#main-content'
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          top: '0',
+          zIndex: 9999,
+          padding: '8px 16px',
+          backgroundColor: '#ff4500',
+          color: 'white',
+          textDecoration: 'none',
+          borderRadius: '0 0 4px 4px',
+          fontWeight: 600,
+          transition: 'left 0.3s ease',
+        }}
+        onFocus={e => {
+          (e.target as HTMLElement).style.left = '16px';
+        }}
+        onBlur={e => {
+          (e.target as HTMLElement).style.left = '-9999px';
+        }}
+      >
+        Skip to main content
+      </a>
+      <Suspense fallback={<RouteLoader />}>
+        <PageTransition variant='fade' duration={0.4}>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/docs' element={<Documentation />} />
+            <Route path='/downloads' element={<Downloads />} />
+            <Route path='/faq' element={<FAQ />} />
+            <Route path='/feedback-demo' element={<FeedbackDemo />} />
+            <Route path='/loading-demo' element={<LoadingDemo />} />
+            <Route path='/codeblock-demo' element={<CodeBlockDemo />} />
+            <Route path='*' element={<NotFound />} />
+          </Routes>
+        </PageTransition>
+      </Suspense>
+      <ScrollToTop />
+    </>
+  );
+};
 
 const App = () => {
   return (
@@ -147,43 +206,9 @@ const App = () => {
       <CssBaseline />
       <ErrorBoundary>
         <Router>
-          {/* Skip to main content link for keyboard users */}
-          <a
-            href='#main-content'
-            style={{
-              position: 'absolute',
-              left: '-9999px',
-              top: '0',
-              zIndex: 9999,
-              padding: '8px 16px',
-              backgroundColor: '#ff4500',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '0 0 4px 4px',
-              fontWeight: 600,
-              transition: 'left 0.3s ease',
-            }}
-            onFocus={e => {
-              e.target.style.left = '16px';
-            }}
-            onBlur={e => {
-              e.target.style.left = '-9999px';
-            }}
-          >
-            Skip to main content
-          </a>
-          <Suspense fallback={<PageLoader />}>
-            <PageTransition variant='fade' duration={0.4}>
-              <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='/docs' element={<Documentation />} />
-                <Route path='/downloads' element={<Downloads />} />
-                <Route path='/faq' element={<FAQ />} />
-                <Route path='*' element={<NotFound />} />
-              </Routes>
-            </PageTransition>
-          </Suspense>
-          <ScrollToTop />
+          <KeyboardShortcutsProvider>
+            <AppContent />
+          </KeyboardShortcutsProvider>
         </Router>
       </ErrorBoundary>
     </ThemeProvider>

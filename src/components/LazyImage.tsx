@@ -1,4 +1,4 @@
-import { Box, Skeleton } from '@mui/material';
+import { Box, Skeleton, LinearProgress } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useState, useRef, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -49,6 +49,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [shouldLoad, setShouldLoad] = useState(loading === 'eager');
+  const [loadProgress, setLoadProgress] = useState(0);
   const imageRef = useRef<HTMLImageElement>(null);
 
   const { ref: inViewRef, inView } = useInView({
@@ -66,14 +67,35 @@ const LazyImage: React.FC<LazyImageProps> = ({
   useEffect(() => {
     if (inView && !shouldLoad) {
       setShouldLoad(true);
+      // Simulate initial loading progress
+      setLoadProgress(30);
     }
   }, [inView, shouldLoad]);
 
-  const handleImageLoad = () => {
-    setImageLoaded(true);
-    if (onLoad) {
-      onLoad();
+  // Simulate loading progress
+  useEffect(() => {
+    if (shouldLoad && !imageLoaded && !imageError) {
+      const interval = setInterval(() => {
+        setLoadProgress(prev => {
+          if (prev >= 90) {
+            return 90;
+          }
+          return prev + 10;
+        });
+      }, 200);
+      return () => clearInterval(interval);
     }
+    return undefined;
+  }, [shouldLoad, imageLoaded, imageError]);
+
+  const handleImageLoad = () => {
+    setLoadProgress(100);
+    setTimeout(() => {
+      setImageLoaded(true);
+      if (onLoad) {
+        onLoad();
+      }
+    }, 100);
   };
 
   const handleImageError = () => {
@@ -150,17 +172,64 @@ const LazyImage: React.FC<LazyImageProps> = ({
                 }}
               />
             ) : (
-              <Skeleton
-                variant='rectangular'
-                width='100%'
-                height='100%'
-                animation='wave'
-                sx={{
-                  bgcolor: 'rgba(255, 255, 255, 0.1)',
-                  borderRadius:
-                    typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius,
-                }}
-              />
+              <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
+                <Skeleton
+                  variant='rectangular'
+                  width='100%'
+                  height='100%'
+                  animation='wave'
+                  sx={{
+                    bgcolor: 'rgba(255, 255, 255, 0.1)',
+                    borderRadius:
+                      typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius,
+                  }}
+                />
+                {/* Shimmer effect overlay */}
+                <motion.div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent)',
+                    borderRadius: typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius,
+                  }}
+                  animate={{ x: ['-100%', '100%'] }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                />
+                {/* Progress indicator for larger images */}
+                {(width === '100%' || (typeof width === 'number' && width > 200)) && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: 4,
+                      overflow: 'hidden',
+                      borderBottomLeftRadius: typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius,
+                      borderBottomRightRadius: typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius,
+                    }}
+                  >
+                    <LinearProgress
+                      variant='determinate'
+                      value={loadProgress}
+                      sx={{
+                        height: '100%',
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        '& .MuiLinearProgress-bar': {
+                          backgroundColor: 'rgba(255, 69, 0, 0.5)',
+                        },
+                      }}
+                    />
+                  </Box>
+                )}
+              </Box>
             )}
           </motion.div>
         )}

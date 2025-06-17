@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syntax Highlighting Themes Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .theme-demo {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            background: #2a2a2a;
+        }
+        .code-block {
+            padding: 16px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        h2 {
+            color: #ff4500;
+        }
+        pre {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Syntax Highlighting Themes Implementation</h1>
+    
+    <div class="theme-demo">
+        <h2>VS Code Dark Theme</h2>
+        <div class="code-block" style="background: #1e1e1e; border: 1px solid #333;">
+            <pre><span style="color: #6a9955">// VS Code Dark Theme Example</span>
+<span style="color: #569cd6">use</span> <span style="color: #d4d4d4">hearth_engine::{Engine, Game};</span>
+
+<span style="color: #569cd6">fn</span> <span style="color: #dcdcaa">main</span>() {
+    <span style="color: #569cd6">let</span> <span style="color: #9cdcfe">engine</span> = <span style="color: #4ec9b0">Engine</span>::<span style="color: #dcdcaa">new</span>();
+    <span style="color: #9cdcfe">engine</span>.<span style="color: #dcdcaa">run</span>();
+}</pre>
+        </div>
+    </div>
+
+    <div class="theme-demo">
+        <h2>Dracula Theme</h2>
+        <div class="code-block" style="background: #282a36; border: 1px solid #44475a;">
+            <pre><span style="color: #6272a4">// Dracula Theme Example</span>
+<span style="color: #ff79c6">use</span> <span style="color: #f8f8f2">hearth_engine::{Engine, Game};</span>
+
+<span style="color: #ff79c6">fn</span> <span style="color: #50fa7b">main</span>() {
+    <span style="color: #ff79c6">let</span> <span style="color: #f8f8f2">engine</span> = <span style="color: #8be9fd">Engine</span>::<span style="color: #50fa7b">new</span>();
+    <span style="color: #f8f8f2">engine</span>.<span style="color: #50fa7b">run</span>();
+}</pre>
+        </div>
+    </div>
+
+    <div class="theme-demo">
+        <h2>Monokai Theme</h2>
+        <div class="code-block" style="background: #272822; border: 1px solid #3e3d32;">
+            <pre><span style="color: #75715e">// Monokai Theme Example</span>
+<span style="color: #f92672">use</span> <span style="color: #f8f8f2">hearth_engine::{Engine, Game};</span>
+
+<span style="color: #f92672">fn</span> <span style="color: #a6e22e">main</span>() {
+    <span style="color: #f92672">let</span> <span style="color: #f8f8f2">engine</span> = <span style="color: #66d9ef">Engine</span>::<span style="color: #a6e22e">new</span>();
+    <span style="color: #f8f8f2">engine</span>.<span style="color: #a6e22e">run</span>();
+}</pre>
+        </div>
+    </div>
+
+    <div class="theme-demo">
+        <h2>GitHub Theme</h2>
+        <div class="code-block" style="background: #ffffff; border: 1px solid #e1e4e8; color: #24292e;">
+            <pre><span style="color: #6a737d">// GitHub Theme Example</span>
+<span style="color: #d73a49">use</span> <span style="color: #24292e">hearth_engine::{Engine, Game};</span>
+
+<span style="color: #d73a49">fn</span> <span style="color: #6f42c1">main</span>() {
+    <span style="color: #d73a49">let</span> <span style="color: #e36209">engine</span> = <span style="color: #005cc5">Engine</span>::<span style="color: #6f42c1">new</span>();
+    <span style="color: #e36209">engine</span>.<span style="color: #6f42c1">run</span>();
+}</pre>
+        </div>
+    </div>
+
+    <h2>Implementation Summary</h2>
+    <ul>
+        <li>✅ Added 8 syntax highlighting themes</li>
+        <li>✅ Created theme configuration in <code>src/themes/syntaxThemes.ts</code></li>
+        <li>✅ Implemented ThemeSelector component with dropdown and preview</li>
+        <li>✅ Updated CodeBlock component to support theme switching</li>
+        <li>✅ Added localStorage persistence for theme preference</li>
+        <li>✅ Implemented smooth transition animations</li>
+        <li>✅ Added hover preview functionality</li>
+        <li>✅ Ensured accessibility with proper ARIA labels</li>
+        <li>✅ Set VS Code Dark as the default theme</li>
+    </ul>
+</body>
+</html>
