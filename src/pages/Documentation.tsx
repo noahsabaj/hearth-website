@@ -34,53 +34,59 @@ const Documentation: React.FC = () => {
   ], []);
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      // Calculate scroll progress
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (scrollTop / docHeight) * 100;
-      setScrollProgress(Math.min(progress, 100));
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          // Calculate scroll progress - more responsive
+          const scrollTop = window.pageYOffset;
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = Math.min((scrollTop / docHeight) * 100, 100);
+          setScrollProgress(progress);
 
-      // Find active section
-      const sectionElements = sections.map(section => ({
-        id: section.id,
-        element: document.getElementById(section.id),
-      }));
+          // Find active section with better detection
+          const sectionElements = sections.map(section => ({
+            id: section.id,
+            element: document.getElementById(section.id),
+          }));
 
-      const headerOffset = 120; // Account for header height + some padding
-      
-      // Check if we're at the bottom of the page
-      const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 10;
-      
-      if (isAtBottom) {
-        // If at bottom, activate the last section
-        setActiveSection(sections[sections.length - 1].id);
-      } else {
-        // Normal detection logic
-        let currentSection = sectionElements.find(({ element }) => {
-          if (!element) return false;
-          const rect = element.getBoundingClientRect();
-          return rect.top <= headerOffset && rect.bottom > headerOffset;
-        });
-
-        // If no section found with normal logic, find the closest one above the threshold
-        if (!currentSection) {
-          const visibleSections = sectionElements
-            .filter(({ element }) => element && element.getBoundingClientRect().top <= headerOffset)
-            .reverse(); // Get the last one that's above the threshold
+          const headerOffset = 120;
+          const isAtBottom = window.innerHeight + scrollTop >= document.documentElement.scrollHeight - 10;
           
-          if (visibleSections.length > 0) {
-            currentSection = visibleSections[0];
-          }
-        }
+          if (isAtBottom) {
+            setActiveSection(sections[sections.length - 1].id);
+          } else {
+            // Find the section currently in view
+            let currentSection = sectionElements.find(({ element }) => {
+              if (!element) return false;
+              const rect = element.getBoundingClientRect();
+              return rect.top <= headerOffset && rect.bottom > headerOffset;
+            });
 
-        if (currentSection) {
-          setActiveSection(currentSection.id);
-        }
+            // Fallback: find the last section that has passed the threshold
+            if (!currentSection) {
+              const visibleSections = sectionElements
+                .filter(({ element }) => element && element.getBoundingClientRect().top <= headerOffset)
+                .reverse();
+              
+              if (visibleSections.length > 0) {
+                currentSection = visibleSections[0];
+              }
+            }
+
+            if (currentSection) {
+              setActiveSection(currentSection.id);
+            }
+          }
+          
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // Call once to set initial state
 
     return () => window.removeEventListener('scroll', handleScroll);
@@ -171,7 +177,7 @@ const Documentation: React.FC = () => {
                       sx={{
                         '& .MuiListItemText-primary': {
                           fontWeight: activeSection === section.id ? 600 : 400,
-                          color: activeSection === section.id ? '#ff4500' : 'inherit',
+                          color: activeSection === section.id ? '#ff4500' : 'rgba(255, 255, 255, 0.9)',
                         }
                       }}
                     />
@@ -199,7 +205,7 @@ const Documentation: React.FC = () => {
                   <Typography variant="h3">
                     Getting Started
                   </Typography>
-                  <ReadingTime text="Hearth Engine is a next-generation voxel game engine built with Rust. It provides a data-oriented, GPU-first architecture for creating games with realistic physics and emergent gameplay. Quick example use hearth_engine Engine Game World struct MyGame impl Game for MyGame fn init mut self world mut World world set_render_distance fn update mut self world mut World input Input dt f32 Game logic here fn main let mut engine Engine new engine run MyGame" />
+                  <ReadingTime text="Hearth Engine is a next-generation voxel game engine built with Rust. It provides a data-oriented, GPU-first architecture for creating games with realistic physics and emergent gameplay. This section covers basic setup and your first game loop implementation using the Engine struct and Game trait. The example shows how to initialize a world, set render distance, update game logic with input handling and delta time, and run the main engine loop." />
                 </Box>
                 <Typography variant="body1" paragraph>
                   Hearth Engine is a next-generation voxel game engine built with Rust. It provides
@@ -236,7 +242,7 @@ fn main() {
                   <Typography variant="h3">
                     Installation
                   </Typography>
-                  <ReadingTime text="Add Hearth Engine to your project dependencies Cargo toml dependencies hearth-engine Make sure you have Rust installed The engine requires a GPU with Vulkan DirectX or Metal support" />
+                  <ReadingTime text="Installation guide for Hearth Engine. Add the crate to your Cargo.toml dependencies section with version 0.35. Ensure you have Rust 1.70 or later installed on your system. The engine requires a modern GPU with Vulkan, DirectX 12, or Metal API support for hardware acceleration. Cross-platform compatibility across Windows, macOS, and Linux distributions." />
                 </Box>
                 <Typography variant="body1" paragraph>
                   Add Hearth Engine to your project's dependencies:
@@ -259,7 +265,7 @@ hearth-engine = "0.35"`}
                   <Typography variant="h3">
                     Basic Usage
                   </Typography>
-                  <ReadingTime text="Creating a simple voxel world with Hearth Engine is straightforward Create a world with terrain generation world generate_terrain TerrainParams seed scale octaves Place a voxel world set_voxel vec3 VoxelType Stone Apply physics simulation world simulate_physics dt" />
+                  <ReadingTime text="Basic usage tutorial covering world creation and voxel manipulation. Learn to generate procedural terrain using TerrainParams with configurable seed, scale, and octave values for noise generation. Place individual voxels at specific coordinates using 3D vectors and material types like Stone. Apply realistic physics simulation with delta time for frame-independent calculations and movement." />
                 </Box>
                 <Typography variant="body1" paragraph>
                   Creating a simple voxel world with Hearth Engine is straightforward:
@@ -287,7 +293,7 @@ world.simulate_physics(dt);`}
                   <Typography variant="h3">
                     Core Concepts
                   </Typography>
-                  <ReadingTime text="Data-Oriented Design Hearth Engine follows strict data-oriented programming principles All data lives in shared buffers and systems are stateless kernels that transform data GPU-First Architecture Computations are performed on the GPU whenever possible allowing for massive parallelization and scale" />
+                  <ReadingTime text="Core architectural concepts behind Hearth Engine. Data-Oriented Design principles ensure all game data lives in contiguous memory buffers rather than scattered objects, enabling better cache performance and vectorization. Systems operate as stateless transformation kernels that process data in bulk. GPU-First Architecture leverages compute shaders for physics simulation, terrain generation, and rendering operations, achieving massive parallelization impossible on CPU alone." />
                 </Box>
                 <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
                   Data-Oriented Design
@@ -312,7 +318,7 @@ world.simulate_physics(dt);`}
                   <Typography variant="h3">
                     Cargo Commands Reference
                   </Typography>
-                  <ReadingTime text="Cargo is Rust build system and package manager Here comprehensive guide to Cargo commands you will use when developing with Hearth Engine Essential Daily Commands cargo check cargo build cargo run cargo test cargo clippy cargo fmt Build Run Commands cargo build release cargo clean cargo run bin example args Testing Debugging cargo test pattern nocapture bench cargo check clippy fmt tree audit outdated Package Management cargo add crate version features remove update search doc open Performance Analysis cargo flamegraph bloat asm watch Development workflow cargo check test run Hearth Engine Specific Workflow cargo build features vulkan debug-ui profiler" />
+                  <ReadingTime text="Comprehensive Cargo commands reference for Rust development with Hearth Engine. Covers essential daily commands like check, build, run, test, clippy, and fmt for development workflow. Build and run commands including release optimization, cleaning artifacts, running specific binaries and examples with arguments. Testing and debugging with pattern matching, output capture, benchmarking, and dependency auditing. Package management for adding, removing, updating dependencies with version control and feature flags. Performance analysis tools including flamegraph profiling, binary size analysis, assembly inspection, and watch mode for automated rebuilds. Specific Hearth Engine workflow recommendations and feature compilation options." />
                 </Box>
                 <Typography variant="body1" paragraph>
                   Cargo is Rust's build system and package manager. Here's a comprehensive guide
@@ -469,7 +475,7 @@ cargo build --features "debug-ui,profiler"`}
                   <Typography variant="h3">
                     API Reference
                   </Typography>
-                  <ReadingTime text="For detailed API documentation see the docs rs page or browse the source code on GitHub" />
+                  <ReadingTime text="API reference section providing links to comprehensive documentation. Access detailed function signatures, type definitions, and usage examples on the official docs.rs documentation site. Browse complete source code, examples, and implementation details on the GitHub repository for deeper understanding of engine internals." />
                 </Box>
                 <Typography variant="body1" paragraph>
                   For detailed API documentation, see the{' '}
