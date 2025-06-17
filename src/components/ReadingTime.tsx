@@ -7,24 +7,31 @@ interface ReadingTimeProps {
   className?: string;
 }
 
-// Calculate reading time based on average reading speed of 200 words per minute
+// Calculate reading time based on average reading speed
+// Technical documentation with code is read slower than regular text
 const calculateReadingTime = (text: string): number => {
-  const wordsPerMinute = 200;
+  // Use 150 WPM for technical content (slower than regular 200-250 WPM)
+  const wordsPerMinute = 150;
   const words = text.trim().split(/\s+/).length;
   const readingTime = Math.ceil(words / wordsPerMinute);
-  return Math.max(1, readingTime); // Minimum 1 minute
+  return readingTime; // No minimum, let it show actual time
 };
 
 const ReadingTime: React.FC<ReadingTimeProps> = memo(({ text, className }) => {
   const readingTime = useMemo(() => calculateReadingTime(text), [text]);
+  
+  const label = readingTime === 0 ? '< 1 min read' : `${readingTime} min read`;
+  const ariaLabel = readingTime === 0 
+    ? 'Estimated reading time: less than 1 minute' 
+    : `Estimated reading time: ${readingTime} minute${readingTime > 1 ? 's' : ''}`;
 
   return (
     <Chip
       icon={<AccessTime aria-hidden='true' />}
-      label={`${readingTime} min read`}
+      label={label}
       size='small'
       {...(className && { className })}
-      aria-label={`Estimated reading time: ${readingTime} minute${readingTime > 1 ? 's' : ''}`}
+      aria-label={ariaLabel}
       role='img'
       sx={{
         backgroundColor: 'rgba(255, 69, 0, 0.1)',

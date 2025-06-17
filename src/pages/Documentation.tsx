@@ -21,6 +21,158 @@ import { Link } from 'react-router-dom';
 import CodeBlock from '../components/CodeBlock';
 import ReadingTime from '../components/ReadingTime';
 
+// Full section content for accurate reading time calculation
+const SECTION_CONTENT = {
+  gettingStarted: `Hearth Engine is a next-generation voxel game engine built with Rust. It provides a data-oriented, GPU-first architecture for creating games with realistic physics and emergent gameplay.
+
+// Quick example
+use hearth_engine::{Engine, Game, World};
+
+struct MyGame;
+
+impl Game for MyGame {
+    fn init(&mut self, world: &mut World) {
+        world.set_render_distance(16);
+    }
+    
+    fn update(&mut self, world: &mut World, input: &Input, dt: f32) {
+        // Game logic here
+    }
+}
+
+fn main() {
+    let mut engine = Engine::new();
+    engine.run(MyGame);
+}
+
+This demonstrates the basic structure for creating a game with Hearth Engine, including the Game trait implementation, world initialization, and the main engine loop setup. The Engine struct provides core functionality while the Game trait defines your application behavior.`,
+  
+  installation: `Add Hearth Engine to your project's dependencies:
+
+# Cargo.toml
+[dependencies]
+hearth-engine = "0.35"
+
+Make sure you have Rust 1.70+ installed. The engine requires a GPU with Vulkan, DirectX 12, or Metal support.`,
+  
+  basicUsage: `Creating a simple voxel world with Hearth Engine is straightforward:
+
+// Create a world with terrain generation
+world.generate_terrain(TerrainParams {
+    seed: 42,
+    scale: 0.1,
+    octaves: 4,
+});
+
+// Place a voxel
+world.set_voxel(vec3(10, 20, 30), VoxelType::Stone);
+
+// Apply physics simulation
+world.simulate_physics(dt);`,
+  
+  coreConcepts: `Data-Oriented Design
+
+Hearth Engine follows strict data-oriented programming principles. All data lives in shared buffers, and systems are stateless kernels that transform data.
+
+GPU-First Architecture
+
+Computations are performed on the GPU whenever possible, allowing for massive parallelization and scale.`,
+  
+  cargoCommands: `Cargo is Rust's build system and package manager. Here's a comprehensive guide to Cargo commands you'll use when developing with Hearth Engine.
+
+Essential Daily Commands
+
+cargo check      # Quick syntax/type check (no compilation)
+cargo build      # Compile in debug mode
+cargo run        # Build and run the default binary
+cargo test       # Run all tests
+cargo clippy     # Run linter for code quality
+cargo fmt        # Auto-format code
+
+Build & Run Commands
+
+# Building
+cargo build              # Debug build (fast compile, slow runtime)
+cargo build --release    # Release build (slow compile, fast runtime)
+cargo clean              # Remove build artifacts
+
+# Running
+cargo run                      # Run default binary
+cargo run --bin <name>         # Run specific binary
+cargo run --example <name>     # Run example
+cargo run -- <args>            # Pass arguments to program
+cargo run --release            # Run optimized version
+
+Testing & Debugging
+
+# Testing
+cargo test                     # Run all tests
+cargo test <pattern>           # Run tests matching pattern
+cargo test -- --nocapture      # Show println! output
+cargo test --release           # Test in release mode
+cargo bench                    # Run benchmarks
+
+# Debugging & Inspection
+cargo check              # Fast syntax check
+cargo clippy             # Advanced linting
+cargo fmt                # Format code
+cargo tree               # Show dependency tree
+cargo audit              # Security vulnerability check
+cargo outdated           # Check for updates
+
+Package Management
+
+# Dependencies
+cargo add <crate>              # Add dependency
+cargo add <crate>@<version>    # Add specific version
+cargo add <crate> --features "feat1,feat2"
+cargo remove <crate>           # Remove dependency
+cargo update                   # Update all dependencies
+cargo search <term>            # Search crates.io
+
+# Documentation
+cargo doc                # Generate docs
+cargo doc --open         # Generate and open docs
+
+Performance Analysis
+
+# Profiling (requires additional tools)
+cargo flamegraph         # CPU profiling visualization
+cargo bloat              # Analyze binary size
+cargo asm <function>     # Show assembly code
+
+# Development workflow
+cargo watch -x check     # Auto-check on file changes
+cargo watch -x test      # Auto-test on file changes
+cargo watch -x run       # Auto-run on file changes
+
+Hearth Engine Specific Workflow
+
+# Quick development cycle
+cargo check && cargo clippy && cargo test
+
+# Performance testing
+cargo build --release && cargo run --release
+
+# Before committing
+cargo fmt && cargo clippy && cargo test
+
+# Build with specific features
+cargo build --features "vulkan"
+cargo build --features "debug-ui,profiler"
+
+Pro Tips
+
+Use cargo check frequently - It's 10x faster than cargo build for catching errors
+Run cargo clippy before commits - Catches common mistakes and suggests improvements
+Use --release for performance testing - Debug builds can be 100x slower than release builds
+Install cargo-watch - Greatly improves development experience with auto-rebuilds
+
+For a complete reference guide with advanced commands and troubleshooting, see the full Cargo Commands Guide in the engine documentation.`,
+  
+  apiReference: `For detailed API documentation, see the docs.rs page or browse the source code on GitHub.`
+};
+
 const Documentation: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('getting-started');
@@ -262,7 +414,7 @@ const Documentation: React.FC = () => {
                   <Typography variant='h3' id='getting-started-heading' component='h2'>
                     Getting Started
                   </Typography>
-                  <ReadingTime text='Hearth Engine is a next-generation voxel game engine built with Rust. It provides a data-oriented, GPU-first architecture for creating games with realistic physics and emergent gameplay. Quick example use hearth_engine Engine Game World struct MyGame impl Game for MyGame fn init mut self world mut World world set_render_distance sixteen fn update mut self world mut World input Input dt f32 Game logic here fn main let mut engine Engine new engine run MyGame This demonstrates basic structure for creating game with Hearth Engine including Game trait implementation world initialization and main engine loop setup. The Engine struct provides core functionality while Game trait defines your application behavior.' />
+                  <ReadingTime text={SECTION_CONTENT.gettingStarted} />
                 </Box>
                 <Typography variant='body1' paragraph>
                   Hearth Engine is a next-generation voxel game engine built with Rust. It provides
@@ -304,7 +456,7 @@ fn main() {
                   <Typography variant='h3' id='installation-heading' component='h2'>
                     Installation
                   </Typography>
-                  <ReadingTime text='Installation guide for Hearth Engine. Add Hearth Engine to your project dependencies Cargo.toml dependencies hearth-engine version zero point thirty five Make sure you have Rust installed one point seventy plus. The engine requires GPU with Vulkan DirectX twelve or Metal support for hardware acceleration and graphics rendering. Cross platform compatibility across Windows macOS and Linux distributions with proper graphics drivers installed.' />
+                  <ReadingTime text={SECTION_CONTENT.installation} />
                 </Box>
                 <Typography variant='body1' paragraph>
                   Add Hearth Engine to your project's dependencies:
@@ -332,7 +484,7 @@ hearth-engine = "0.35"`}
                   <Typography variant='h3' id='basic-usage-heading' component='h2'>
                     Basic Usage
                   </Typography>
-                  <ReadingTime text='Creating simple voxel world with Hearth Engine is straightforward. Create world with terrain generation world generate_terrain TerrainParams seed forty two scale zero point one octaves four Place voxel world set_voxel vec3 ten twenty thirty VoxelType Stone Apply physics simulation world simulate_physics dt. This covers world creation voxel placement and physics simulation basics for getting started with voxel manipulation and terrain generation in your games.' />
+                  <ReadingTime text={SECTION_CONTENT.basicUsage} />
                 </Box>
                 <Typography variant='body1' paragraph>
                   Creating a simple voxel world with Hearth Engine is straightforward:
@@ -365,7 +517,7 @@ world.simulate_physics(dt);`}
                   <Typography variant='h3' id='core-concepts-heading' component='h2'>
                     Core Concepts
                   </Typography>
-                  <ReadingTime text='Core Concepts Data Oriented Design Hearth Engine follows strict data-oriented programming principles All data lives in shared buffers and systems are stateless kernels that transform data GPU First Architecture Computations are performed on GPU whenever possible allowing for massive parallelization and scale. This architectural approach enables high performance voxel simulation with millions of blocks processed simultaneously using modern graphics hardware acceleration techniques.' />
+                  <ReadingTime text={SECTION_CONTENT.coreConcepts} />
                 </Box>
                 <Typography variant='h4' gutterBottom sx={{ mt: 3 }}>
                   Data-Oriented Design
@@ -395,7 +547,7 @@ world.simulate_physics(dt);`}
                   <Typography variant='h3' id='cargo-commands-heading' component='h2'>
                     Cargo Commands Reference
                   </Typography>
-                  <ReadingTime text='Cargo is Rust build system and package manager comprehensive guide to Cargo commands you will use when developing with Hearth Engine Essential Daily Commands cargo check cargo build cargo run cargo test cargo clippy cargo fmt Build Run Commands cargo build release cargo clean cargo run bin example args Testing Debugging cargo test pattern nocapture bench cargo check clippy fmt tree audit outdated Package Management cargo add crate version features remove update search doc open Performance Analysis cargo flamegraph bloat asm watch Development workflow cargo check test run Hearth Engine Specific Workflow cargo build features vulkan debug-ui profiler. This section covers all essential Cargo commands for Rust development including building testing debugging package management performance analysis and Hearth Engine specific workflows with feature flags and optimization techniques for game development.' />
+                  <ReadingTime text={SECTION_CONTENT.cargoCommands} />
                 </Box>
                 <Typography variant='body1' paragraph>
                   Cargo is Rust's build system and package manager. Here's a comprehensive guide to
@@ -557,7 +709,7 @@ cargo build --features "debug-ui,profiler"`}
                   <Typography variant='h3' id='api-reference-heading' component='h2'>
                     API Reference
                   </Typography>
-                  <ReadingTime text='For detailed API documentation see the docs rs page or browse the source code on GitHub repository for comprehensive function signatures type definitions and usage examples.' />
+                  <ReadingTime text={SECTION_CONTENT.apiReference} />
                 </Box>
                 <Typography variant='body1' paragraph>
                   For detailed API documentation, see the{' '}
