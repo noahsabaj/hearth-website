@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   Container,
@@ -13,20 +13,56 @@ import {
   Button,
   IconButton,
   Grid,
+  LinearProgress,
 } from '@mui/material';
 import { GitHub, Home, Download } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import CodeBlock from '../components/CodeBlock';
 
 const Documentation: React.FC = () => {
-  const sections = [
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [activeSection, setActiveSection] = useState('getting-started');
+
+  const sections = useMemo(() => [
     { title: 'Getting Started', id: 'getting-started' },
     { title: 'Installation', id: 'installation' },
     { title: 'Basic Usage', id: 'basic-usage' },
     { title: 'Core Concepts', id: 'core-concepts' },
     { title: 'Cargo Commands', id: 'cargo-commands' },
     { title: 'API Reference', id: 'api-reference' },
-  ];
+  ], []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Calculate scroll progress
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      setScrollProgress(Math.min(progress, 100));
+
+      // Find active section
+      const sectionElements = sections.map(section => ({
+        id: section.id,
+        element: document.getElementById(section.id),
+      }));
+
+      const headerOffset = 120; // Account for header height + some padding
+      const currentSection = sectionElements.find(({ element }) => {
+        if (!element) return false;
+        const rect = element.getBoundingClientRect();
+        return rect.top <= headerOffset && rect.bottom > headerOffset;
+      });
+
+      if (currentSection) {
+        setActiveSection(currentSection.id);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Call once to set initial state
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [sections]);
 
   return (
     <Box>
@@ -50,6 +86,24 @@ const Documentation: React.FC = () => {
           </IconButton>
         </Toolbar>
       </AppBar>
+
+      {/* Reading Progress Bar */}
+      <LinearProgress
+        variant="determinate"
+        value={scrollProgress}
+        sx={{
+          position: 'fixed',
+          top: 64, // Below AppBar
+          left: 0,
+          right: 0,
+          zIndex: 1200,
+          height: 3,
+          backgroundColor: 'transparent',
+          '& .MuiLinearProgress-bar': {
+            backgroundColor: '#ff4500',
+          },
+        }}
+      />
 
       <Container maxWidth="lg" sx={{ mt: 10 }}>
         <Grid container spacing={4}>
@@ -75,9 +129,30 @@ const Documentation: React.FC = () => {
                         });
                       }
                     }}
-                    sx={{ cursor: 'pointer' }}
+                    sx={{ 
+                      cursor: 'pointer',
+                      borderRadius: 1,
+                      mb: 0.5,
+                      transition: 'all 0.2s ease',
+                      backgroundColor: activeSection === section.id ? 'rgba(255, 69, 0, 0.1)' : 'transparent',
+                      borderLeft: activeSection === section.id ? '3px solid #ff4500' : '3px solid transparent',
+                      '&:hover': {
+                        backgroundColor: activeSection === section.id 
+                          ? 'rgba(255, 69, 0, 0.15)' 
+                          : 'rgba(255, 255, 255, 0.05)',
+                        transform: 'translateX(4px)',
+                      },
+                    }}
                   >
-                    <ListItemText primary={section.title} />
+                    <ListItemText 
+                      primary={section.title}
+                      sx={{
+                        '& .MuiListItemText-primary': {
+                          fontWeight: activeSection === section.id ? 600 : 400,
+                          color: activeSection === section.id ? '#ff4500' : 'inherit',
+                        }
+                      }}
+                    />
                   </ListItem>
                 ))}
               </List>

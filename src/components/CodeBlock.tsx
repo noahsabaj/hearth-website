@@ -1,5 +1,6 @@
-import React from 'react';
-import { Paper } from '@mui/material';
+import React, { useState } from 'react';
+import { Paper, IconButton, Tooltip, Snackbar } from '@mui/material';
+import { ContentCopy } from '@mui/icons-material';
 
 interface CodeBlockProps {
   children: string;
@@ -7,6 +8,21 @@ interface CodeBlockProps {
 }
 
 const CodeBlock: React.FC<CodeBlockProps> = ({ children, language = 'rust' }) => {
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(children);
+      setCopySuccess(true);
+    } catch (err) {
+      console.error('Failed to copy code:', err);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setCopySuccess(false);
+  };
+
   // Simple syntax highlighting for Rust
   const highlightCode = (code: string) => {
     // Keywords
@@ -37,54 +53,90 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, language = 'rust' }) =>
   };
 
   return (
-    <Paper 
-      sx={{ 
-        p: 2, 
-        bgcolor: '#1e1e1e', 
-        my: 2,
-        overflow: 'auto',
-        borderRadius: 2,
-        border: '1px solid #333',
-        '& pre': {
-          margin: 0,
-          fontFamily: '"Fira Code", "Consolas", "Monaco", monospace',
-          fontSize: '14px',
-          lineHeight: 1.6,
-        },
-        '& .keyword': {
-          color: '#569cd6',
-          fontWeight: 'bold',
-        },
-        '& .type': {
-          color: '#4ec9b0',
-        },
-        '& .function': {
-          color: '#dcdcaa',
-        },
-        '& .macro': {
-          color: '#c586c0',
-        },
-        '& .string': {
-          color: '#ce9178',
-        },
-        '& .comment': {
-          color: '#6a9955',
-          fontStyle: 'italic',
-        },
-        '& .number': {
-          color: '#b5cea8',
-        },
-        '& .attribute': {
-          color: '#9cdcfe',
-        },
-      }}
-    >
-      <pre 
-        dangerouslySetInnerHTML={{ 
-          __html: highlightCode(children) 
-        }} 
+    <>
+      <Paper 
+        sx={{ 
+          p: 2, 
+          bgcolor: '#1e1e1e', 
+          my: 2,
+          overflow: 'auto',
+          borderRadius: 2,
+          border: '1px solid #333',
+          position: 'relative',
+          '&:hover .copy-button': {
+            opacity: 1,
+          },
+          '& pre': {
+            margin: 0,
+            fontFamily: '"Fira Code", "Consolas", "Monaco", monospace',
+            fontSize: '14px',
+            lineHeight: 1.6,
+          },
+          '& .keyword': {
+            color: '#569cd6',
+            fontWeight: 'bold',
+          },
+          '& .type': {
+            color: '#4ec9b0',
+          },
+          '& .function': {
+            color: '#dcdcaa',
+          },
+          '& .macro': {
+            color: '#c586c0',
+          },
+          '& .string': {
+            color: '#ce9178',
+          },
+          '& .comment': {
+            color: '#6a9955',
+            fontStyle: 'italic',
+          },
+          '& .number': {
+            color: '#b5cea8',
+          },
+          '& .attribute': {
+            color: '#9cdcfe',
+          },
+        }}
+      >
+        <Tooltip title="Copy code">
+          <IconButton
+            className="copy-button"
+            onClick={handleCopy}
+            sx={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              opacity: 0,
+              transition: 'opacity 0.2s ease',
+              color: '#999',
+              backgroundColor: 'rgba(255,255,255,0.1)',
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                color: '#fff',
+              },
+              zIndex: 1,
+            }}
+            size="small"
+          >
+            <ContentCopy fontSize="small" />
+          </IconButton>
+        </Tooltip>
+        <pre 
+          dangerouslySetInnerHTML={{ 
+            __html: highlightCode(children) 
+          }} 
+        />
+      </Paper>
+      <Snackbar
+        open={copySuccess}
+        autoHideDuration={2000}
+        onClose={handleCloseSnackbar}
+        message="Code copied to clipboard!"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       />
-    </Paper>
+    </>
   );
 };
 
