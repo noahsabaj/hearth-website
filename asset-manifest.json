@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/hearth-website/static/js/main.f34e971c.js",
+    "main.js": "/hearth-website/static/js/main.9d241174.js",
     "static/js/453.da128c9e.chunk.js": "/hearth-website/static/js/453.da128c9e.chunk.js",
     "index.html": "/hearth-website/index.html",
-    "main.f34e971c.js.map": "/hearth-website/static/js/main.f34e971c.js.map",
+    "main.9d241174.js.map": "/hearth-website/static/js/main.9d241174.js.map",
     "453.da128c9e.chunk.js.map": "/hearth-website/static/js/453.da128c9e.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.f34e971c.js"
+    "static/js/main.9d241174.js"
   ]
 }
