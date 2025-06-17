@@ -26,6 +26,7 @@ import {
   Window,
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import ReadingTime from '../components/ReadingTime';
 
 interface Release {
   tag_name: string;
@@ -161,12 +162,25 @@ cargo build --release`}
         )}
 
         {releases.map((release, index) => (
-          <Card key={release.tag_name} sx={{ mb: 3, bgcolor: index === 0 ? '#1a1a1a' : '#0a0a0a' }}>
+          <Card key={release.tag_name} sx={{ 
+            mb: 3, 
+            bgcolor: index === 0 ? '#1a1a1a' : '#0a0a0a',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            cursor: 'pointer',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: index === 0 
+                ? '0 16px 32px rgba(255, 69, 0, 0.3)' 
+                : '0 16px 32px rgba(0, 0, 0, 0.5)',
+              bgcolor: index === 0 ? '#2a2a2a' : '#1a1a1a',
+            },
+          }}>
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                 <Typography variant="h5" sx={{ flexGrow: 1 }}>
                   {release.name || release.tag_name}
                 </Typography>
+                <ReadingTime text={release.body || "Release notes and download information"} />
                 {index === 0 && <Chip label="Latest" color="primary" size="small" />}
               </Box>
               <Typography variant="body2" color="text.secondary" paragraph>

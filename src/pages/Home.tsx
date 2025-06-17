@@ -22,6 +22,7 @@ import {
   Build,
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import ReadingTime from '../components/ReadingTime';
 
 const Home: React.FC = () => {
   return (
@@ -164,12 +165,30 @@ const Home: React.FC = () => {
           </Typography>
           <Grid container spacing={4}>
             <Grid item xs={12} md={4}>
-              <Card sx={{ height: '100%', background: '#222' }}>
+              <Card sx={{ 
+                height: '100%', 
+                background: '#222',
+                cursor: 'pointer',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': {
+                  transform: 'translateY(-8px) scale(1.02)',
+                  boxShadow: '0 20px 40px rgba(255, 69, 0, 0.2)',
+                  background: '#2a2a2a',
+                },
+              }}>
                 <CardContent>
-                  <Speed sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                  <Typography variant="h5" gutterBottom>
-                    Blazing Performance
-                  </Typography>
+                  <Speed sx={{ 
+                    fontSize: 48, 
+                    color: 'primary.main', 
+                    mb: 2,
+                    transition: 'all 0.3s ease',
+                  }} />
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                    <Typography variant="h5">
+                      Blazing Performance
+                    </Typography>
+                    <ReadingTime text="GPU-first architecture with data-oriented design achieves 60+ FPS with millions of voxels. No compromises on scale or detail." />
+                  </Box>
                   <Typography variant="body2" color="text.secondary">
                     GPU-first architecture with data-oriented design achieves 60+ FPS 
                     with millions of voxels. No compromises on scale or detail.
@@ -178,12 +197,30 @@ const Home: React.FC = () => {
               </Card>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Card sx={{ height: '100%', background: '#222' }}>
+              <Card sx={{ 
+                height: '100%', 
+                background: '#222',
+                cursor: 'pointer',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': {
+                  transform: 'translateY(-8px) scale(1.02)',
+                  boxShadow: '0 20px 40px rgba(255, 69, 0, 0.2)',
+                  background: '#2a2a2a',
+                },
+              }}>
                 <CardContent>
-                  <Terrain sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                  <Typography variant="h5" gutterBottom>
-                    True Voxel Physics
-                  </Typography>
+                  <Terrain sx={{ 
+                    fontSize: 48, 
+                    color: 'primary.main', 
+                    mb: 2,
+                    transition: 'all 0.3s ease',
+                  }} />
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                    <Typography variant="h5">
+                      True Voxel Physics
+                    </Typography>
+                    <ReadingTime text="Every voxel simulates realistic physics - thermal, fluid, acoustic, and structural properties. Watch worlds come alive." />
+                  </Box>
                   <Typography variant="body2" color="text.secondary">
                     Every voxel simulates realistic physics - thermal, fluid, acoustic, 
                     and structural properties. Watch worlds come alive.
@@ -192,12 +229,30 @@ const Home: React.FC = () => {
               </Card>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Card sx={{ height: '100%', background: '#222' }}>
+              <Card sx={{ 
+                height: '100%', 
+                background: '#222',
+                cursor: 'pointer',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': {
+                  transform: 'translateY(-8px) scale(1.02)',
+                  boxShadow: '0 20px 40px rgba(255, 69, 0, 0.2)',
+                  background: '#2a2a2a',
+                },
+              }}>
                 <CardContent>
-                  <Build sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                  <Typography variant="h5" gutterBottom>
-                    Emergent Gameplay
-                  </Typography>
+                  <Build sx={{ 
+                    fontSize: 48, 
+                    color: 'primary.main', 
+                    mb: 2,
+                    transition: 'all 0.3s ease',
+                  }} />
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                    <Typography variant="h5">
+                      Emergent Gameplay
+                    </Typography>
+                    <ReadingTime text="Complex behaviors emerge from simple rules. Build cities, destroy mountains, reshape worlds. Your imagination is the limit." />
+                  </Box>
                   <Typography variant="body2" color="text.secondary">
                     Complex behaviors emerge from simple rules. Build cities, 
                     destroy mountains, reshape worlds. Your imagination is the limit.

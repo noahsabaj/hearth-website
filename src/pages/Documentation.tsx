@@ -18,6 +18,7 @@ import {
 import { GitHub, Home, Download } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import CodeBlock from '../components/CodeBlock';
+import ReadingTime from '../components/ReadingTime';
 
 const Documentation: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -194,9 +195,12 @@ const Documentation: React.FC = () => {
               <Divider sx={{ my: 4 }} />
 
               <Box id="getting-started" sx={{ mb: 6 }}>
-                <Typography variant="h3" gutterBottom>
-                  Getting Started
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                  <Typography variant="h3">
+                    Getting Started
+                  </Typography>
+                  <ReadingTime text="Hearth Engine is a next-generation voxel game engine built with Rust. It provides a data-oriented, GPU-first architecture for creating games with realistic physics and emergent gameplay. Quick example use hearth_engine Engine Game World struct MyGame impl Game for MyGame fn init mut self world mut World world set_render_distance fn update mut self world mut World input Input dt f32 Game logic here fn main let mut engine Engine new engine run MyGame" />
+                </Box>
                 <Typography variant="body1" paragraph>
                   Hearth Engine is a next-generation voxel game engine built with Rust. It provides
                   a data-oriented, GPU-first architecture for creating games with realistic physics
@@ -228,9 +232,12 @@ fn main() {
               <Divider sx={{ my: 4 }} />
 
               <Box id="installation" sx={{ mb: 6 }}>
-                <Typography variant="h3" gutterBottom>
-                  Installation
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                  <Typography variant="h3">
+                    Installation
+                  </Typography>
+                  <ReadingTime text="Add Hearth Engine to your project dependencies Cargo toml dependencies hearth-engine Make sure you have Rust installed The engine requires a GPU with Vulkan DirectX or Metal support" />
+                </Box>
                 <Typography variant="body1" paragraph>
                   Add Hearth Engine to your project's dependencies:
                 </Typography>
@@ -248,9 +255,12 @@ hearth-engine = "0.35"`}
               <Divider sx={{ my: 4 }} />
 
               <Box id="basic-usage" sx={{ mb: 6 }}>
-                <Typography variant="h3" gutterBottom>
-                  Basic Usage
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                  <Typography variant="h3">
+                    Basic Usage
+                  </Typography>
+                  <ReadingTime text="Creating a simple voxel world with Hearth Engine is straightforward Create a world with terrain generation world generate_terrain TerrainParams seed scale octaves Place a voxel world set_voxel vec3 VoxelType Stone Apply physics simulation world simulate_physics dt" />
+                </Box>
                 <Typography variant="body1" paragraph>
                   Creating a simple voxel world with Hearth Engine is straightforward:
                 </Typography>
@@ -273,9 +283,12 @@ world.simulate_physics(dt);`}
               <Divider sx={{ my: 4 }} />
 
               <Box id="core-concepts" sx={{ mb: 6 }}>
-                <Typography variant="h3" gutterBottom>
-                  Core Concepts
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                  <Typography variant="h3">
+                    Core Concepts
+                  </Typography>
+                  <ReadingTime text="Data-Oriented Design Hearth Engine follows strict data-oriented programming principles All data lives in shared buffers and systems are stateless kernels that transform data GPU-First Architecture Computations are performed on the GPU whenever possible allowing for massive parallelization and scale" />
+                </Box>
                 <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
                   Data-Oriented Design
                 </Typography>
@@ -295,9 +308,12 @@ world.simulate_physics(dt);`}
               <Divider sx={{ my: 4 }} />
 
               <Box id="cargo-commands" sx={{ mb: 6 }}>
-                <Typography variant="h3" gutterBottom>
-                  Cargo Commands Reference
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                  <Typography variant="h3">
+                    Cargo Commands Reference
+                  </Typography>
+                  <ReadingTime text="Cargo is Rust build system and package manager Here comprehensive guide to Cargo commands you will use when developing with Hearth Engine Essential Daily Commands cargo check cargo build cargo run cargo test cargo clippy cargo fmt Build Run Commands cargo build release cargo clean cargo run bin example args Testing Debugging cargo test pattern nocapture bench cargo check clippy fmt tree audit outdated Package Management cargo add crate version features remove update search doc open Performance Analysis cargo flamegraph bloat asm watch Development workflow cargo check test run Hearth Engine Specific Workflow cargo build features vulkan debug-ui profiler" />
+                </Box>
                 <Typography variant="body1" paragraph>
                   Cargo is Rust's build system and package manager. Here's a comprehensive guide
                   to Cargo commands you'll use when developing with Hearth Engine.
@@ -449,9 +465,12 @@ cargo build --features "debug-ui,profiler"`}
               <Divider sx={{ my: 4 }} />
 
               <Box id="api-reference" sx={{ mb: 6 }}>
-                <Typography variant="h3" gutterBottom>
-                  API Reference
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                  <Typography variant="h3">
+                    API Reference
+                  </Typography>
+                  <ReadingTime text="For detailed API documentation see the docs rs page or browse the source code on GitHub" />
+                </Box>
                 <Typography variant="body1" paragraph>
                   For detailed API documentation, see the{' '}
                   <a 
