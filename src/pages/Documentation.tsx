@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { GitHub, Home, Download } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import CodeBlock from '../components/CodeBlock';
 
 const Documentation: React.FC = () => {
   const sections = [
@@ -66,7 +67,12 @@ const Documentation: React.FC = () => {
                     onClick={() => {
                       const element = document.getElementById(section.id);
                       if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
+                        const headerHeight = 80; // AppBar height + some padding
+                        const elementPosition = element.offsetTop - headerHeight;
+                        window.scrollTo({
+                          top: elementPosition,
+                          behavior: 'smooth'
+                        });
                       }
                     }}
                     sx={{ cursor: 'pointer' }}
@@ -100,8 +106,7 @@ const Documentation: React.FC = () => {
                   a data-oriented, GPU-first architecture for creating games with realistic physics
                   and emergent gameplay.
                 </Typography>
-                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
-                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+                <CodeBlock>
 {`// Quick example
 use hearth_engine::{Engine, Game, World};
 
@@ -121,8 +126,7 @@ fn main() {
     let mut engine = Engine::new();
     engine.run(MyGame);
 }`}
-                  </Typography>
-                </Paper>
+                </CodeBlock>
               </Box>
 
               <Divider sx={{ my: 4 }} />
@@ -134,13 +138,11 @@ fn main() {
                 <Typography variant="body1" paragraph>
                   Add Hearth Engine to your project's dependencies:
                 </Typography>
-                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
-                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+                <CodeBlock language="toml">
 {`# Cargo.toml
 [dependencies]
 hearth-engine = "0.35"`}
-                  </Typography>
-                </Paper>
+                </CodeBlock>
                 <Typography variant="body1" paragraph>
                   Make sure you have Rust 1.70+ installed. The engine requires a GPU with 
                   Vulkan, DirectX 12, or Metal support.
@@ -156,8 +158,7 @@ hearth-engine = "0.35"`}
                 <Typography variant="body1" paragraph>
                   Creating a simple voxel world with Hearth Engine is straightforward:
                 </Typography>
-                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
-                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+                <CodeBlock>
 {`// Create a world with terrain generation
 world.generate_terrain(TerrainParams {
     seed: 42,
@@ -170,8 +171,7 @@ world.set_voxel(vec3(10, 20, 30), VoxelType::Stone);
 
 // Apply physics simulation
 world.simulate_physics(dt);`}
-                  </Typography>
-                </Paper>
+                </CodeBlock>
               </Box>
 
               <Divider sx={{ my: 4 }} />
@@ -210,22 +210,19 @@ world.simulate_physics(dt);`}
                 <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
                   Essential Daily Commands
                 </Typography>
-                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
-                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+                <CodeBlock language="bash">
 {`cargo check      # Quick syntax/type check (no compilation)
 cargo build      # Compile in debug mode
 cargo run        # Build and run the default binary
 cargo test       # Run all tests
 cargo clippy     # Run linter for code quality
 cargo fmt        # Auto-format code`}
-                  </Typography>
-                </Paper>
+                </CodeBlock>
 
                 <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
                   Build & Run Commands
                 </Typography>
-                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
-                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+                <CodeBlock language="bash">
 {`# Building
 cargo build              # Debug build (fast compile, slow runtime)
 cargo build --release    # Release build (slow compile, fast runtime)
@@ -237,14 +234,12 @@ cargo run --bin <name>         # Run specific binary
 cargo run --example <name>     # Run example
 cargo run -- <args>            # Pass arguments to program
 cargo run --release            # Run optimized version`}
-                  </Typography>
-                </Paper>
+                </CodeBlock>
 
                 <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
                   Testing & Debugging
                 </Typography>
-                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
-                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+                <CodeBlock language="bash">
 {`# Testing
 cargo test                     # Run all tests
 cargo test <pattern>           # Run tests matching pattern
@@ -259,14 +254,12 @@ cargo fmt                # Format code
 cargo tree               # Show dependency tree
 cargo audit              # Security vulnerability check
 cargo outdated           # Check for updates`}
-                  </Typography>
-                </Paper>
+                </CodeBlock>
 
                 <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
                   Package Management
                 </Typography>
-                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
-                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+                <CodeBlock language="bash">
 {`# Dependencies
 cargo add <crate>              # Add dependency
 cargo add <crate>@<version>    # Add specific version
@@ -278,14 +271,12 @@ cargo search <term>            # Search crates.io
 # Documentation
 cargo doc                # Generate docs
 cargo doc --open         # Generate and open docs`}
-                  </Typography>
-                </Paper>
+                </CodeBlock>
 
                 <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
                   Performance Analysis
                 </Typography>
-                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
-                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+                <CodeBlock language="bash">
 {`# Profiling (requires additional tools)
 cargo flamegraph         # CPU profiling visualization
 cargo bloat              # Analyze binary size
@@ -295,14 +286,12 @@ cargo asm <function>     # Show assembly code
 cargo watch -x check     # Auto-check on file changes
 cargo watch -x test      # Auto-test on file changes
 cargo watch -x run       # Auto-run on file changes`}
-                  </Typography>
-                </Paper>
+                </CodeBlock>
 
                 <Typography variant="h4" gutterBottom sx={{ mt: 3 }}>
                   Hearth Engine Specific Workflow
                 </Typography>
-                <Paper sx={{ p: 2, bgcolor: '#1a1a1a', my: 2 }}>
-                  <Typography variant="body2" component="pre" sx={{ fontFamily: 'monospace' }}>
+                <CodeBlock language="bash">
 {`# Quick development cycle
 cargo check && cargo clippy && cargo test
 
@@ -315,8 +304,7 @@ cargo fmt && cargo clippy && cargo test
 # Build with specific features
 cargo build --features "vulkan"
 cargo build --features "debug-ui,profiler"`}
-                  </Typography>
-                </Paper>
+                </CodeBlock>
 
                 <Typography variant="h5" gutterBottom sx={{ mt: 3 }}>
                   Pro Tips
