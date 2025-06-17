@@ -60,7 +60,17 @@ const Documentation: React.FC = () => {
               </Typography>
               <List>
                 {sections.map((section) => (
-                  <ListItem key={section.id} component="a" href={`#${section.id}`}>
+                  <ListItem 
+                    key={section.id} 
+                    component="button"
+                    onClick={() => {
+                      const element = document.getElementById(section.id);
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                    sx={{ cursor: 'pointer' }}
+                  >
                     <ListItemText primary={section.title} />
                   </ListItem>
                 ))}
@@ -340,9 +350,14 @@ cargo build --features "debug-ui,profiler"`}
 
                 <Typography variant="body1" paragraph sx={{ mt: 3 }}>
                   For a complete reference guide with advanced commands and troubleshooting, see the{' '}
-                  <Link to="https://github.com/noahsabaj/hearth-engine/blob/main/docs/guides/CARGO_COMMANDS_GUIDE.md">
+                  <a 
+                    href="https://github.com/noahsabaj/hearth-engine/blob/main/docs/guides/CARGO_COMMANDS_GUIDE.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#ff4500', textDecoration: 'none' }}
+                  >
                     full Cargo Commands Guide
-                  </Link>{' '}
+                  </a>{' '}
                   in the engine documentation.
                 </Typography>
               </Box>
@@ -355,13 +370,23 @@ cargo build --features "debug-ui,profiler"`}
                 </Typography>
                 <Typography variant="body1" paragraph>
                   For detailed API documentation, see the{' '}
-                  <Link to="https://docs.rs/hearth-engine">
+                  <a 
+                    href="https://docs.rs/hearth-engine"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#ff4500', textDecoration: 'none' }}
+                  >
                     docs.rs page
-                  </Link>{' '}
+                  </a>{' '}
                   or browse the source code on{' '}
-                  <Link to="https://github.com/noahsabaj/hearth-engine">
+                  <a 
+                    href="https://github.com/noahsabaj/hearth-engine"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#ff4500', textDecoration: 'none' }}
+                  >
                     GitHub
-                  </Link>.
+                  </a>.
                 </Typography>
               </Box>
             </Box>
