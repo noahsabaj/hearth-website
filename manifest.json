@@ -1,6 +1,7 @@
 {
-  "short_name": "Hearth",
-  "name": "Hearth Engine",
+  "short_name": "Hearth Engine",
+  "name": "Hearth Engine - Next-Generation Voxel Game Engine",
+  "description": "Build worlds that feel real with Hearth Engine - a revolutionary voxel game engine featuring true physics simulation and emergent gameplay.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,18 +9,40 @@
       "type": "image/x-icon"
     },
     {
+      "src": "favicon-16.png",
+      "type": "image/png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "favicon-32.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "favicon-48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
       "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/hearth-website/",
+  "scope": "/hearth-website/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "theme_color": "#ff4500",
-  "background_color": "#0a0a0a"
+  "background_color": "#0a0a0a",
+  "categories": ["games", "developer", "utilities"],
+  "lang": "en-US",
+  "dir": "ltr"
 }
