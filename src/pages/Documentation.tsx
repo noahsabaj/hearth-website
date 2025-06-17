@@ -262,7 +262,7 @@ const Documentation: React.FC = () => {
                   <Typography variant='h3' id='getting-started-heading' component='h2'>
                     Getting Started
                   </Typography>
-                  <ReadingTime text='Hearth Engine is a next-generation voxel game engine built with Rust. It provides a data-oriented, GPU-first architecture for creating games with realistic physics and emergent gameplay. This section covers basic setup and your first game loop implementation using the Engine struct and Game trait. The example shows how to initialize a world, set render distance, update game logic with input handling and delta time, and run the main engine loop.' />
+                  <ReadingTime text='Hearth Engine is a next-generation voxel game engine built with Rust. It provides a data-oriented, GPU-first architecture for creating games with realistic physics and emergent gameplay. Quick example use hearth_engine Engine Game World struct MyGame impl Game for MyGame fn init mut self world mut World world set_render_distance sixteen fn update mut self world mut World input Input dt f32 Game logic here fn main let mut engine Engine new engine run MyGame This demonstrates basic structure for creating game with Hearth Engine including Game trait implementation world initialization and main engine loop setup. The Engine struct provides core functionality while Game trait defines your application behavior.' />
                 </Box>
                 <Typography variant='body1' paragraph>
                   Hearth Engine is a next-generation voxel game engine built with Rust. It provides
@@ -304,7 +304,7 @@ fn main() {
                   <Typography variant='h3' id='installation-heading' component='h2'>
                     Installation
                   </Typography>
-                  <ReadingTime text='Installation guide for Hearth Engine. Add the crate to your Cargo.toml dependencies section with version 0.35. Ensure you have Rust 1.70 or later installed on your system. The engine requires a modern GPU with Vulkan, DirectX 12, or Metal API support for hardware acceleration. Cross-platform compatibility across Windows, macOS, and Linux distributions.' />
+                  <ReadingTime text='Installation guide for Hearth Engine. Add Hearth Engine to your project dependencies Cargo.toml dependencies hearth-engine version zero point thirty five Make sure you have Rust installed one point seventy plus. The engine requires GPU with Vulkan DirectX twelve or Metal support for hardware acceleration and graphics rendering. Cross platform compatibility across Windows macOS and Linux distributions with proper graphics drivers installed.' />
                 </Box>
                 <Typography variant='body1' paragraph>
                   Add Hearth Engine to your project's dependencies:
@@ -332,7 +332,7 @@ hearth-engine = "0.35"`}
                   <Typography variant='h3' id='basic-usage-heading' component='h2'>
                     Basic Usage
                   </Typography>
-                  <ReadingTime text='Basic usage tutorial covering world creation and voxel manipulation. Learn to generate procedural terrain using TerrainParams with configurable seed, scale, and octave values for noise generation. Place individual voxels at specific coordinates using 3D vectors and material types like Stone. Apply realistic physics simulation with delta time for frame-independent calculations and movement.' />
+                  <ReadingTime text='Creating simple voxel world with Hearth Engine is straightforward. Create world with terrain generation world generate_terrain TerrainParams seed forty two scale zero point one octaves four Place voxel world set_voxel vec3 ten twenty thirty VoxelType Stone Apply physics simulation world simulate_physics dt. This covers world creation voxel placement and physics simulation basics for getting started with voxel manipulation and terrain generation in your games.' />
                 </Box>
                 <Typography variant='body1' paragraph>
                   Creating a simple voxel world with Hearth Engine is straightforward:
@@ -365,7 +365,7 @@ world.simulate_physics(dt);`}
                   <Typography variant='h3' id='core-concepts-heading' component='h2'>
                     Core Concepts
                   </Typography>
-                  <ReadingTime text='Core architectural concepts behind Hearth Engine. Data-Oriented Design principles ensure all game data lives in contiguous memory buffers rather than scattered objects, enabling better cache performance and vectorization. Systems operate as stateless transformation kernels that process data in bulk. GPU-First Architecture leverages compute shaders for physics simulation, terrain generation, and rendering operations, achieving massive parallelization impossible on CPU alone.' />
+                  <ReadingTime text='Core Concepts Data Oriented Design Hearth Engine follows strict data-oriented programming principles All data lives in shared buffers and systems are stateless kernels that transform data GPU First Architecture Computations are performed on GPU whenever possible allowing for massive parallelization and scale. This architectural approach enables high performance voxel simulation with millions of blocks processed simultaneously using modern graphics hardware acceleration techniques.' />
                 </Box>
                 <Typography variant='h4' gutterBottom sx={{ mt: 3 }}>
                   Data-Oriented Design
@@ -395,7 +395,7 @@ world.simulate_physics(dt);`}
                   <Typography variant='h3' id='cargo-commands-heading' component='h2'>
                     Cargo Commands Reference
                   </Typography>
-                  <ReadingTime text='Comprehensive Cargo commands reference for Rust development with Hearth Engine. Covers essential daily commands like check, build, run, test, clippy, and fmt for development workflow. Build and run commands including release optimization, cleaning artifacts, running specific binaries and examples with arguments. Testing and debugging with pattern matching, output capture, benchmarking, and dependency auditing. Package management for adding, removing, updating dependencies with version control and feature flags. Performance analysis tools including flamegraph profiling, binary size analysis, assembly inspection, and watch mode for automated rebuilds. Specific Hearth Engine workflow recommendations and feature compilation options.' />
+                  <ReadingTime text='Cargo is Rust build system and package manager comprehensive guide to Cargo commands you will use when developing with Hearth Engine Essential Daily Commands cargo check cargo build cargo run cargo test cargo clippy cargo fmt Build Run Commands cargo build release cargo clean cargo run bin example args Testing Debugging cargo test pattern nocapture bench cargo check clippy fmt tree audit outdated Package Management cargo add crate version features remove update search doc open Performance Analysis cargo flamegraph bloat asm watch Development workflow cargo check test run Hearth Engine Specific Workflow cargo build features vulkan debug-ui profiler. This section covers all essential Cargo commands for Rust development including building testing debugging package management performance analysis and Hearth Engine specific workflows with feature flags and optimization techniques for game development.' />
                 </Box>
                 <Typography variant='body1' paragraph>
                   Cargo is Rust's build system and package manager. Here's a comprehensive guide to
@@ -557,7 +557,7 @@ cargo build --features "debug-ui,profiler"`}
                   <Typography variant='h3' id='api-reference-heading' component='h2'>
                     API Reference
                   </Typography>
-                  <ReadingTime text='API reference section providing links to comprehensive documentation. Access detailed function signatures, type definitions, and usage examples on the official docs.rs documentation site. Browse complete source code, examples, and implementation details on the GitHub repository for deeper understanding of engine internals.' />
+                  <ReadingTime text='For detailed API documentation see the docs rs page or browse the source code on GitHub repository for comprehensive function signatures type definitions and usage examples.' />
                 </Box>
                 <Typography variant='body1' paragraph>
                   For detailed API documentation, see the{' '}
