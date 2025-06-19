@@ -22,9 +22,9 @@ import {
 import React, { useState, useMemo, memo } from 'react';
 import { Link } from 'react-router-dom';
 
-import { AnimatedSection } from '../components/PageTransition';
 import EditOnGitHub from '../components/EditOnGitHub';
 import NavigationBar from '../components/NavigationBar';
+import { AnimatedSection } from '../components/PageTransition';
 
 interface FAQItem {
   id: string;

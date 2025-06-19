@@ -1,3 +1,4 @@
+import { Menu as MenuIcon, Close } from '@mui/icons-material';
 import {
   Box,
   Container,
@@ -14,16 +15,15 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
-import { Menu as MenuIcon, Close } from '@mui/icons-material';
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 
 import CodeBlock from '../components/CodeBlock';
 import EditOnGitHub from '../components/EditOnGitHub';
+import FeedbackWidget from '../components/FeedbackWidget';
+import LastUpdated from '../components/LastUpdated';
 import NavigationBar from '../components/NavigationBar';
 import ReadingTime from '../components/ReadingTime';
 import RelatedArticles from '../components/RelatedArticles';
-import FeedbackWidget from '../components/FeedbackWidget';
-import LastUpdated from '../components/LastUpdated';
 import { useKeyboardShortcutsContext } from '../contexts/KeyboardShortcutsContext';
 
 // Last updated dates for each documentation section
@@ -53,7 +53,7 @@ const GITHUB_EDIT_URLS = {
 
 // Full section content for accurate reading time calculation
 const SECTION_CONTENT = {
-  gettingStarted: `Hearth Engine is a next-generation voxel game engine built with Rust. It provides a data-oriented, GPU-first architecture for creating games with realistic physics and emergent gameplay. Currently in Sprint 39 focusing on core system stabilization and performance optimization.
+  gettingStarted: `Hearth Engine is a next-generation voxel game engine built with Rust. It provides a data-oriented, GPU-first architecture for creating games with realistic physics and emergent gameplay.
 
 Key Features:
 - GPU-driven architecture with 60+ FPS at millions of voxels
