@@ -1,11 +1,11 @@
 {
   "files": {
     "main.css": "/hearth-website/static/css/main.cf935264.css",
-    "main.js": "/hearth-website/static/js/main.0cc8a694.js",
-    "static/js/210.10ea1d9a.chunk.js": "/hearth-website/static/js/210.10ea1d9a.chunk.js",
-    "static/js/209.46dc127c.chunk.js": "/hearth-website/static/js/209.46dc127c.chunk.js",
+    "main.js": "/hearth-website/static/js/main.fcc39f42.js",
+    "static/js/210.859227e1.chunk.js": "/hearth-website/static/js/210.859227e1.chunk.js",
+    "static/js/209.a81cf452.chunk.js": "/hearth-website/static/js/209.a81cf452.chunk.js",
     "static/js/46.f0abcc87.chunk.js": "/hearth-website/static/js/46.f0abcc87.chunk.js",
-    "static/js/844.c5b28ac9.chunk.js": "/hearth-website/static/js/844.c5b28ac9.chunk.js",
+    "static/js/844.6d663542.chunk.js": "/hearth-website/static/js/844.6d663542.chunk.js",
     "static/js/760.c781a508.chunk.js": "/hearth-website/static/js/760.c781a508.chunk.js",
     "static/js/407.80982059.chunk.js": "/hearth-website/static/js/407.80982059.chunk.js",
     "static/js/830.2cf7d007.chunk.js": "/hearth-website/static/js/830.2cf7d007.chunk.js",
@@ -26,6 +26,6 @@
   },
   "entrypoints": [
     "static/css/main.cf935264.css",
-    "static/js/main.0cc8a694.js"
+    "static/js/main.fcc39f42.js"
   ]
 }
