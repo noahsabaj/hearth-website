@@ -45,7 +45,8 @@ const searchData: SearchItem[] = [
   {
     title: 'Home',
     path: '/',
-    content: 'Hearth Engine homepage. Build worlds that feel real. Destroy them too. A next-generation voxel engine with true physics simulation.',
+    content:
+      'Hearth Engine homepage. Build worlds that feel real. Destroy them too. A next-generation voxel engine with true physics simulation.',
     type: 'page',
     keywords: ['home', 'main', 'start', 'hearth', 'engine', 'voxel'],
     priority: 100,
@@ -53,7 +54,8 @@ const searchData: SearchItem[] = [
   {
     title: 'Documentation',
     path: '/docs',
-    content: 'Complete documentation for Hearth Engine. Getting started, installation, API reference, core concepts, and usage examples.',
+    content:
+      'Complete documentation for Hearth Engine. Getting started, installation, API reference, core concepts, and usage examples.',
     type: 'page',
     keywords: ['docs', 'documentation', 'guide', 'tutorial', 'reference', 'api'],
     priority: 90,
@@ -61,7 +63,8 @@ const searchData: SearchItem[] = [
   {
     title: 'Downloads',
     path: '/downloads',
-    content: 'Download Hearth Engine for Windows, macOS, and Linux. Latest releases, installation instructions, and system requirements.',
+    content:
+      'Download Hearth Engine for Windows, macOS, and Linux. Latest releases, installation instructions, and system requirements.',
     type: 'page',
     keywords: ['download', 'install', 'releases', 'binaries', 'setup'],
     priority: 90,
@@ -69,7 +72,8 @@ const searchData: SearchItem[] = [
   {
     title: 'FAQ',
     path: '/faq',
-    content: 'Frequently asked questions about Hearth Engine. System requirements, performance, development, and general questions.',
+    content:
+      'Frequently asked questions about Hearth Engine. System requirements, performance, development, and general questions.',
     type: 'page',
     keywords: ['faq', 'questions', 'help', 'support', 'answers'],
     priority: 80,
@@ -79,7 +83,8 @@ const searchData: SearchItem[] = [
   {
     title: 'Getting Started',
     path: '/docs#getting-started',
-    content: 'Quick introduction to Hearth Engine. Learn the basics of creating voxel worlds with realistic physics and emergent gameplay.',
+    content:
+      'Quick introduction to Hearth Engine. Learn the basics of creating voxel worlds with realistic physics and emergent gameplay.',
     type: 'section',
     keywords: ['getting started', 'introduction', 'basics', 'begin', 'tutorial'],
     priority: 85,
@@ -87,7 +92,8 @@ const searchData: SearchItem[] = [
   {
     title: 'Installation',
     path: '/docs#installation',
-    content: 'How to install Hearth Engine. Add to Cargo.toml, system requirements, GPU support for Vulkan, DirectX 12, or Metal.',
+    content:
+      'How to install Hearth Engine. Add to Cargo.toml, system requirements, GPU support for Vulkan, DirectX 12, or Metal.',
     type: 'section',
     keywords: ['install', 'installation', 'cargo', 'toml', 'dependencies', 'setup'],
     priority: 85,
@@ -95,7 +101,8 @@ const searchData: SearchItem[] = [
   {
     title: 'Basic Usage',
     path: '/docs#basic-usage',
-    content: 'Creating voxel worlds, terrain generation, placing voxels, applying physics simulation. Code examples and tutorials.',
+    content:
+      'Creating voxel worlds, terrain generation, placing voxels, applying physics simulation. Code examples and tutorials.',
     type: 'section',
     keywords: ['usage', 'examples', 'code', 'terrain', 'voxels', 'physics'],
     priority: 80,
@@ -103,7 +110,8 @@ const searchData: SearchItem[] = [
   {
     title: 'Core Concepts',
     path: '/docs#core-concepts',
-    content: 'Data-oriented design, GPU-first architecture, stateless systems, parallel processing, and engine architecture.',
+    content:
+      'Data-oriented design, GPU-first architecture, stateless systems, parallel processing, and engine architecture.',
     type: 'section',
     keywords: ['concepts', 'architecture', 'design', 'gpu', 'data-oriented', 'parallel'],
     priority: 75,
@@ -111,7 +119,8 @@ const searchData: SearchItem[] = [
   {
     title: 'Cargo Commands',
     path: '/docs#cargo-commands',
-    content: 'Complete reference for Cargo commands. Build, run, test, debug, profile, and manage dependencies for Hearth Engine projects.',
+    content:
+      'Complete reference for Cargo commands. Build, run, test, debug, profile, and manage dependencies for Hearth Engine projects.',
     type: 'section',
     keywords: ['cargo', 'commands', 'build', 'run', 'test', 'clippy', 'fmt'],
     priority: 75,
@@ -119,7 +128,8 @@ const searchData: SearchItem[] = [
   {
     title: 'API Reference',
     path: '/docs#api-reference',
-    content: 'Complete API documentation for Hearth Engine. Structs, traits, functions, and modules reference.',
+    content:
+      'Complete API documentation for Hearth Engine. Structs, traits, functions, and modules reference.',
     type: 'section',
     keywords: ['api', 'reference', 'docs', 'functions', 'traits', 'modules'],
     priority: 70,
@@ -163,7 +173,8 @@ const searchData: SearchItem[] = [
   {
     title: 'What is Hearth Engine?',
     path: '/faq',
-    content: 'Next-generation voxel game engine built in Rust with true physics simulation and GPU-first architecture.',
+    content:
+      'Next-generation voxel game engine built in Rust with true physics simulation and GPU-first architecture.',
     type: 'faq',
     keywords: ['what', 'hearth', 'engine', 'about', 'description'],
     priority: 65,
@@ -190,13 +201,13 @@ const SearchBar: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
-  
+
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchItem[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
-  
+
   const searchInputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
 
@@ -229,7 +240,7 @@ const SearchBar: React.FC = () => {
   // Save search history
   const saveToHistory = useCallback((term: string) => {
     if (!term.trim()) return;
-    
+
     setSearchHistory(prev => {
       const newHistory = [term, ...prev.filter(h => h !== term)].slice(0, 5);
       localStorage.setItem('searchHistory', JSON.stringify(newHistory));
@@ -241,7 +252,7 @@ const SearchBar: React.FC = () => {
   const handleSearch = useCallback(
     (searchQuery: string) => {
       setQuery(searchQuery);
-      
+
       if (!searchQuery.trim()) {
         setResults([]);
         setSelectedIndex(-1);
@@ -275,14 +286,14 @@ const SearchBar: React.FC = () => {
       setOpen(false);
       setQuery('');
       setResults([]);
-      
+
       // Navigate to the path
       if (item.path.includes('#')) {
         const [path, hash] = item.path.split('#');
         if (path) {
           navigate(path);
         }
-        
+
         // Scroll to section after navigation
         setTimeout(() => {
           if (hash) {
@@ -321,16 +332,14 @@ const SearchBar: React.FC = () => {
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
-          setSelectedIndex(prev => 
-            prev < results.length - 1 ? prev + 1 : prev
-          );
+          setSelectedIndex(prev => (prev < results.length - 1 ? prev + 1 : prev));
           break;
-          
+
         case 'ArrowUp':
           e.preventDefault();
           setSelectedIndex(prev => (prev > 0 ? prev - 1 : -1));
           break;
-          
+
         case 'Enter':
           e.preventDefault();
           if (selectedIndex >= 0 && selectedIndex < results.length) {
@@ -340,7 +349,7 @@ const SearchBar: React.FC = () => {
             }
           }
           break;
-          
+
         case 'Escape':
           e.preventDefault();
           setOpen(false);
@@ -357,9 +366,7 @@ const SearchBar: React.FC = () => {
   // Scroll selected item into view
   useEffect(() => {
     if (selectedIndex >= 0 && resultsRef.current) {
-      const selectedElement = resultsRef.current.querySelector(
-        `[data-index="${selectedIndex}"]`
-      );
+      const selectedElement = resultsRef.current.querySelector(`[data-index="${selectedIndex}"]`);
       selectedElement?.scrollIntoView({
         block: 'nearest',
         behavior: 'smooth',
@@ -433,7 +440,7 @@ const SearchBar: React.FC = () => {
           {!isMobile && (
             <>
               <Typography
-                variant="body2"
+                variant='body2'
                 sx={{
                   color: 'text.secondary',
                   mr: 2,
@@ -443,8 +450,8 @@ const SearchBar: React.FC = () => {
                 Search...
               </Typography>
               <Chip
-                label="Ctrl+K"
-                size="small"
+                label='Ctrl+K'
+                size='small'
                 sx={{
                   height: 20,
                   fontSize: '0.75rem',
@@ -504,7 +511,7 @@ const SearchBar: React.FC = () => {
                 <InputBase
                   ref={searchInputRef}
                   fullWidth
-                  placeholder="Search documentation, commands, FAQ..."
+                  placeholder='Search documentation, commands, FAQ...'
                   value={query}
                   onChange={e => handleSearch(e.target.value)}
                   sx={{
@@ -516,7 +523,7 @@ const SearchBar: React.FC = () => {
                   autoFocus
                 />
                 <IconButton
-                  size="small"
+                  size='small'
                   onClick={() => {
                     setOpen(false);
                     setQuery('');
@@ -540,7 +547,7 @@ const SearchBar: React.FC = () => {
                 {!query && searchHistory.length > 0 && (
                   <>
                     <Typography
-                      variant="caption"
+                      variant='caption'
                       sx={{
                         display: 'block',
                         px: 2,
@@ -578,7 +585,7 @@ const SearchBar: React.FC = () => {
                 {!query && (
                   <>
                     <Typography
-                      variant="caption"
+                      variant='caption'
                       sx={{
                         display: 'block',
                         px: 2,
@@ -624,7 +631,10 @@ const SearchBar: React.FC = () => {
                         selected={selectedIndex === index}
                         onClick={() => handleNavigate(result)}
                         sx={{
-                          borderLeft: selectedIndex === index ? `3px solid ${theme.palette.primary.main}` : '3px solid transparent',
+                          borderLeft:
+                            selectedIndex === index
+                              ? `3px solid ${theme.palette.primary.main}`
+                              : '3px solid transparent',
                           '&:hover': {
                             backgroundColor: alpha(theme.palette.primary.main, 0.08),
                           },
@@ -636,16 +646,14 @@ const SearchBar: React.FC = () => {
                           },
                         }}
                       >
-                        <ListItemIcon sx={{ minWidth: 40 }}>
-                          {getIcon(result.type)}
-                        </ListItemIcon>
+                        <ListItemIcon sx={{ minWidth: 40 }}>{getIcon(result.type)}</ListItemIcon>
                         <ListItemText
                           primary={
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                              <Typography variant="body1">{result.title}</Typography>
+                              <Typography variant='body1'>{result.title}</Typography>
                               <Chip
                                 label={getTypeLabel(result.type)}
-                                size="small"
+                                size='small'
                                 sx={{
                                   height: 18,
                                   fontSize: '0.7rem',
@@ -656,7 +664,7 @@ const SearchBar: React.FC = () => {
                           }
                           secondary={
                             <Typography
-                              variant="caption"
+                              variant='caption'
                               sx={{
                                 display: '-webkit-box',
                                 WebkitLineClamp: 2,
@@ -677,10 +685,10 @@ const SearchBar: React.FC = () => {
                 {/* No results */}
                 {query && results.length === 0 && (
                   <Box sx={{ p: 4, textAlign: 'center' }}>
-                    <Typography variant="body1" color="text.secondary">
+                    <Typography variant='body1' color='text.secondary'>
                       No results found for "{query}"
                     </Typography>
-                    <Typography variant="caption" color="text.secondary">
+                    <Typography variant='caption' color='text.secondary'>
                       Try searching for "getting started", "installation", or "cargo commands"
                     </Typography>
                   </Box>
@@ -698,17 +706,17 @@ const SearchBar: React.FC = () => {
                 }}
               >
                 <Box sx={{ display: 'flex', gap: 2, px: 1 }}>
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant='caption' color='text.secondary'>
                     <strong>↑↓</strong> Navigate
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant='caption' color='text.secondary'>
                     <strong>Enter</strong> Select
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant='caption' color='text.secondary'>
                     <strong>Esc</strong> Close
                   </Typography>
                 </Box>
-                <Typography variant="caption" color="text.secondary" sx={{ px: 1 }}>
+                <Typography variant='caption' color='text.secondary' sx={{ px: 1 }}>
                   Powered by Fuse.js
                 </Typography>
               </Box>

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
+import React, { useEffect, useRef } from 'react';
 
 interface LoadingAnnouncerProps {
   message: string;
@@ -33,16 +33,17 @@ const LoadingAnnouncer: React.FC<LoadingAnnouncerProps> = ({
     // Announce progress at intervals
     if (announceProgress && progress > 0) {
       const roundedProgress = Math.round(progress);
-      const shouldAnnounce = 
+      const shouldAnnounce =
         roundedProgress - lastAnnouncedProgress.current >= announceInterval ||
         roundedProgress === 100;
 
       if (shouldAnnounce) {
         lastAnnouncedProgress.current = roundedProgress;
-        const progressMessage = roundedProgress === 100 
-          ? 'Loading complete'
-          : `Loading ${roundedProgress} percent complete`;
-        
+        const progressMessage =
+          roundedProgress === 100
+            ? 'Loading complete'
+            : `Loading ${roundedProgress} percent complete`;
+
         announcerRef.current.textContent = `${message}. ${progressMessage}.`;
       }
     } else {
@@ -56,9 +57,9 @@ const LoadingAnnouncer: React.FC<LoadingAnnouncerProps> = ({
       {/* Live region for screen readers */}
       <Box
         ref={announcerRef}
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
+        role='status'
+        aria-live='polite'
+        aria-atomic='true'
         sx={{
           position: 'absolute',
           width: '1px',
@@ -71,12 +72,12 @@ const LoadingAnnouncer: React.FC<LoadingAnnouncerProps> = ({
           border: 0,
         }}
       />
-      
+
       {/* Additional assertive announcer for important updates */}
       <Box
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
+        role='alert'
+        aria-live='assertive'
+        aria-atomic='true'
         sx={{
           position: 'absolute',
           width: '1px',

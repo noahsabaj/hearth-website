@@ -9,25 +9,25 @@ interface EditOnGitHubProps {
   sx?: object;
 }
 
-const EditOnGitHub: React.FC<EditOnGitHubProps> = ({ 
-  filePath, 
+const EditOnGitHub: React.FC<EditOnGitHubProps> = ({
+  filePath,
   variant = 'edit',
   size = 'medium',
-  sx = {}
+  sx = {},
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  
+
   const baseUrl = 'https://github.com/noahsabaj/hearth-website';
   const editUrl = `${baseUrl}/edit/main/${filePath}`;
-  
-  const tooltipText = variant === 'edit' 
-    ? 'Edit this page on GitHub' 
-    : 'Improve this section on GitHub';
-  
-  const ariaLabel = variant === 'edit'
-    ? 'Edit this page on GitHub (opens in new tab)'
-    : 'Improve this section on GitHub (opens in new tab)';
+
+  const tooltipText =
+    variant === 'edit' ? 'Edit this page on GitHub' : 'Improve this section on GitHub';
+
+  const ariaLabel =
+    variant === 'edit'
+      ? 'Edit this page on GitHub (opens in new tab)'
+      : 'Improve this section on GitHub (opens in new tab)';
 
   return (
     <Box
@@ -36,14 +36,14 @@ const EditOnGitHub: React.FC<EditOnGitHubProps> = ({
         alignItems: 'center',
         // Hide on very small screens if in a crowded area
         ...(size === 'small' && isMobile ? { display: { xs: 'none', sm: 'inline-flex' } } : {}),
-        ...sx
+        ...sx,
       }}
     >
-      <Tooltip title={tooltipText} placement={isMobile ? "bottom" : "left"}>
+      <Tooltip title={tooltipText} placement={isMobile ? 'bottom' : 'left'}>
         <IconButton
           href={editUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+          target='_blank'
+          rel='noopener noreferrer'
           aria-label={ariaLabel}
           size={size}
           sx={{

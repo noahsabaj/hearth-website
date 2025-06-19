@@ -51,11 +51,11 @@
     --background-color: #000000;
     --border-color: #ffffff;
   }
-  
+
   .MuiButton-root {
     border: 2px solid currentColor !important;
   }
-  
+
   .MuiCard-root {
     border: 2px solid rgba(255, 255, 255, 0.5) !important;
   }
@@ -71,7 +71,7 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  
+
   /* Disable all framer-motion animations */
   .motion-safe {
     transform: none !important;
@@ -114,22 +114,22 @@ select:focus-visible,
 
 /* Color blind friendly indicators */
 .status-success::before {
-  content: "✓ ";
+  content: '✓ ';
   color: #4caf50;
 }
 
 .status-error::before {
-  content: "✗ ";
+  content: '✗ ';
   color: #f44336;
 }
 
 .status-warning::before {
-  content: "⚠ ";
+  content: '⚠ ';
   color: #ff9800;
 }
 
 .status-info::before {
-  content: "ℹ ";
+  content: 'ℹ ';
   color: #2196f3;
 }
 
@@ -149,13 +149,13 @@ select:focus-visible,
   :root {
     color-scheme: dark;
   }
-  
+
   /* Ensure sufficient contrast for text */
   body {
     color: #e0e0e0;
     background-color: #0a0a0a;
   }
-  
+
   /* Enhance focus visibility in dark mode */
   :focus-visible {
     outline-color: #ff6b35;
@@ -168,16 +168,16 @@ select:focus-visible,
   .no-print {
     display: none !important;
   }
-  
+
   a[href]::after {
-    content: " (" attr(href) ")";
+    content: ' (' attr(href) ')';
     font-size: 0.8em;
     color: #666;
   }
-  
-  a[href^="#"]::after,
-  a[href^="javascript:"]::after {
-    content: "";
+
+  a[href^='#']::after,
+  a[href^='javascript:']::after {
+    content: '';
   }
 }
 
@@ -232,7 +232,7 @@ select:focus-visible,
 }
 
 .error-state::before {
-  content: "Error: ";
+  content: 'Error: ';
   font-weight: bold;
   color: #f44336;
 }
@@ -244,7 +244,7 @@ select:focus-visible,
 }
 
 .success-state::before {
-  content: "Success: ";
+  content: 'Success: ';
   font-weight: bold;
   color: #4caf50;
 }

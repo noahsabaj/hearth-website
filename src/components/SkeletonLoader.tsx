@@ -40,7 +40,8 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent)',
+            background:
+              'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent)',
             pointerEvents: 'none',
           }}
           animate={{ x: ['-100%', '100%'] }}
@@ -330,7 +331,15 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
   const renderTableSkeleton = () => (
     <Box>
       {/* Header */}
-      <Box sx={{ display: 'flex', gap: 2, mb: 2, pb: 2, borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 2,
+          mb: 2,
+          pb: 2,
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        }}
+      >
         {[...Array(4)].map((_, i) => (
           <Skeleton
             key={i}

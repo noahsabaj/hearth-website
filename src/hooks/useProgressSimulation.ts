@@ -23,7 +23,7 @@ export const useProgressSimulation = ({
   const completedRef = useRef(false);
 
   const easeOutCubic = (t: number): number => {
-    return 1 - Math.pow(1 - t, 3);
+    return 1 - (1 - t) ** 3;
   };
 
   const addRealisticVariation = (value: number): number => {
@@ -38,7 +38,7 @@ export const useProgressSimulation = ({
     const elapsed = now - startTimeRef.current;
     const stepDuration = duration / steps.length;
     const currentStep = Math.floor(elapsed / stepDuration);
-    
+
     if (currentStep >= steps.length) {
       setProgress(100);
       setIsRunning(false);
@@ -51,20 +51,20 @@ export const useProgressSimulation = ({
 
     const stepProgress = (elapsed % stepDuration) / stepDuration;
     const easedProgress = easeOutCubic(stepProgress);
-    
+
     const fromValue = currentStep === 0 ? 0 : steps[currentStep - 1] ?? 0;
     const toValue = steps[currentStep] ?? 100;
     const interpolatedValue = fromValue + (toValue - fromValue) * easedProgress;
-    
+
     setProgress(addRealisticVariation(interpolatedValue));
     setCurrentStepIndex(currentStep);
-    
+
     rafRef.current = requestAnimationFrame(updateProgress);
   }, [duration, steps, onComplete, realistic]);
 
   const start = useCallback(() => {
     if (isRunning) return;
-    
+
     setIsRunning(true);
     setProgress(0);
     setCurrentStepIndex(0);
@@ -100,7 +100,7 @@ export const useProgressSimulation = ({
     if (startAutomatically) {
       start();
     }
-    
+
     return () => {
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);

@@ -39,21 +39,24 @@ export const useLoadingState = (options: UseLoadingStateOptions = {}) => {
 
   const minimumDurationTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
-  const start = useCallback((message?: string) => {
-    setState({
-      isLoading: true,
-      progress: 0,
-      message: message || initialMessage,
-      error: null,
-      startTime: Date.now(),
-      endTime: null,
-      duration: null,
-    });
-    
-    if (onStart) {
-      onStart();
-    }
-  }, [initialMessage, onStart]);
+  const start = useCallback(
+    (message?: string) => {
+      setState({
+        isLoading: true,
+        progress: 0,
+        message: message || initialMessage,
+        error: null,
+        startTime: Date.now(),
+        endTime: null,
+        duration: null,
+      });
+
+      if (onStart) {
+        onStart();
+      }
+    },
+    [initialMessage, onStart]
+  );
 
   const updateProgress = useCallback((progress: number, message?: string) => {
     setState(prev => ({
@@ -70,76 +73,82 @@ export const useLoadingState = (options: UseLoadingStateOptions = {}) => {
     }));
   }, []);
 
-  const complete = useCallback((message?: string) => {
-    const endTime = Date.now();
-    
-    setState(prev => {
-      const duration = prev.startTime ? endTime - prev.startTime : null;
-      
-      // Handle minimum duration
-      if (minimumDuration > 0 && duration && duration < minimumDuration) {
-        const remainingTime = minimumDuration - duration;
-        
-        minimumDurationTimeoutRef.current = setTimeout(() => {
-          setState(current => ({
-            ...current,
-            isLoading: false,
+  const complete = useCallback(
+    (message?: string) => {
+      const endTime = Date.now();
+
+      setState(prev => {
+        const duration = prev.startTime ? endTime - prev.startTime : null;
+
+        // Handle minimum duration
+        if (minimumDuration > 0 && duration && duration < minimumDuration) {
+          const remainingTime = minimumDuration - duration;
+
+          minimumDurationTimeoutRef.current = setTimeout(() => {
+            setState(current => ({
+              ...current,
+              isLoading: false,
+              progress: 100,
+              message: message || 'Complete',
+              endTime,
+              duration: minimumDuration,
+            }));
+
+            if (onComplete) {
+              onComplete();
+            }
+          }, remainingTime);
+
+          return {
+            ...prev,
             progress: 100,
-            message: message || 'Complete',
-            endTime,
-            duration: minimumDuration,
-          }));
-          
-          if (onComplete) {
-            onComplete();
-          }
-        }, remainingTime);
-        
+            message: message || 'Completing...',
+          };
+        }
+
+        // Complete immediately
+        if (onComplete) {
+          onComplete();
+        }
+
         return {
           ...prev,
+          isLoading: false,
           progress: 100,
-          message: message || 'Completing...',
+          message: message || 'Complete',
+          endTime,
+          duration,
         };
-      }
-      
-      // Complete immediately
-      if (onComplete) {
-        onComplete();
-      }
-      
-      return {
+      });
+    },
+    [minimumDuration, onComplete]
+  );
+
+  const error = useCallback(
+    (error: Error, message?: string) => {
+      const endTime = Date.now();
+
+      setState(prev => ({
         ...prev,
         isLoading: false,
-        progress: 100,
-        message: message || 'Complete',
+        error,
+        message: message || error.message || 'An error occurred',
         endTime,
-        duration,
-      };
-    });
-  }, [minimumDuration, onComplete]);
+        duration: prev.startTime ? endTime - prev.startTime : null,
+      }));
 
-  const error = useCallback((error: Error, message?: string) => {
-    const endTime = Date.now();
-    
-    setState(prev => ({
-      ...prev,
-      isLoading: false,
-      error,
-      message: message || error.message || 'An error occurred',
-      endTime,
-      duration: prev.startTime ? endTime - prev.startTime : null,
-    }));
-    
-    if (onError) {
-      onError(error);
-    }
-  }, [onError]);
+      if (onError) {
+        onError(error);
+      }
+    },
+    [onError]
+  );
 
   const reset = useCallback(() => {
     if (minimumDurationTimeoutRef.current) {
       clearTimeout(minimumDurationTimeoutRef.current);
     }
-    
+
     setState({
       isLoading: false,
       progress: 0,

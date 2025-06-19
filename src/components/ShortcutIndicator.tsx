@@ -1,6 +1,6 @@
-import React from 'react';
-import { Box, Typography, Chip, alpha, useTheme } from '@mui/material';
 import { Keyboard } from '@mui/icons-material';
+import { Box, Typography, Chip, alpha, useTheme } from '@mui/material';
+import React from 'react';
 
 interface ShortcutIndicatorProps {
   shortcuts: string[];
@@ -9,18 +9,19 @@ interface ShortcutIndicatorProps {
 
 const ShortcutIndicator: React.FC<ShortcutIndicatorProps> = ({ shortcuts, description }) => {
   const theme = useTheme();
-  const isMac = typeof window !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
+  const isMac =
+    typeof window !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
 
   const formatKey = (key: string): string => {
     const replacements: Record<string, string> = {
-      'cmd': isMac ? '⌘' : 'Ctrl',
-      'ctrl': isMac ? '⌃' : 'Ctrl',
-      'alt': isMac ? '⌥' : 'Alt',
-      'shift': isMac ? '⇧' : 'Shift',
-      'up': '↑',
-      'down': '↓',
-      'left': '←',
-      'right': '→',
+      cmd: isMac ? '⌘' : 'Ctrl',
+      ctrl: isMac ? '⌃' : 'Ctrl',
+      alt: isMac ? '⌥' : 'Alt',
+      shift: isMac ? '⇧' : 'Shift',
+      up: '↑',
+      down: '↓',
+      left: '←',
+      right: '→',
     };
     return replacements[key.toLowerCase()] || key.toUpperCase();
   };
@@ -43,7 +44,7 @@ const ShortcutIndicator: React.FC<ShortcutIndicatorProps> = ({ shortcuts, descri
           <React.Fragment key={index}>
             <Chip
               label={formatKey(shortcut)}
-              size="small"
+              size='small'
               sx={{
                 height: 20,
                 fontSize: '0.75rem',
@@ -56,7 +57,7 @@ const ShortcutIndicator: React.FC<ShortcutIndicatorProps> = ({ shortcuts, descri
               }}
             />
             {index < shortcuts.length - 1 && (
-              <Typography variant="caption" sx={{ mx: 0.25, color: theme.palette.text.secondary }}>
+              <Typography variant='caption' sx={{ mx: 0.25, color: theme.palette.text.secondary }}>
                 +
               </Typography>
             )}
@@ -64,7 +65,7 @@ const ShortcutIndicator: React.FC<ShortcutIndicatorProps> = ({ shortcuts, descri
         ))}
       </Box>
       {description && (
-        <Typography variant="caption" sx={{ ml: 1, color: theme.palette.text.secondary }}>
+        <Typography variant='caption' sx={{ ml: 1, color: theme.palette.text.secondary }}>
           {description}
         </Typography>
       )}

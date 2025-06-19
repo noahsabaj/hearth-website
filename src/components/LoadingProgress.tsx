@@ -62,7 +62,7 @@ const LoadingProgress: React.FC<LoadingProgressProps> = ({
   useEffect(() => {
     if (tips.length > 1) {
       const interval = setInterval(() => {
-        setCurrentTip((prev) => (prev + 1) % tips.length);
+        setCurrentTip(prev => (prev + 1) % tips.length);
       }, tipInterval);
       return () => clearInterval(interval);
     }
@@ -177,9 +177,9 @@ const LoadingProgress: React.FC<LoadingProgressProps> = ({
                 }}
               >
                 <Typography
-                  variant="caption"
-                  component="div"
-                  color="text.secondary"
+                  variant='caption'
+                  component='div'
+                  color='text.secondary'
                   sx={{ fontWeight: 600 }}
                 >
                   {`${Math.round(progress)}%`}
@@ -214,7 +214,8 @@ const LoadingProgress: React.FC<LoadingProgressProps> = ({
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent)',
+                  background:
+                    'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent)',
                 }}
                 animate={{ x: ['0%', '100%'] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
@@ -245,12 +246,12 @@ const LoadingProgress: React.FC<LoadingProgressProps> = ({
             {(showPercentage || showTimeRemaining) && !indeterminate && (
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
                 {showPercentage && (
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant='caption' color='text.secondary'>
                     {`${Math.round(progress)}%`}
                   </Typography>
                 )}
                 {showTimeRemaining && timeRemaining > 0 && (
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant='caption' color='text.secondary'>
                     {formatTime(timeRemaining)} remaining
                   </Typography>
                 )}
@@ -273,9 +274,9 @@ const LoadingProgress: React.FC<LoadingProgressProps> = ({
           height: '1px',
           overflow: 'hidden',
         }}
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
+        role='status'
+        aria-live='polite'
+        aria-atomic='true'
       />
 
       {/* Progress indicator */}
@@ -284,11 +285,7 @@ const LoadingProgress: React.FC<LoadingProgressProps> = ({
       {/* Message */}
       {message && (
         <Fade in>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ mt: 2, textAlign: 'center' }}
-          >
+          <Typography variant='body2' color='text.secondary' sx={{ mt: 2, textAlign: 'center' }}>
             {message}
           </Typography>
         </Fade>
@@ -297,7 +294,7 @@ const LoadingProgress: React.FC<LoadingProgressProps> = ({
       {/* Tips rotation */}
       {tips.length > 0 && (
         <Box sx={{ mt: 2, height: 40, position: 'relative' }}>
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode='wait'>
             <motion.div
               key={currentTip}
               initial={{ opacity: 0, y: 10 }}
@@ -316,8 +313,8 @@ const LoadingProgress: React.FC<LoadingProgressProps> = ({
                 }}
               >
                 <Typography
-                  variant="caption"
-                  color="text.secondary"
+                  variant='caption'
+                  color='text.secondary'
                   sx={{ display: 'block', textAlign: 'center' }}
                 >
                   💡 {tips[currentTip]}

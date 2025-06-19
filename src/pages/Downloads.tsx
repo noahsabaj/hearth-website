@@ -1,10 +1,4 @@
-import {
-  Computer,
-  Apple,
-  Window,
-  Refresh,
-  Warning,
-} from '@mui/icons-material';
+import { Computer, Apple, Window, Refresh, Warning } from '@mui/icons-material';
 import {
   Box,
   Container,
@@ -20,12 +14,12 @@ import {
 } from '@mui/material';
 import React, { useState, useEffect, memo } from 'react';
 
+import DownloadButton from '../components/DownloadButton';
 import EditOnGitHub from '../components/EditOnGitHub';
+import LoadingProgress from '../components/LoadingProgress';
 import NavigationBar from '../components/NavigationBar';
 import ReadingTime from '../components/ReadingTime';
 import SkeletonLoader from '../components/SkeletonLoader';
-import LoadingProgress from '../components/LoadingProgress';
-import DownloadButton from '../components/DownloadButton';
 
 /**
  * Interface for GitHub release data
@@ -72,6 +66,8 @@ const Downloads: React.FC = memo(() => {
   const [loadingMessage, setLoadingMessage] = useState('Connecting to GitHub...');
 
   const fetchReleases = async () => {
+    const startTime = Date.now();
+
     try {
       setLoading(true);
       setError(null);
@@ -106,7 +102,7 @@ const Downloads: React.FC = memo(() => {
       setLoadingMessage('Processing release data...');
 
       const data = await response.json();
-      
+
       setLoadingProgress(80);
       setLoadingMessage('Finalizing...');
 
@@ -118,7 +114,7 @@ const Downloads: React.FC = memo(() => {
       setRetryCount(0);
       setLoadingProgress(100);
       setLoadingMessage('Complete!');
-      
+
       // Brief delay to show completion
       setTimeout(() => setLoading(false), 300);
     } catch (err) {
@@ -139,6 +135,14 @@ const Downloads: React.FC = memo(() => {
 
       setError(errorMessage);
     } finally {
+      // Ensure minimum loading time for better perceived performance
+      const elapsedTime = Date.now() - startTime;
+      const minLoadingTime = 500; // 500ms minimum loading time
+
+      if (elapsedTime < minLoadingTime) {
+        await new Promise(resolve => setTimeout(resolve, minLoadingTime - elapsedTime));
+      }
+
       setLoading(false);
     }
   };
@@ -151,7 +155,6 @@ const Downloads: React.FC = memo(() => {
   useEffect(() => {
     fetchReleases();
   }, []);
-
 
   const getOSIcon = (filename: string) => {
     if (filename.includes('windows')) return <Window />;
@@ -170,7 +173,7 @@ const Downloads: React.FC = memo(() => {
             Downloads
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <EditOnGitHub filePath="src/pages/Downloads.tsx" />
+          <EditOnGitHub filePath='src/pages/Downloads.tsx' />
         </Box>
         <Typography variant='body1' color='text.secondary' paragraph>
           Download the latest version of Hearth Engine for your platform. All releases include the
@@ -265,7 +268,7 @@ cargo build --release`}
                 'Check out our documentation for getting started guides',
                 'Join our community Discord for support and updates',
                 'All releases include example projects to help you begin',
-                'Our engine supports both 2D and 3D voxel games'
+                'Our engine supports both 2D and 3D voxel games',
               ]}
               tipInterval={3000}
               color='primary'
@@ -327,8 +330,12 @@ cargo build --release`}
                         size={asset.size}
                         icon={getOSIcon(asset.name)}
                         onDownloadStart={() => console.log(`Downloading ${asset.name}...`)}
-                        onDownloadComplete={() => console.log(`Downloaded ${asset.name} successfully!`)}
-                        onDownloadError={(error) => console.error(`Failed to download ${asset.name}:`, error)}
+                        onDownloadComplete={() =>
+                          console.log(`Downloaded ${asset.name} successfully!`)
+                        }
+                        onDownloadError={error =>
+                          console.error(`Failed to download ${asset.name}:`, error)
+                        }
                       />
                     </Grid>
                   ))}

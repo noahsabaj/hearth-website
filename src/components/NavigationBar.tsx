@@ -54,7 +54,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ variant = 'home' }) => {
             }}
           >
             <img
-              src={`/hearth-website/logo.png?v=${Date.now()}`}
+              src='/hearth-website/logo.png'
               alt='Hearth Engine'
               style={{
                 height: 40,
@@ -167,7 +167,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ variant = 'home' }) => {
           >
             <Keyboard />
           </IconButton>
-          
+
           <IconButton
             color='inherit'
             href='https://github.com/noahsabaj/hearth-engine'

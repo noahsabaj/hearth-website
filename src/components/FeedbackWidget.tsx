@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { ThumbUp, ThumbDown } from '@mui/icons-material';
 import {
   Box,
   Paper,
@@ -11,8 +11,8 @@ import {
   Alert,
   Tooltip,
 } from '@mui/material';
-import { ThumbUp, ThumbDown } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 
 interface FeedbackData {
   sectionId: string;
@@ -49,16 +49,16 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
     const storedFeedback = localStorage.getItem('hearthFeedback');
     if (storedFeedback) {
       const feedbackData: FeedbackData[] = JSON.parse(storedFeedback);
-      
+
       // Calculate stats for this section
       const sectionFeedback = feedbackData.filter(fb => fb.sectionId === sectionId);
       const thumbsUp = sectionFeedback.filter(fb => fb.helpful).length;
       const thumbsDown = sectionFeedback.filter(fb => !fb.helpful).length;
-      
+
       // Check if current user has voted
       const userVoteKey = `hearthVote_${sectionId}`;
       const userVote = localStorage.getItem(userVoteKey) as 'up' | 'down' | null;
-      
+
       setStats({
         thumbsUp,
         thumbsDown,
@@ -150,7 +150,7 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
   return (
     <>
       <Paper
-        component="section"
+        component='section'
         elevation={2}
         sx={{
           p: 3,
@@ -160,20 +160,20 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
           backgroundColor: 'rgba(255, 255, 255, 0.05)',
           border: '1px solid rgba(255, 255, 255, 0.1)',
         }}
-        aria-label="Feedback section"
+        aria-label='Feedback section'
       >
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Typography variant="body1" sx={{ fontWeight: 500 }}>
+          <Typography variant='body1' sx={{ fontWeight: 500 }}>
             Was this section helpful?
           </Typography>
-          
+
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Tooltip title={stats.hasVoted ? "You've already voted" : "This was helpful"}>
+            <Tooltip title={stats.hasVoted ? "You've already voted" : 'This was helpful'}>
               <span>
                 <IconButton
                   onClick={() => handleVote(true)}
                   disabled={stats.hasVoted}
-                  aria-label="Mark as helpful"
+                  aria-label='Mark as helpful'
                   sx={{
                     color: stats.userVote === 'up' ? '#4caf50' : 'inherit',
                     '&:hover': {
@@ -185,13 +185,13 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
                 </IconButton>
               </span>
             </Tooltip>
-            <Typography variant="body2" sx={{ minWidth: 20, textAlign: 'center' }}>
+            <Typography variant='body2' sx={{ minWidth: 20, textAlign: 'center' }}>
               {stats.thumbsUp}
             </Typography>
-            
+
             <Box sx={{ width: 1, height: 24, backgroundColor: 'rgba(255, 255, 255, 0.1)' }} />
-            
-            <Typography variant="body2" sx={{ minWidth: 20, textAlign: 'center' }}>
+
+            <Typography variant='body2' sx={{ minWidth: 20, textAlign: 'center' }}>
               {stats.thumbsDown}
             </Typography>
             <Tooltip title={stats.hasVoted ? "You've already voted" : "This wasn't helpful"}>
@@ -199,7 +199,7 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
                 <IconButton
                   onClick={() => handleVote(false)}
                   disabled={stats.hasVoted}
-                  aria-label="Mark as not helpful"
+                  aria-label='Mark as not helpful'
                   sx={{
                     color: stats.userVote === 'down' ? '#f44336' : 'inherit',
                     '&:hover': {
@@ -224,7 +224,7 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
             >
               <Collapse in={showCommentBox}>
                 <Box sx={{ mt: 3 }}>
-                  <Typography variant="body2" sx={{ mb: 2 }}>
+                  <Typography variant='body2' sx={{ mb: 2 }}>
                     Please tell us how we can improve this section (optional):
                   </Typography>
                   <TextField
@@ -232,10 +232,10 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
                     rows={3}
                     fullWidth
                     value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    placeholder="Your feedback helps us improve the documentation..."
-                    variant="outlined"
-                    aria-label="Feedback comment"
+                    onChange={e => setComment(e.target.value)}
+                    placeholder='Your feedback helps us improve the documentation...'
+                    variant='outlined'
+                    aria-label='Feedback comment'
                     sx={{
                       '& .MuiOutlinedInput-root': {
                         backgroundColor: 'rgba(255, 255, 255, 0.05)',
@@ -244,8 +244,8 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
                   />
                   <Box sx={{ mt: 2, display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
                     <Button
-                      variant="outlined"
-                      size="small"
+                      variant='outlined'
+                      size='small'
                       onClick={() => {
                         setShowCommentBox(false);
                         setComment('');
@@ -256,8 +256,8 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
                       Skip
                     </Button>
                     <Button
-                      variant="contained"
-                      size="small"
+                      variant='contained'
+                      size='small'
                       onClick={handleCommentSubmit}
                       sx={{
                         backgroundColor: '#ff4500',
@@ -284,8 +284,8 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
       >
         <Alert
           onClose={() => setShowToast(false)}
-          severity="success"
-          variant="filled"
+          severity='success'
+          variant='filled'
           sx={{ width: '100%' }}
         >
           {toastMessage}

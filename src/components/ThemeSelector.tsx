@@ -1,13 +1,5 @@
 import { Palette } from '@mui/icons-material';
-import {
-  IconButton,
-  Menu,
-  MenuItem,
-  Tooltip,
-  Typography,
-  Box,
-  Fade,
-} from '@mui/material';
+import { IconButton, Menu, MenuItem, Tooltip, Typography, Box, Fade } from '@mui/material';
 import React, { useState, useCallback, memo } from 'react';
 
 import { syntaxThemes, SyntaxTheme } from '../themes/syntaxThemes';
@@ -43,34 +35,37 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = memo(({ currentTheme, onThem
     [onThemeChange, handleClose]
   );
 
-  const renderThemePreview = useCallback((theme: SyntaxTheme) => (
-    <Box
-      sx={{
-        p: 1,
-        borderRadius: 1,
-        backgroundColor: theme.background,
-        border: `1px solid ${theme.border}`,
-        fontFamily: 'monospace',
-        fontSize: '12px',
-        whiteSpace: 'pre',
-      }}
-    >
-      <span style={{ color: theme.colors.keyword }}>const</span>{' '}
-      <span style={{ color: theme.colors.variable }}>example</span>{' '}
-      <span style={{ color: theme.foreground }}>=</span>{' '}
-      <span style={{ color: theme.colors.string }}>"Hello"</span>
-      <span style={{ color: theme.foreground }}>;</span>
-    </Box>
-  ), []);
+  const renderThemePreview = useCallback(
+    (theme: SyntaxTheme) => (
+      <Box
+        sx={{
+          p: 1,
+          borderRadius: 1,
+          backgroundColor: theme.background,
+          border: `1px solid ${theme.border}`,
+          fontFamily: 'monospace',
+          fontSize: '12px',
+          whiteSpace: 'pre',
+        }}
+      >
+        <span style={{ color: theme.colors.keyword }}>const</span>{' '}
+        <span style={{ color: theme.colors.variable }}>example</span>{' '}
+        <span style={{ color: theme.foreground }}>=</span>{' '}
+        <span style={{ color: theme.colors.string }}>"Hello"</span>
+        <span style={{ color: theme.foreground }}>;</span>
+      </Box>
+    ),
+    []
+  );
 
   return (
     <>
-      <Tooltip title="Change syntax theme">
+      <Tooltip title='Change syntax theme'>
         <IconButton
           onClick={handleClick}
-          size="small"
-          aria-label="Change syntax highlighting theme"
-          aria-haspopup="true"
+          size='small'
+          aria-label='Change syntax highlighting theme'
+          aria-haspopup='true'
           aria-expanded={open ? 'true' : undefined}
           sx={{
             color: '#999',
@@ -85,7 +80,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = memo(({ currentTheme, onThem
             },
           }}
         >
-          <Palette fontSize="small" />
+          <Palette fontSize='small' />
         </IconButton>
       </Tooltip>
       <Menu
@@ -127,7 +122,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = memo(({ currentTheme, onThem
           >
             <Box sx={{ width: '100%' }}>
               <Typography
-                variant="body2"
+                variant='body2'
                 sx={{
                   mb: hoveredTheme === key ? 1 : 0,
                   fontWeight: currentTheme === key ? 600 : 400,

@@ -29,10 +29,10 @@ const LoadingDots: React.FC<LoadingDotsProps> = ({
         gap: `${gap}px`,
         alignItems: 'center',
       }}
-      role="status"
-      aria-label="Loading"
+      role='status'
+      aria-label='Loading'
     >
-      {[0, 1, 2].map((index) => (
+      {[0, 1, 2].map(index => (
         <motion.div
           key={index}
           style={{
@@ -53,7 +53,7 @@ const LoadingDots: React.FC<LoadingDotsProps> = ({
           }}
         />
       ))}
-      <span className="sr-only">Loading...</span>
+      <span className='sr-only'>Loading...</span>
     </Box>
   );
 };

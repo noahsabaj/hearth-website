@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import React from 'react';
+
 import LoadingProgress from './LoadingProgress';
 import { loadingConfig } from '../config/loadingConfig';
 
@@ -113,9 +114,9 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
                   transition={{ delay: 0.1 }}
                 >
                   <Box
-                    component="img"
-                    src="/hearth-website/logo.png"
-                    alt="Loading"
+                    component='img'
+                    src='/hearth-website/logo.png'
+                    alt='Loading'
                     sx={{
                       width: 80,
                       height: 80,
@@ -157,7 +158,7 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
                   }}
                 >
                   <LoadingProgress
-                    variant="linear"
+                    variant='linear'
                     progress={progress}
                     indeterminate={progress === 0}
                     showPercentage={variant !== 'minimal'}
@@ -165,7 +166,7 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
                     tips={variant === 'full' ? tips : []}
                     tipInterval={loadingConfig.timing.tipRotationInterval}
                     size={variant === 'minimal' ? 'small' : 'medium'}
-                    color="primary"
+                    color='primary'
                   />
                 </motion.div>
               )}

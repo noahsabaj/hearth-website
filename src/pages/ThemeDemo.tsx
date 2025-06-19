@@ -44,29 +44,29 @@ fn main() {
 
 const ThemeDemo: React.FC = () => {
   return (
-    <Container maxWidth="lg" sx={{ py: 8 }}>
-      <Typography variant="h2" gutterBottom align="center">
+    <Container maxWidth='lg' sx={{ py: 8 }}>
+      <Typography variant='h2' gutterBottom align='center'>
         Syntax Highlighting Themes Demo
       </Typography>
-      
-      <Typography variant="body1" paragraph align="center" sx={{ mb: 6 }}>
-        Click the palette icon on any code block to change the syntax highlighting theme.
-        Your preference will be saved and applied to all code blocks across the site.
+
+      <Typography variant='body1' paragraph align='center' sx={{ mb: 6 }}>
+        Click the palette icon on any code block to change the syntax highlighting theme. Your
+        preference will be saved and applied to all code blocks across the site.
       </Typography>
 
       <Box sx={{ mb: 6 }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant='h4' gutterBottom>
           Interactive Theme Switcher
         </Typography>
-        <Typography variant="body2" color="text.secondary" paragraph>
+        <Typography variant='body2' color='text.secondary' paragraph>
           Try hovering over different themes to see a preview before selecting.
         </Typography>
-        <CodeBlock language="rust">{sampleCode}</CodeBlock>
+        <CodeBlock language='rust'>{sampleCode}</CodeBlock>
       </Box>
 
       <Divider sx={{ my: 8 }} />
 
-      <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
+      <Typography variant='h4' gutterBottom sx={{ mb: 4 }}>
         Available Themes
       </Typography>
 
@@ -74,7 +74,7 @@ const ThemeDemo: React.FC = () => {
         {Object.entries(syntaxThemes).map(([key, theme]) => (
           <Grid item xs={12} md={6} key={key}>
             <Paper sx={{ p: 3, bgcolor: 'background.paper' }}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant='h6' gutterBottom>
                 {theme.displayName}
               </Typography>
               <Box
@@ -94,8 +94,7 @@ const ThemeDemo: React.FC = () => {
                   <span style={{ color: theme.colors.keyword }}>const</span>{' '}
                   <span style={{ color: theme.colors.variable }}>message</span>{' '}
                   <span style={{ color: theme.colors.operator }}>=</span>{' '}
-                  <span style={{ color: theme.colors.string }}>"Hello"</span>;
-                  {'\n'}
+                  <span style={{ color: theme.colors.string }}>"Hello"</span>;{'\n'}
                   <span style={{ color: theme.colors.keyword }}>function</span>{' '}
                   <span style={{ color: theme.colors.function }}>greet</span>
                   <span style={{ color: theme.foreground }}>(</span>
@@ -104,8 +103,7 @@ const ThemeDemo: React.FC = () => {
                   <span style={{ color: theme.foreground }}>{'{'}</span>
                   {'\n  '}
                   <span style={{ color: theme.colors.keyword }}>return</span>{' '}
-                  <span style={{ color: theme.colors.string }}>`Hello, ${'${name}'}!`</span>;
-                  {'\n'}
+                  <span style={{ color: theme.colors.string }}>`Hello, ${'${name}'}!`</span>;{'\n'}
                   <span style={{ color: theme.foreground }}>{'}'}</span>
                 </pre>
               </Box>
@@ -115,10 +113,10 @@ const ThemeDemo: React.FC = () => {
       </Grid>
 
       <Box sx={{ mt: 8, p: 3, bgcolor: 'background.paper', borderRadius: 2 }}>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant='h5' gutterBottom>
           Features
         </Typography>
-        <Typography component="ul" sx={{ pl: 3 }}>
+        <Typography component='ul' sx={{ pl: 3 }}>
           <li>8 carefully crafted themes including VS Code Dark, Dracula, Monokai, and more</li>
           <li>Theme preference saved in localStorage for persistence across sessions</li>
           <li>Smooth transition animations when switching themes</li>

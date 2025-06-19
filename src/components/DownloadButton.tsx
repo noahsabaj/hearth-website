@@ -22,7 +22,9 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
   onDownloadComplete,
   onDownloadError,
 }) => {
-  const [downloadState, setDownloadState] = useState<'idle' | 'downloading' | 'complete' | 'error'>('idle');
+  const [downloadState, setDownloadState] = useState<'idle' | 'downloading' | 'complete' | 'error'>(
+    'idle'
+  );
   const [progress, setProgress] = useState(0);
   const [downloaded, setDownloaded] = useState(0);
 
@@ -38,7 +40,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
     setDownloadState('downloading');
     setProgress(0);
     setDownloaded(0);
-    
+
     if (onDownloadStart) {
       onDownloadStart();
     }
@@ -47,15 +49,15 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
       // Simulate download progress
       const totalSteps = 20;
       const stepSize = size / totalSteps;
-      
+
       for (let i = 0; i <= totalSteps; i++) {
         await new Promise(resolve => setTimeout(resolve, 100 + Math.random() * 100));
         const currentProgress = (i / totalSteps) * 100;
         const currentDownloaded = i * stepSize;
-        
+
         setProgress(currentProgress);
         setDownloaded(currentDownloaded);
-        
+
         // Add some realistic variation
         if (i < totalSteps && Math.random() > 0.8) {
           await new Promise(resolve => setTimeout(resolve, 200));
@@ -84,7 +86,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
       if (onDownloadError) {
         onDownloadError(error as Error);
       }
-      
+
       setTimeout(() => {
         setDownloadState('idle');
         setProgress(0);
@@ -100,11 +102,11 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           <>
             {icon}
             <Box sx={{ flexGrow: 1, mx: 2 }}>
-              <Typography variant="caption" sx={{ display: 'block', mb: 0.5 }}>
+              <Typography variant='caption' sx={{ display: 'block', mb: 0.5 }}>
                 Downloading... {Math.round(progress)}%
               </Typography>
               <LinearProgress
-                variant="determinate"
+                variant='determinate'
                 value={progress}
                 sx={{
                   height: 3,
@@ -115,7 +117,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
                   },
                 }}
               />
-              <Typography variant="caption" sx={{ display: 'block', mt: 0.5, opacity: 0.7 }}>
+              <Typography variant='caption' sx={{ display: 'block', mt: 0.5, opacity: 0.7 }}>
                 {formatBytes(downloaded)} / {formatBytes(size)}
               </Typography>
             </Box>
@@ -126,8 +128,8 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           <>
             <CheckCircle sx={{ color: '#4caf50' }} />
             <Box sx={{ flexGrow: 1, mx: 2 }}>
-              <Typography variant="body2">Download Complete!</Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant='body2'>Download Complete!</Typography>
+              <Typography variant='caption' color='text.secondary'>
                 {formatBytes(size)}
               </Typography>
             </Box>
@@ -138,8 +140,8 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           <>
             <ErrorIcon sx={{ color: '#f44336' }} />
             <Box sx={{ flexGrow: 1, mx: 2 }}>
-              <Typography variant="body2">Download Failed</Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant='body2'>Download Failed</Typography>
+              <Typography variant='caption' color='text.secondary'>
                 Click to retry
               </Typography>
             </Box>
@@ -150,8 +152,8 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           <>
             {icon}
             <Box sx={{ flexGrow: 1, mx: 2 }}>
-              <Typography variant="body2">{filename}</Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant='body2'>{filename}</Typography>
+              <Typography variant='caption' color='text.secondary'>
                 {formatBytes(size)}
               </Typography>
             </Box>
@@ -164,11 +166,11 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
   return (
     <Tooltip
       title={downloadState === 'downloading' ? `Downloading ${Math.round(progress)}%` : ''}
-      placement="top"
+      placement='top'
     >
       <Button
         fullWidth
-        variant="outlined"
+        variant='outlined'
         onClick={simulateDownload}
         disabled={downloadState === 'downloading'}
         sx={{
@@ -192,7 +194,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           }),
         }}
       >
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode='wait'>
           <motion.div
             key={downloadState}
             initial={{ opacity: 0, y: 10 }}
@@ -208,7 +210,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
             {getButtonContent()}
           </motion.div>
         </AnimatePresence>
-        
+
         {/* Progress overlay */}
         {downloadState === 'downloading' && (
           <Box

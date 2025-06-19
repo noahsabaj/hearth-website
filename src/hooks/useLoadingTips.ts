@@ -19,16 +19,14 @@ export const useLoadingTips = ({
     if (tips.length === 0) return;
 
     // Shuffle tips if requested
-    const tipsList = shuffle
-      ? [...tips].sort(() => Math.random() - 0.5)
-      : tips;
-    
+    const tipsList = shuffle ? [...tips].sort(() => Math.random() - 0.5) : tips;
+
     setDisplayedTips(tipsList);
     setCurrentTipIndex(0);
 
     // Set up rotation interval
     intervalRef.current = setInterval(() => {
-      setCurrentTipIndex((prev) => (prev + 1) % tipsList.length);
+      setCurrentTipIndex(prev => (prev + 1) % tipsList.length);
     }, interval);
 
     return () => {
@@ -40,12 +38,10 @@ export const useLoadingTips = ({
 
   const currentTip = displayedTips[currentTipIndex] || '';
   const nextTip = () => {
-    setCurrentTipIndex((prev) => (prev + 1) % displayedTips.length);
+    setCurrentTipIndex(prev => (prev + 1) % displayedTips.length);
   };
   const previousTip = () => {
-    setCurrentTipIndex((prev) => 
-      prev === 0 ? displayedTips.length - 1 : prev - 1
-    );
+    setCurrentTipIndex(prev => (prev === 0 ? displayedTips.length - 1 : prev - 1));
   };
 
   return {

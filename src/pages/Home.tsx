@@ -9,6 +9,7 @@ import {
   Paper,
   Chip,
   Grid,
+  Tooltip,
 } from '@mui/material';
 import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
@@ -63,7 +64,7 @@ const Home: React.FC = memo(() => {
                   to='/downloads'
                   startIcon={<Download />}
                 >
-                  Download Sprint 39
+                  Download Latest
                 </Button>
                 <Button
                   variant='outlined'
@@ -102,7 +103,7 @@ const Home: React.FC = memo(() => {
                   }}
                 >
                   <img
-                    src={`/hearth-website/logo.png?v=${Date.now()}`}
+                    src='/hearth-website/logo.png'
                     alt='Hearth Engine Logo'
                     style={{
                       width: 200,
@@ -122,9 +123,18 @@ const Home: React.FC = memo(() => {
                       justifyContent: 'center',
                     }}
                   >
-                    <Chip label='60+ FPS' color='primary' />
-                    <Chip label='1M+ Voxels' color='primary' />
-                    <Chip label='Real Physics' color='primary' />
+                    <Tooltip title='Maintains 60+ FPS even with millions of active voxels' arrow>
+                      <Chip label='60+ FPS' color='primary' />
+                    </Tooltip>
+                    <Tooltip title='Handle 1M+ active voxels with efficient GPU processing' arrow>
+                      <Chip label='1M+ Voxels' color='primary' />
+                    </Tooltip>
+                    <Tooltip
+                      title='Per-voxel physics simulation including thermal, fluid, and structural dynamics'
+                      arrow
+                    >
+                      <Chip label='Real Physics' color='primary' />
+                    </Tooltip>
                   </Box>
                 </Box>
               </Paper>
@@ -281,9 +291,46 @@ const Home: React.FC = memo(() => {
       <Box
         component='footer'
         role='contentinfo'
-        sx={{ py: 4, borderTop: '1px solid rgba(255,255,255,0.1)' }}
+        sx={{ py: 6, borderTop: '1px solid rgba(255,255,255,0.1)' }}
       >
         <Container>
+          <Grid container spacing={4} justifyContent='center' sx={{ mb: 3 }}>
+            <Grid item>
+              <Button
+                color='inherit'
+                component='a'
+                href='https://github.com/noahsabaj/hearth-engine'
+                target='_blank'
+                rel='noopener noreferrer'
+                startIcon={<GitHub />}
+                sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#ff4500' } }}
+              >
+                GitHub
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                color='inherit'
+                component={Link}
+                to='/docs'
+                startIcon={<MenuBook />}
+                sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#ff4500' } }}
+              >
+                Documentation
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                color='inherit'
+                component={Link}
+                to='/downloads'
+                startIcon={<Download />}
+                sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#ff4500' } }}
+              >
+                Downloads
+              </Button>
+            </Grid>
+          </Grid>
           <Typography variant='body2' color='text.secondary' align='center' component='p'>
             © 2025 Hearth Engine. Built with <span aria-label='fire'>🔥</span> in Rust.
           </Typography>

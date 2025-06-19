@@ -18,33 +18,34 @@ export const useGitHistory = (sectionId: string): GitHistoryData | null => {
     // 1. Call GitHub API to get commit history for the specific file/section
     // 2. Parse the response to get the last modified date
     // 3. Generate the commit URL
-    
+
     // For now, we'll use static dates that can be replaced with real API calls
     const staticDates: Record<string, GitHistoryData> = {
       'getting-started': {
         lastModified: new Date('2025-01-15T10:30:00'),
-        commitUrl: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/getting-started.md'
+        commitUrl:
+          'https://github.com/noahsabaj/hearth-engine/commits/main/docs/getting-started.md',
       },
-      'installation': {
+      installation: {
         lastModified: new Date('2025-01-14T14:45:00'),
-        commitUrl: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/installation.md'
+        commitUrl: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/installation.md',
       },
       'basic-usage': {
         lastModified: new Date('2025-01-13T09:15:00'),
-        commitUrl: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/basic-usage.md'
+        commitUrl: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/basic-usage.md',
       },
       'core-concepts': {
         lastModified: new Date('2025-01-10T16:20:00'),
-        commitUrl: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/core-concepts.md'
+        commitUrl: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/core-concepts.md',
       },
       'cargo-commands': {
         lastModified: new Date('2025-01-16T11:00:00'),
-        commitUrl: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/cargo-commands.md'
+        commitUrl: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/cargo-commands.md',
       },
       'api-reference': {
         lastModified: new Date('2025-01-12T13:30:00'),
-        commitUrl: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/api-reference.md'
-      }
+        commitUrl: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/api-reference.md',
+      },
     };
 
     // Simulate async data fetching
@@ -60,7 +61,7 @@ export const useGitHistory = (sectionId: string): GitHistoryData | null => {
 
 /**
  * Example of how to fetch real Git history from GitHub API:
- * 
+ *
  * async function fetchGitHistory(owner: string, repo: string, path: string): Promise<GitHistoryData> {
  *   const response = await fetch(
  *     `https://api.github.com/repos/${owner}/${repo}/commits?path=${path}&per_page=1`,
@@ -72,7 +73,7 @@ export const useGitHistory = (sectionId: string): GitHistoryData | null => {
  *       }
  *     }
  *   );
- *   
+ *
  *   const commits = await response.json();
  *   if (commits.length > 0) {
  *     const lastCommit = commits[0];
@@ -81,7 +82,7 @@ export const useGitHistory = (sectionId: string): GitHistoryData | null => {
  *       commitUrl: lastCommit.html_url
  *     };
  *   }
- *   
+ *
  *   throw new Error('No commits found');
  * }
  */

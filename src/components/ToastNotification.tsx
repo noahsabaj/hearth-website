@@ -1,5 +1,5 @@
-import React from 'react';
 import { Snackbar, Alert, Slide, SlideProps } from '@mui/material';
+import React from 'react';
 
 interface ToastNotificationProps {
   open: boolean;
@@ -9,9 +9,9 @@ interface ToastNotificationProps {
   duration?: number;
 }
 
-function SlideTransition(props: SlideProps) {
-  return <Slide {...props} direction="up" />;
-}
+const SlideTransition = (props: SlideProps) => {
+  return <Slide {...props} direction='up' />;
+};
 
 const ToastNotification: React.FC<ToastNotificationProps> = ({
   open,
@@ -31,7 +31,7 @@ const ToastNotification: React.FC<ToastNotificationProps> = ({
       <Alert
         onClose={onClose}
         severity={severity}
-        variant="filled"
+        variant='filled'
         sx={{
           minWidth: 300,
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',

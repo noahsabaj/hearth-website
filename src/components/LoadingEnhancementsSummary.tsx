@@ -1,5 +1,5 @@
-import { Box, Typography, List, ListItem, ListItemIcon, ListItemText, Paper } from '@mui/material';
 import { CheckCircle } from '@mui/icons-material';
+import { Box, Typography, List, ListItem, ListItemIcon, ListItemText, Paper } from '@mui/material';
 import React from 'react';
 
 const LoadingEnhancementsSummary: React.FC = () => {
@@ -89,17 +89,18 @@ const LoadingEnhancementsSummary: React.FC = () => {
 
   return (
     <Paper sx={{ p: 4, backgroundColor: 'rgba(30, 30, 30, 0.8)' }}>
-      <Typography variant="h3" gutterBottom sx={{ color: '#ff4500' }}>
+      <Typography variant='h3' gutterBottom sx={{ color: '#ff4500' }}>
         Loading Enhancement Summary
       </Typography>
-      
-      <Typography variant="body1" paragraph sx={{ mb: 4 }}>
-        All loading states throughout the Hearth Website have been enhanced with the following improvements:
+
+      <Typography variant='body1' paragraph sx={{ mb: 4 }}>
+        All loading states throughout the Hearth Website have been enhanced with the following
+        improvements:
       </Typography>
 
       {enhancements.map((section, index) => (
         <Box key={index} sx={{ mb: 4 }}>
-          <Typography variant="h5" gutterBottom sx={{ color: '#ff6b35', mt: 3 }}>
+          <Typography variant='h5' gutterBottom sx={{ color: '#ff6b35', mt: 3 }}>
             {section.title}
           </Typography>
           <List dense>
@@ -122,10 +123,10 @@ const LoadingEnhancementsSummary: React.FC = () => {
       ))}
 
       <Box sx={{ mt: 4, p: 3, backgroundColor: 'rgba(255, 69, 0, 0.1)', borderRadius: 2 }}>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant='h6' gutterBottom>
           Key Benefits
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant='body2' color='text.secondary'>
           • Improved user experience with visual feedback during loading
           <br />
           • Better accessibility for users with screen readers
@@ -133,8 +134,7 @@ const LoadingEnhancementsSummary: React.FC = () => {
           • Consistent loading patterns across the entire application
           <br />
           • Performance optimizations with lazy loading and progress tracking
-          <br />
-          • Professional appearance with smooth animations and transitions
+          <br />• Professional appearance with smooth animations and transitions
         </Typography>
       </Box>
     </Paper>

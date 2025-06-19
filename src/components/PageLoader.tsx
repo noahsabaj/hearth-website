@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import React, { useState, useEffect } from 'react';
+
 import LoadingProgress from './LoadingProgress';
 
 interface PageLoaderProps {
@@ -12,11 +13,7 @@ interface PageLoaderProps {
   tips?: string[];
 }
 
-const PageLoader: React.FC<PageLoaderProps> = ({
-  pageName,
-  estimatedTime = 2,
-  tips,
-}) => {
+const PageLoader: React.FC<PageLoaderProps> = ({ pageName, estimatedTime = 2, tips }) => {
   const [progress, setProgress] = useState(0);
   const [isIndeterminate, setIsIndeterminate] = useState(true);
 
@@ -127,7 +124,7 @@ const PageLoader: React.FC<PageLoaderProps> = ({
               ease: 'easeInOut',
             }}
           />
-          
+
           {/* Rotating ring */}
           <motion.div
             style={{
@@ -159,7 +156,7 @@ const PageLoader: React.FC<PageLoaderProps> = ({
           transition={{ delay: 0.2 }}
         >
           <Typography
-            variant="h5"
+            variant='h5'
             sx={{
               mb: 3,
               color: 'text.secondary',
@@ -180,7 +177,7 @@ const PageLoader: React.FC<PageLoaderProps> = ({
         style={{ width: '100%', maxWidth: 400 }}
       >
         <LoadingProgress
-          variant="linear"
+          variant='linear'
           progress={progress}
           indeterminate={isIndeterminate}
           showPercentage={!isIndeterminate}
@@ -188,19 +185,15 @@ const PageLoader: React.FC<PageLoaderProps> = ({
           estimatedTime={estimatedTime}
           tips={tips || defaultTips}
           tipInterval={2000}
-          size="medium"
-          color="primary"
+          size='medium'
+          color='primary'
         />
       </motion.div>
 
       {/* Skip loading (for accessibility) */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-      >
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
         <Typography
-          variant="caption"
+          variant='caption'
           sx={{
             mt: 4,
             color: 'text.secondary',

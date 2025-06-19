@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import { useKeyboardShortcuts, Shortcut } from '../hooks/useKeyboardShortcuts';
+
 import KeyboardShortcutsModal from '../components/KeyboardShortcutsModal';
 import ToastNotification from '../components/ToastNotification';
+import { useKeyboardShortcuts, Shortcut } from '../hooks/useKeyboardShortcuts';
 
 interface KeyboardShortcutsContextType {
   registerShortcut: (shortcut: Shortcut) => void;
@@ -26,11 +27,13 @@ interface KeyboardShortcutsProviderProps {
   children: ReactNode;
 }
 
-export const KeyboardShortcutsProvider: React.FC<KeyboardShortcutsProviderProps> = ({ children }) => {
+export const KeyboardShortcutsProvider: React.FC<KeyboardShortcutsProviderProps> = ({
+  children,
+}) => {
   const [customShortcuts, setCustomShortcuts] = useState<Shortcut[]>([]);
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
-  
+
   // Callbacks for various actions
   const [searchFocusCallback, setSearchFocusCallback] = useState<() => void>(() => () => {});
   const [sidebarToggleCallback, setSidebarToggleCallback] = useState<() => void>(() => () => {});
@@ -68,14 +71,15 @@ export const KeyboardShortcutsProvider: React.FC<KeyboardShortcutsProviderProps>
     navigationDownCallback();
   }, [navigationDownCallback]);
 
-  const { shortcuts, formatShortcut, isHelpOpen, setIsHelpOpen, keySequence, isMac } = useKeyboardShortcuts({
-    shortcuts: customShortcuts,
-    onShowHelp: handleShowHelp,
-    onFocusSearch: handleFocusSearch,
-    onToggleSidebar: handleToggleSidebar,
-    onNavigateUp: handleNavigateUp,
-    onNavigateDown: handleNavigateDown,
-  });
+  const { shortcuts, formatShortcut, isHelpOpen, setIsHelpOpen, keySequence, isMac } =
+    useKeyboardShortcuts({
+      shortcuts: customShortcuts,
+      onShowHelp: handleShowHelp,
+      onFocusSearch: handleFocusSearch,
+      onToggleSidebar: handleToggleSidebar,
+      onNavigateUp: handleNavigateUp,
+      onNavigateDown: handleNavigateDown,
+    });
 
   const registerShortcut = useCallback((shortcut: Shortcut) => {
     setCustomShortcuts(prev => [...prev, shortcut]);
@@ -94,15 +98,15 @@ export const KeyboardShortcutsProvider: React.FC<KeyboardShortcutsProviderProps>
     registerShortcut,
     unregisterShortcut,
     showToast,
-    setSearchFocusCallback: (callback) => setSearchFocusCallback(() => callback),
-    setSidebarToggleCallback: (callback) => setSidebarToggleCallback(() => callback),
+    setSearchFocusCallback: callback => setSearchFocusCallback(() => callback),
+    setSidebarToggleCallback: callback => setSidebarToggleCallback(() => callback),
     setNavigationCallbacks,
   };
 
   return (
     <KeyboardShortcutsContext.Provider value={contextValue}>
       {children}
-      
+
       <KeyboardShortcutsModal
         open={isHelpOpen}
         onClose={() => setIsHelpOpen(false)}
@@ -110,21 +114,21 @@ export const KeyboardShortcutsProvider: React.FC<KeyboardShortcutsProviderProps>
         formatShortcut={formatShortcut}
         isMac={isMac}
       />
-      
+
       <ToastNotification
         open={toastOpen}
         message={toastMessage}
         onClose={handleCloseToast}
-        severity="info"
+        severity='info'
       />
-      
+
       {/* Show key sequence indicator */}
       {keySequence.length > 0 && (
         <ToastNotification
-          open={true}
+          open
           message={`Key sequence: ${keySequence.join(' ')} ...`}
           onClose={() => {}}
-          severity="info"
+          severity='info'
           duration={1000}
         />
       )}

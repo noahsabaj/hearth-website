@@ -7,9 +7,9 @@ import './styles/accessibility.css';
 import './styles/print.css';
 
 import ErrorBoundary from './components/ErrorBoundary';
+import PageLoader from './components/PageLoader';
 import PageTransition from './components/PageTransition';
 import ScrollToTop from './components/ScrollToTop';
-import PageLoader from './components/PageLoader';
 import { KeyboardShortcutsProvider } from './contexts/KeyboardShortcutsContext';
 
 // Lazy load pages for better performance
@@ -135,7 +135,7 @@ const theme = createTheme({
 const RouteLoader: React.FC = () => {
   const location = useLocation();
   const [pageName, setPageName] = useState('');
-  
+
   useEffect(() => {
     // Determine page name based on route
     const path = location.pathname;
@@ -148,7 +148,7 @@ const RouteLoader: React.FC = () => {
     else if (path === '/loading-demo') setPageName('Loading Demo');
     else setPageName('Page');
   }, [location]);
-  
+
   return <PageLoader pageName={pageName} estimatedTime={2} />;
 };
 

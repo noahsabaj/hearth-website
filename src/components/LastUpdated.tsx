@@ -12,31 +12,31 @@ interface LastUpdatedProps {
 const formatRelativeTime = (date: Date): string => {
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-  
+
   if (diffInSeconds < 60) {
     return 'just now';
   }
-  
+
   const diffInMinutes = Math.floor(diffInSeconds / 60);
   if (diffInMinutes < 60) {
     return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
   }
-  
+
   const diffInHours = Math.floor(diffInMinutes / 60);
   if (diffInHours < 24) {
     return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
   }
-  
+
   const diffInDays = Math.floor(diffInHours / 24);
   if (diffInDays < 30) {
     return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
   }
-  
+
   const diffInMonths = Math.floor(diffInDays / 30);
   if (diffInMonths < 12) {
     return `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`;
   }
-  
+
   const diffInYears = Math.floor(diffInMonths / 12);
   return `${diffInYears} year${diffInYears > 1 ? 's' : ''} ago`;
 };
@@ -58,19 +58,19 @@ const LastUpdated: React.FC<LastUpdatedProps> = memo(({ date, githubEditUrl, cla
   const dateObj = useMemo(() => (typeof date === 'string' ? new Date(date) : date), [date]);
   const relativeTime = useMemo(() => formatRelativeTime(dateObj), [dateObj]);
   const absoluteDate = useMemo(() => formatAbsoluteDate(dateObj), [dateObj]);
-  
+
   const ariaLabel = `Last updated ${relativeTime}, on ${absoluteDate}`;
 
   return (
-    <Box 
-      sx={{ 
-        display: 'inline-flex', 
-        alignItems: 'center', 
+    <Box
+      sx={{
+        display: 'inline-flex',
+        alignItems: 'center',
         gap: 0.5,
-        ...(className && { className })
+        ...(className && { className }),
       }}
     >
-      <Tooltip title={absoluteDate} arrow placement="top">
+      <Tooltip title={absoluteDate} arrow placement='top'>
         <Chip
           icon={<UpdateOutlined aria-hidden='true' />}
           label={`Updated ${relativeTime}`}
@@ -111,9 +111,9 @@ const LastUpdated: React.FC<LastUpdatedProps> = memo(({ date, githubEditUrl, cla
           }}
         />
       </Tooltip>
-      
+
       {githubEditUrl && (
-        <Tooltip title="View edit history on GitHub" arrow placement="top">
+        <Tooltip title='View edit history on GitHub' arrow placement='top'>
           <IconButton
             href={githubEditUrl}
             target='_blank'

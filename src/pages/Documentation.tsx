@@ -362,7 +362,7 @@ const Documentation: React.FC = () => {
       { title: 'Cargo Commands', id: 'cargo-commands' },
       { title: 'API Reference', id: 'api-reference' },
     ],
-    [],
+    []
   );
 
   // Set up keyboard navigation
@@ -444,7 +444,7 @@ const Documentation: React.FC = () => {
             if (!currentSection) {
               const visibleSections = sectionElements
                 .filter(
-                  ({ element }) => element && element.getBoundingClientRect().top <= headerOffset,
+                  ({ element }) => element && element.getBoundingClientRect().top <= headerOffset
                 )
                 .reverse();
 

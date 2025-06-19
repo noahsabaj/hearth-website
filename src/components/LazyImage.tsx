@@ -192,8 +192,10 @@ const LazyImage: React.FC<LazyImageProps> = ({
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent)',
-                    borderRadius: typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius,
+                    background:
+                      'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent)',
+                    borderRadius:
+                      typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius,
                   }}
                   animate={{ x: ['-100%', '100%'] }}
                   transition={{
@@ -212,8 +214,10 @@ const LazyImage: React.FC<LazyImageProps> = ({
                       right: 0,
                       height: 4,
                       overflow: 'hidden',
-                      borderBottomLeftRadius: typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius,
-                      borderBottomRightRadius: typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius,
+                      borderBottomLeftRadius:
+                        typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius,
+                      borderBottomRightRadius:
+                        typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius,
                     }}
                   >
                     <LinearProgress

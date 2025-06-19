@@ -22,7 +22,8 @@ export interface ShortcutConfig {
 }
 
 // Detect if user is on macOS
-const isMac = typeof window !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
+const isMac =
+  typeof window !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
 
 export const useKeyboardShortcuts = (config: ShortcutConfig) => {
   const navigate = useNavigate();
@@ -31,23 +32,23 @@ export const useKeyboardShortcuts = (config: ShortcutConfig) => {
   // Format shortcut for display
   const formatShortcut = useCallback((shortcut: Shortcut): string => {
     const parts: string[] = [];
-    
+
     if (shortcut.ctrl && !isMac) parts.push('Ctrl');
     if (shortcut.cmd && isMac) parts.push('⌘');
     if (shortcut.ctrl && isMac) parts.push('⌃');
     if (shortcut.alt) parts.push(isMac ? '⌥' : 'Alt');
     if (shortcut.shift) parts.push(isMac ? '⇧' : 'Shift');
-    
+
     // Format the key
-    let key = shortcut.key;
+    let { key } = shortcut;
     if (key === ' ') key = 'Space';
     if (key === 'ArrowUp') key = '↑';
     if (key === 'ArrowDown') key = '↓';
     if (key === 'ArrowLeft') key = '←';
     if (key === 'ArrowRight') key = '→';
-    
+
     parts.push(key.toUpperCase());
-    
+
     return parts.join(isMac ? '' : '+');
   }, []);
 
@@ -111,86 +112,100 @@ export const useKeyboardShortcuts = (config: ShortcutConfig) => {
   const [keySequence, setKeySequence] = useState<string[]>([]);
   const [sequenceTimeout, setSequenceTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    // Don't trigger shortcuts when typing in input fields
-    const target = event.target as HTMLElement;
-    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.contentEditable === 'true') {
-      return;
-    }
-
-    // Check for help shortcut (?)
-    if (event.key === '?' && !event.ctrlKey && !event.metaKey && !event.altKey) {
-      event.preventDefault();
-      setIsHelpOpen(true);
-      config.onShowHelp?.();
-      return;
-    }
-
-    // Handle key sequences (g h, g d)
-    if (keySequence.length > 0) {
-      const newSequence = [...keySequence, event.key.toLowerCase()];
-      
-      // Clear previous timeout
-      if (sequenceTimeout) {
-        clearTimeout(sequenceTimeout);
-      }
-
-      // Check for matching sequences
-      if (newSequence.join(' ') === 'g h') {
-        event.preventDefault();
-        navigate('/');
-        setKeySequence([]);
-        return;
-      } else if (newSequence.join(' ') === 'g d') {
-        event.preventDefault();
-        navigate('/docs');
-        setKeySequence([]);
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in input fields
+      const target = event.target as HTMLElement;
+      if (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.contentEditable === 'true'
+      ) {
         return;
       }
 
-      // Reset sequence after timeout
-      const timeout = setTimeout(() => {
-        setKeySequence([]);
-      }, 1000);
-      setSequenceTimeout(timeout);
-    }
-
-    // Start a new sequence with 'g'
-    if (event.key.toLowerCase() === 'g' && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey) {
-      event.preventDefault();
-      setKeySequence(['g']);
-      
-      // Clear sequence after 1 second
-      const timeout = setTimeout(() => {
-        setKeySequence([]);
-      }, 1000);
-      setSequenceTimeout(timeout);
-      return;
-    }
-
-    // Check all shortcuts
-    for (const shortcut of allShortcuts) {
-      const keyMatch = event.key.toLowerCase() === shortcut.key.toLowerCase();
-      const shiftMatch = !shortcut.shift || event.shiftKey;
-      const altMatch = !shortcut.alt || event.altKey;
-
-      // Special handling for platform-specific modifiers
-      const modifierMatch = isMac
-        ? (!shortcut.cmd || event.metaKey) && (!shortcut.ctrl || event.ctrlKey)
-        : (!shortcut.ctrl || event.ctrlKey) && !event.metaKey;
-
-      if (keyMatch && modifierMatch && shiftMatch && altMatch) {
+      // Check for help shortcut (?)
+      if (event.key === '?' && !event.ctrlKey && !event.metaKey && !event.altKey) {
         event.preventDefault();
-        shortcut.action();
+        setIsHelpOpen(true);
+        config.onShowHelp?.();
         return;
       }
-    }
-  }, [keySequence, sequenceTimeout, allShortcuts, navigate, config]);
+
+      // Handle key sequences (g h, g d)
+      if (keySequence.length > 0) {
+        const newSequence = [...keySequence, event.key.toLowerCase()];
+
+        // Clear previous timeout
+        if (sequenceTimeout) {
+          clearTimeout(sequenceTimeout);
+        }
+
+        // Check for matching sequences
+        if (newSequence.join(' ') === 'g h') {
+          event.preventDefault();
+          navigate('/');
+          setKeySequence([]);
+          return;
+        }
+        if (newSequence.join(' ') === 'g d') {
+          event.preventDefault();
+          navigate('/docs');
+          setKeySequence([]);
+          return;
+        }
+
+        // Reset sequence after timeout
+        const timeout = setTimeout(() => {
+          setKeySequence([]);
+        }, 1000);
+        setSequenceTimeout(timeout);
+      }
+
+      // Start a new sequence with 'g'
+      if (
+        event.key.toLowerCase() === 'g' &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.altKey &&
+        !event.shiftKey
+      ) {
+        event.preventDefault();
+        setKeySequence(['g']);
+
+        // Clear sequence after 1 second
+        const timeout = setTimeout(() => {
+          setKeySequence([]);
+        }, 1000);
+        setSequenceTimeout(timeout);
+        return;
+      }
+
+      // Check all shortcuts
+      for (const shortcut of allShortcuts) {
+        const keyMatch = event.key.toLowerCase() === shortcut.key.toLowerCase();
+        const shiftMatch = !shortcut.shift || event.shiftKey;
+        const altMatch = !shortcut.alt || event.altKey;
+
+        // Special handling for platform-specific modifiers
+        const modifierMatch = isMac
+          ? (!shortcut.cmd || event.metaKey) && (!shortcut.ctrl || event.ctrlKey)
+          : (!shortcut.ctrl || event.ctrlKey) && !event.metaKey;
+
+        if (keyMatch && modifierMatch && shiftMatch && altMatch) {
+          event.preventDefault();
+          shortcut.action();
+          return;
+        }
+      }
+    },
+    [keySequence, sequenceTimeout, allShortcuts, navigate, config]
+  );
 
   // Set up event listeners
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
-    
+
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       if (sequenceTimeout) {
