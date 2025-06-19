@@ -15,7 +15,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { Menu as MenuIcon, Close } from '@mui/icons-material';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 
 import CodeBlock from '../components/CodeBlock';
 import EditOnGitHub from '../components/EditOnGitHub';
@@ -29,12 +29,13 @@ import { useKeyboardShortcutsContext } from '../contexts/KeyboardShortcutsContex
 // Last updated dates for each documentation section
 // In a real application, these could be fetched from Git history or a CMS
 const SECTION_UPDATES = {
-  gettingStarted: new Date('2025-01-15T10:30:00'),
-  installation: new Date('2025-01-14T14:45:00'),
-  basicUsage: new Date('2025-01-13T09:15:00'),
-  coreConcepts: new Date('2025-01-10T16:20:00'),
+  gettingStarted: new Date('2025-06-18T10:30:00'),
+  installation: new Date('2025-06-18T14:45:00'),
+  basicUsage: new Date('2025-06-18T09:15:00'),
+  coreConcepts: new Date('2025-06-18T16:20:00'),
+  architecture: new Date('2025-06-18T11:00:00'),
   cargoCommands: new Date('2025-01-16T11:00:00'),
-  apiReference: new Date('2025-01-12T13:30:00'),
+  apiReference: new Date('2025-06-18T13:30:00'),
 };
 
 // GitHub edit history URLs for each section
@@ -43,26 +44,44 @@ const GITHUB_EDIT_URLS = {
   installation: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/installation.md',
   basicUsage: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/basic-usage.md',
   coreConcepts: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/core-concepts.md',
-  cargoCommands: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/cargo-commands.md',
+  architecture:
+    'https://github.com/noahsabaj/hearth-engine/commits/main/docs/architecture/GPU_DRIVEN_ARCHITECTURE.md',
+  cargoCommands:
+    'https://github.com/noahsabaj/hearth-engine/commits/main/docs/guides/CARGO_COMMANDS_GUIDE.md',
   apiReference: 'https://github.com/noahsabaj/hearth-engine/commits/main/docs/api-reference.md',
 };
 
 // Full section content for accurate reading time calculation
 const SECTION_CONTENT = {
-  gettingStarted: `Hearth Engine is a next-generation voxel game engine built with Rust. It provides a data-oriented, GPU-first architecture for creating games with realistic physics and emergent gameplay.
+  gettingStarted: `Hearth Engine is a next-generation voxel game engine built with Rust. It provides a data-oriented, GPU-first architecture for creating games with realistic physics and emergent gameplay. Currently in Sprint 39 focusing on core system stabilization and performance optimization.
 
-// Quick example
+Key Features:
+- GPU-driven architecture with 60+ FPS at millions of voxels
+- Zero manual GPU operations through 8-phase automation system
+- Data-Oriented Programming (DOP) - no classes or OOP
+- 1dcm³ voxels (10cm cubes) for realistic physics
+- Full per-voxel physics simulation (thermal, fluid, acoustic, structural)
+- Unified world system with GPU-first computation
+
+// Quick example - Data-Oriented Style
 use hearth_engine::{Engine, Game, World};
 
-struct MyGame;
+struct MyGame {
+    // Data only - no methods!
+    player_data: PlayerData,
+    world_buffer: WorldBuffer,
+}
 
 impl Game for MyGame {
     fn init(&mut self, world: &mut World) {
         world.set_render_distance(16);
+        // Initialize data buffers
     }
     
     fn update(&mut self, world: &mut World, input: &Input, dt: f32) {
-        // Game logic here
+        // Transform data through stateless functions
+        update_player_position(&mut self.player_data, input, dt);
+        simulate_physics(&mut self.world_buffer, dt);
     }
 }
 
@@ -71,39 +90,89 @@ fn main() {
     engine.run(MyGame);
 }
 
-This demonstrates the basic structure for creating a game with Hearth Engine, including the Game trait implementation, world initialization, and the main engine loop setup. The Engine struct provides core functionality while the Game trait defines your application behavior.`,
-  
+This demonstrates the data-oriented approach - structs contain only data, and functions transform that data. No methods, no self references in game logic.`,
+
   installation: `Add Hearth Engine to your project's dependencies:
 
 # Cargo.toml
 [dependencies]
-hearth-engine = "0.35"
+hearth-engine = { git = "https://github.com/noahsabaj/hearth-engine" }
 
-Make sure you have Rust 1.70+ installed. The engine requires a GPU with Vulkan, DirectX 12, or Metal support.`,
-  
-  basicUsage: `Creating a simple voxel world with Hearth Engine is straightforward:
+# Or use a specific branch/tag
+hearth-engine = { git = "https://github.com/noahsabaj/hearth-engine", branch = "main" }
 
-// Create a world with terrain generation
-world.generate_terrain(TerrainParams {
+Requirements:
+- Rust 1.70+ (latest stable recommended)
+- GPU with Vulkan, DirectX 12, or Metal support
+- 8GB+ RAM for development
+- Windows, macOS, or Linux
+
+For development, clone the repository:
+git clone https://github.com/noahsabaj/hearth-engine
+cd hearth-engine
+cargo run --example engine_testbed`,
+
+  basicUsage: `Creating a voxel world follows data-oriented principles:
+
+// Initialize world buffers
+let mut world_buffer = WorldBuffer::new();
+let mut render_buffer = RenderBuffer::new();
+
+// Generate terrain using stateless functions
+generate_terrain(&mut world_buffer, TerrainParams {
     seed: 42,
     scale: 0.1,
     octaves: 4,
 });
 
-// Place a voxel
-world.set_voxel(vec3(10, 20, 30), VoxelType::Stone);
+// Transform voxel data
+set_voxel(&mut world_buffer, vec3(10, 20, 30), VoxelType::Stone);
 
-// Apply physics simulation
-world.simulate_physics(dt);`,
-  
-  coreConcepts: `Data-Oriented Design
+// Run physics kernel on GPU
+let physics_kernel = PhysicsKernel::new();
+physics_kernel.execute(&mut world_buffer, dt);
 
-Hearth Engine follows strict data-oriented programming principles. All data lives in shared buffers, and systems are stateless kernels that transform data.
+// Sync to render buffer
+sync_render_data(&world_buffer, &mut render_buffer);`,
+
+  coreConcepts: `Data-Oriented Design (DOP)
+
+Hearth Engine follows STRICT data-oriented programming principles:
+- ❌ NO classes, objects, or OOP patterns  
+- ❌ NO methods - only functions that transform data
+- ✅ Data lives in shared buffers (WorldBuffer, RenderBuffer, etc.)
+- ✅ Systems are stateless kernels that read/write buffers
+- ✅ GPU-first architecture - data lives where it's processed
+- ✅ If you're writing self.method(), you're doing it wrong
 
 GPU-First Architecture
 
-Computations are performed on the GPU whenever possible, allowing for massive parallelization and scale.`,
-  
+Everything runs on GPU when possible:
+- Unified GPU Type System - Rust types as single source of truth
+- 8-Phase GPU Automation eliminates ALL manual GPU operations
+- Automatic WGSL generation from Rust types
+- Structure of Arrays (SOA) memory layout
+- Zero-copy GPU pipeline creation
+- Type-safe bind groups with compile-time validation
+
+Physics-First World
+
+Every voxel is 1dcm³ (10cm cube) with full physics:
+- Thermal dynamics - heat spreads, materials melt
+- Fluid dynamics - water flows, pressure matters
+- Acoustic simulation - sound propagates realistically
+- Structural integrity - buildings can collapse
+- Material properties - density, conductivity, elasticity
+
+Unified World System
+
+GPU-driven world management:
+- Single world_unified module (no CPU/GPU split)
+- GPU kernels for all operations
+- CPU fallbacks only when necessary
+- Automatic memory synchronization
+- Lock-free concurrent access`,
+
   cargoCommands: `Cargo is Rust's build system and package manager. Here's a comprehensive guide to Cargo commands you'll use when developing with Hearth Engine.
 
 Essential Daily Commands
@@ -195,8 +264,71 @@ Use --release for performance testing - Debug builds can be 100x slower than rel
 Install cargo-watch - Greatly improves development experience with auto-rebuilds
 
 For a complete reference guide with advanced commands and troubleshooting, see the full Cargo Commands Guide in the engine documentation.`,
-  
-  apiReference: `For detailed API documentation, see the docs.rs page or browse the source code on GitHub.`
+
+  architecture: `GPU-Driven Architecture
+
+Hearth Engine is built from the ground up for GPU-first computation:
+
+8-Phase GPU Automation System
+
+Phase 1: Type Registration
+- Rust types automatically registered with GPU system
+- Zero manual struct definitions in WGSL
+
+Phase 2: Layout Analysis
+- Automatic memory layout calculation
+- Padding and alignment handled by encase
+
+Phase 3: WGSL Generation
+- Automatic shader code generation from Rust types
+- Type-safe bindings with no manual writing
+
+Phase 4: Buffer Management
+- Automatic buffer creation and updates
+- Smart caching and reuse
+
+Phase 5: Pipeline Creation
+- Zero-code pipeline setup
+- Automatic bind group layouts
+
+Phase 6: Bind Group Management
+- Type-safe resource binding
+- Compile-time validation
+
+Phase 7: Dispatch Orchestration
+- Automatic workgroup sizing
+- Dependency tracking
+
+Phase 8: Validation
+- Runtime type checking
+- Memory safety guarantees
+
+Module Structure
+
+src/
+├── gpu/
+│   ├── automation/      # 8-phase GPU automation
+│   ├── soa/            # Structure of Arrays types
+│   └── kernels/        # GPU compute shaders
+├── world_unified/      # Unified world system
+│   ├── core/          # Core data structures
+│   ├── storage/       # GPU storage management
+│   ├── generation/    # World generation kernels
+│   ├── compute/       # Physics & simulation
+│   └── interfaces/    # CPU/GPU sync
+└── render/            # Rendering pipeline
+
+Performance Architecture
+
+- Lock-free concurrent access patterns
+- Zero-copy GPU memory transfers
+- Structure of Arrays (SOA) for cache efficiency
+- Batch operations minimize GPU dispatch overhead
+- Unified memory model reduces synchronization
+
+The architecture prioritizes GPU residence - data lives where it&apos;s processed, eliminating costly CPU-GPU transfers.`,
+
+  apiReference: `For detailed API documentation, see the docs.rs page or browse the source code on GitHub.`,
 };
 
 const Documentation: React.FC = () => {
@@ -205,9 +337,10 @@ const Documentation: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('getting-started');
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
-  const { setSidebarToggleCallback, setNavigationCallbacks, showToast } = useKeyboardShortcutsContext();
-  
-  const handleNavigateToSection = (sectionId: string) => {
+  const { setSidebarToggleCallback, setNavigationCallbacks, showToast } =
+    useKeyboardShortcutsContext();
+
+  const handleNavigateToSection = useCallback((sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       const headerHeight = 80; // AppBar height + some padding
@@ -217,7 +350,7 @@ const Documentation: React.FC = () => {
         behavior: 'smooth',
       });
     }
-  };
+  }, []);
 
   const sections = useMemo(
     () => [
@@ -225,10 +358,11 @@ const Documentation: React.FC = () => {
       { title: 'Installation', id: 'installation' },
       { title: 'Basic Usage', id: 'basic-usage' },
       { title: 'Core Concepts', id: 'core-concepts' },
+      { title: 'Architecture', id: 'architecture' },
       { title: 'Cargo Commands', id: 'cargo-commands' },
       { title: 'API Reference', id: 'api-reference' },
     ],
-    []
+    [],
   );
 
   // Set up keyboard navigation
@@ -240,7 +374,7 @@ const Documentation: React.FC = () => {
     const navigateUp = () => {
       const currentIndex = sections.findIndex(s => s.id === activeSection);
       if (currentIndex > 0) {
-        const newSection = sections[currentIndex - 1];
+        const [newSection] = [sections[currentIndex - 1]];
         if (newSection) {
           handleNavigateToSection(newSection.id);
           setActiveSection(newSection.id);
@@ -252,7 +386,7 @@ const Documentation: React.FC = () => {
     const navigateDown = () => {
       const currentIndex = sections.findIndex(s => s.id === activeSection);
       if (currentIndex < sections.length - 1) {
-        const newSection = sections[currentIndex + 1];
+        const [newSection] = [sections[currentIndex + 1]];
         if (newSection) {
           handleNavigateToSection(newSection.id);
           setActiveSection(newSection.id);
@@ -262,7 +396,14 @@ const Documentation: React.FC = () => {
     };
 
     setNavigationCallbacks(navigateUp, navigateDown);
-  }, [setSidebarToggleCallback, setNavigationCallbacks, sections, activeSection, handleNavigateToSection, showToast]);
+  }, [
+    setSidebarToggleCallback,
+    setNavigationCallbacks,
+    sections,
+    activeSection,
+    handleNavigateToSection,
+    showToast,
+  ]);
 
   useEffect(() => {
     let ticking = false;
@@ -303,12 +444,12 @@ const Documentation: React.FC = () => {
             if (!currentSection) {
               const visibleSections = sectionElements
                 .filter(
-                  ({ element }) => element && element.getBoundingClientRect().top <= headerOffset
+                  ({ element }) => element && element.getBoundingClientRect().top <= headerOffset,
                 )
                 .reverse();
 
               if (visibleSections.length > 0) {
-                currentSection = visibleSections[0];
+                [currentSection] = visibleSections;
               }
             }
 
@@ -374,7 +515,7 @@ const Documentation: React.FC = () => {
             {sidebarOpen ? <Close /> : <MenuIcon />}
           </IconButton>
         )}
-        
+
         <Grid container spacing={4}>
           {/* Sidebar */}
           <Grid item xs={12} md={3} sx={{ display: { xs: 'none', md: 'block' } }}>
@@ -521,17 +662,19 @@ const Documentation: React.FC = () => {
                 aria-labelledby='getting-started-heading'
                 sx={{ mb: 6, position: 'relative' }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}
+                >
                   <Typography variant='h3' id='getting-started-heading' component='h2'>
                     Getting Started
                   </Typography>
                   <ReadingTime text={SECTION_CONTENT.gettingStarted} />
-                  <LastUpdated 
-                    date={SECTION_UPDATES.gettingStarted} 
+                  <LastUpdated
+                    date={SECTION_UPDATES.gettingStarted}
                     githubEditUrl={GITHUB_EDIT_URLS.gettingStarted}
                   />
                   <Box sx={{ flexGrow: 1 }} />
-                  <EditOnGitHub filePath="src/pages/Documentation.tsx" />
+                  <EditOnGitHub filePath='src/pages/Documentation.tsx' />
                 </Box>
                 <Typography variant='body1' paragraph>
                   Hearth Engine is a next-generation voxel game engine built with Rust. It provides
@@ -559,11 +702,11 @@ fn main() {
     engine.run(MyGame);
 }`}
                 </CodeBlock>
-                <RelatedArticles 
-                  currentSection="getting-started" 
-                  onNavigate={handleNavigateToSection} 
+                <RelatedArticles
+                  currentSection='getting-started'
+                  onNavigate={handleNavigateToSection}
                 />
-                <FeedbackWidget sectionId="getting-started" sectionTitle="Getting Started" />
+                <FeedbackWidget sectionId='getting-started' sectionTitle='Getting Started' />
               </Box>
 
               <Divider sx={{ my: 4 }} />
@@ -574,35 +717,47 @@ fn main() {
                 aria-labelledby='installation-heading'
                 sx={{ mb: 6, position: 'relative' }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}
+                >
                   <Typography variant='h3' id='installation-heading' component='h2'>
                     Installation
                   </Typography>
                   <ReadingTime text={SECTION_CONTENT.installation} />
-                  <LastUpdated 
-                    date={SECTION_UPDATES.installation} 
+                  <LastUpdated
+                    date={SECTION_UPDATES.installation}
                     githubEditUrl={GITHUB_EDIT_URLS.installation}
                   />
                   <Box sx={{ flexGrow: 1 }} />
-                  <EditOnGitHub filePath="src/pages/Documentation.tsx" />
+                  <EditOnGitHub filePath='src/pages/Documentation.tsx' />
                 </Box>
                 <Typography variant='body1' paragraph>
-                  Add Hearth Engine to your project's dependencies:
+                  Add Hearth Engine to your project&apos;s dependencies:
                 </Typography>
                 <CodeBlock language='toml'>
                   {`# Cargo.toml
 [dependencies]
-hearth-engine = "0.35"`}
+hearth-engine = { git = "https://github.com/noahsabaj/hearth-engine" }
+
+# Or use a specific branch/tag
+hearth-engine = { git = "https://github.com/noahsabaj/hearth-engine", branch = "main" }`}
                 </CodeBlock>
                 <Typography variant='body1' paragraph>
-                  Make sure you have Rust 1.70+ installed. The engine requires a GPU with Vulkan,
-                  DirectX 12, or Metal support.
+                  Requirements: Rust 1.70+, GPU with Vulkan/DirectX 12/Metal, 8GB+ RAM
                 </Typography>
-                <RelatedArticles 
-                  currentSection="installation" 
-                  onNavigate={handleNavigateToSection} 
+                <Typography variant='body1' paragraph>
+                  For development, clone the repository:
+                </Typography>
+                <CodeBlock language='bash'>
+                  {`git clone https://github.com/noahsabaj/hearth-engine
+cd hearth-engine
+cargo run --example engine_testbed`}
+                </CodeBlock>
+                <RelatedArticles
+                  currentSection='installation'
+                  onNavigate={handleNavigateToSection}
                 />
-                <FeedbackWidget sectionId="installation" sectionTitle="Installation" />
+                <FeedbackWidget sectionId='installation' sectionTitle='Installation' />
               </Box>
 
               <Divider sx={{ my: 4 }} />
@@ -613,40 +768,50 @@ hearth-engine = "0.35"`}
                 aria-labelledby='basic-usage-heading'
                 sx={{ mb: 6, position: 'relative' }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}
+                >
                   <Typography variant='h3' id='basic-usage-heading' component='h2'>
                     Basic Usage
                   </Typography>
                   <ReadingTime text={SECTION_CONTENT.basicUsage} />
-                  <LastUpdated 
-                    date={SECTION_UPDATES.basicUsage} 
+                  <LastUpdated
+                    date={SECTION_UPDATES.basicUsage}
                     githubEditUrl={GITHUB_EDIT_URLS.basicUsage}
                   />
                   <Box sx={{ flexGrow: 1 }} />
-                  <EditOnGitHub filePath="src/pages/Documentation.tsx" />
+                  <EditOnGitHub filePath='src/pages/Documentation.tsx' />
                 </Box>
                 <Typography variant='body1' paragraph>
-                  Creating a simple voxel world with Hearth Engine is straightforward:
+                  Creating a voxel world follows data-oriented principles:
                 </Typography>
                 <CodeBlock>
-                  {`// Create a world with terrain generation
-world.generate_terrain(TerrainParams {
+                  {`// Initialize world buffers
+let mut world_buffer = WorldBuffer::new();
+let mut render_buffer = RenderBuffer::new();
+
+// Generate terrain using stateless functions
+generate_terrain(&mut world_buffer, TerrainParams {
     seed: 42,
     scale: 0.1,
     octaves: 4,
 });
 
-// Place a voxel
-world.set_voxel(vec3(10, 20, 30), VoxelType::Stone);
+// Transform voxel data
+set_voxel(&mut world_buffer, vec3(10, 20, 30), VoxelType::Stone);
 
-// Apply physics simulation
-world.simulate_physics(dt);`}
+// Run physics kernel on GPU
+let physics_kernel = PhysicsKernel::new();
+physics_kernel.execute(&mut world_buffer, dt);
+
+// Sync to render buffer
+sync_render_data(&world_buffer, &mut render_buffer);`}
                 </CodeBlock>
-                <RelatedArticles 
-                  currentSection="basic-usage" 
-                  onNavigate={handleNavigateToSection} 
+                <RelatedArticles
+                  currentSection='basic-usage'
+                  onNavigate={handleNavigateToSection}
                 />
-                <FeedbackWidget sectionId="basic-usage" sectionTitle="Basic Usage" />
+                <FeedbackWidget sectionId='basic-usage' sectionTitle='Basic Usage' />
               </Box>
 
               <Divider sx={{ my: 4 }} />
@@ -657,37 +822,163 @@ world.simulate_physics(dt);`}
                 aria-labelledby='core-concepts-heading'
                 sx={{ mb: 6, position: 'relative' }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}
+                >
                   <Typography variant='h3' id='core-concepts-heading' component='h2'>
                     Core Concepts
                   </Typography>
                   <ReadingTime text={SECTION_CONTENT.coreConcepts} />
-                  <LastUpdated 
-                    date={SECTION_UPDATES.coreConcepts} 
+                  <LastUpdated
+                    date={SECTION_UPDATES.coreConcepts}
                     githubEditUrl={GITHUB_EDIT_URLS.coreConcepts}
                   />
                   <Box sx={{ flexGrow: 1 }} />
-                  <EditOnGitHub filePath="src/pages/Documentation.tsx" />
+                  <EditOnGitHub filePath='src/pages/Documentation.tsx' />
                 </Box>
                 <Typography variant='h4' gutterBottom sx={{ mt: 3 }}>
-                  Data-Oriented Design
+                  Data-Oriented Design (DOP)
                 </Typography>
                 <Typography variant='body1' paragraph>
-                  Hearth Engine follows strict data-oriented programming principles. All data lives
-                  in shared buffers, and systems are stateless kernels that transform data.
+                  Hearth Engine follows STRICT data-oriented programming principles:
                 </Typography>
+                <List>
+                  <ListItem>❌ NO classes, objects, or OOP patterns</ListItem>
+                  <ListItem>❌ NO methods - only functions that transform data</ListItem>
+                  <ListItem>
+                    ✅ Data lives in shared buffers (WorldBuffer, RenderBuffer, etc.)
+                  </ListItem>
+                  <ListItem>✅ Systems are stateless kernels that read/write buffers</ListItem>
+                  <ListItem>
+                    ✅ GPU-first architecture - data lives where it&apos;s processed
+                  </ListItem>
+                </List>
                 <Typography variant='h4' gutterBottom sx={{ mt: 3 }}>
                   GPU-First Architecture
                 </Typography>
                 <Typography variant='body1' paragraph>
-                  Computations are performed on the GPU whenever possible, allowing for massive
-                  parallelization and scale.
+                  Everything runs on GPU when possible with automatic WGSL generation, Structure of
+                  Arrays (SOA) memory layout, and zero-copy pipeline creation.
                 </Typography>
-                <RelatedArticles 
-                  currentSection="core-concepts" 
-                  onNavigate={handleNavigateToSection} 
+                <Typography variant='h4' gutterBottom sx={{ mt: 3 }}>
+                  Physics-First World
+                </Typography>
+                <Typography variant='body1' paragraph>
+                  Every voxel is 1dcm³ (10cm cube) with full physics simulation including thermal
+                  dynamics, fluid dynamics, acoustic simulation, and structural integrity.
+                </Typography>
+                <RelatedArticles
+                  currentSection='core-concepts'
+                  onNavigate={handleNavigateToSection}
                 />
-                <FeedbackWidget sectionId="core-concepts" sectionTitle="Core Concepts" />
+                <FeedbackWidget sectionId='core-concepts' sectionTitle='Core Concepts' />
+              </Box>
+
+              <Divider sx={{ my: 4 }} />
+
+              <Box
+                component='section'
+                id='architecture'
+                aria-labelledby='architecture-heading'
+                sx={{ mb: 6, position: 'relative' }}
+              >
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}
+                >
+                  <Typography variant='h3' id='architecture-heading' component='h2'>
+                    Architecture
+                  </Typography>
+                  <ReadingTime text={SECTION_CONTENT.architecture} />
+                  <LastUpdated
+                    date={SECTION_UPDATES.architecture}
+                    githubEditUrl={GITHUB_EDIT_URLS.architecture}
+                  />
+                  <Box sx={{ flexGrow: 1 }} />
+                  <EditOnGitHub filePath='src/pages/Documentation.tsx' />
+                </Box>
+                <Typography variant='body1' paragraph>
+                  Hearth Engine is built from the ground up for GPU-first computation with an
+                  innovative 8-phase automation system.
+                </Typography>
+                <Typography variant='h4' gutterBottom sx={{ mt: 3 }}>
+                  8-Phase GPU Automation System
+                </Typography>
+                <Typography variant='body1' paragraph>
+                  The engine eliminates all manual GPU operations through a sophisticated automation
+                  pipeline:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemText
+                      primary='Phase 1: Type Registration'
+                      secondary='Rust types automatically registered with GPU system'
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary='Phase 2: Layout Analysis'
+                      secondary='Automatic memory layout calculation with encase'
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary='Phase 3: WGSL Generation'
+                      secondary='Automatic shader code generation from Rust types'
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary='Phase 4: Buffer Management'
+                      secondary='Automatic buffer creation and updates'
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary='Phase 5: Pipeline Creation'
+                      secondary='Zero-code pipeline setup'
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary='Phase 6: Bind Group Management'
+                      secondary='Type-safe resource binding'
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary='Phase 7: Dispatch Orchestration'
+                      secondary='Automatic workgroup sizing'
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary='Phase 8: Validation'
+                      secondary='Runtime type checking and memory safety'
+                    />
+                  </ListItem>
+                </List>
+                <Typography variant='h4' gutterBottom sx={{ mt: 3 }}>
+                  Module Structure
+                </Typography>
+                <CodeBlock language='bash'>
+                  {`src/
+├── gpu/
+│   ├── automation/      # 8-phase GPU automation
+│   ├── soa/            # Structure of Arrays types
+│   └── kernels/        # GPU compute shaders
+├── world_unified/      # Unified world system
+│   ├── core/          # Core data structures
+│   ├── storage/       # GPU storage management
+│   ├── generation/    # World generation kernels
+│   ├── compute/       # Physics & simulation
+│   └── interfaces/    # CPU/GPU sync
+└── render/            # Rendering pipeline`}
+                </CodeBlock>
+                <RelatedArticles
+                  currentSection='architecture'
+                  onNavigate={handleNavigateToSection}
+                />
+                <FeedbackWidget sectionId='architecture' sectionTitle='Architecture' />
               </Box>
 
               <Divider sx={{ my: 4 }} />
@@ -698,21 +989,23 @@ world.simulate_physics(dt);`}
                 aria-labelledby='cargo-commands-heading'
                 sx={{ mb: 6, position: 'relative' }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}
+                >
                   <Typography variant='h3' id='cargo-commands-heading' component='h2'>
                     Cargo Commands Reference
                   </Typography>
                   <ReadingTime text={SECTION_CONTENT.cargoCommands} />
-                  <LastUpdated 
-                    date={SECTION_UPDATES.cargoCommands} 
+                  <LastUpdated
+                    date={SECTION_UPDATES.cargoCommands}
                     githubEditUrl={GITHUB_EDIT_URLS.cargoCommands}
                   />
                   <Box sx={{ flexGrow: 1 }} />
-                  <EditOnGitHub filePath="src/pages/Documentation.tsx" />
+                  <EditOnGitHub filePath='src/pages/Documentation.tsx' />
                 </Box>
                 <Typography variant='body1' paragraph>
-                  Cargo is Rust's build system and package manager. Here's a comprehensive guide to
-                  Cargo commands you'll use when developing with Hearth Engine.
+                  Cargo is Rust&apos;s build system and package manager. Here&apos;s a comprehensive
+                  guide to Cargo commands you&apos;ll use when developing with Hearth Engine.
                 </Typography>
 
                 <Typography variant='h4' gutterBottom sx={{ mt: 3 }}>
@@ -856,11 +1149,11 @@ cargo build --features "debug-ui,profiler"`}
                   </a>{' '}
                   in the engine documentation.
                 </Typography>
-                <RelatedArticles 
-                  currentSection="cargo-commands" 
-                  onNavigate={handleNavigateToSection} 
+                <RelatedArticles
+                  currentSection='cargo-commands'
+                  onNavigate={handleNavigateToSection}
                 />
-                <FeedbackWidget sectionId="cargo-commands" sectionTitle="Cargo Commands" />
+                <FeedbackWidget sectionId='cargo-commands' sectionTitle='Cargo Commands' />
               </Box>
 
               <Divider sx={{ my: 4 }} />
@@ -871,17 +1164,19 @@ cargo build --features "debug-ui,profiler"`}
                 aria-labelledby='api-reference-heading'
                 sx={{ mb: 6, position: 'relative' }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}
+                >
                   <Typography variant='h3' id='api-reference-heading' component='h2'>
                     API Reference
                   </Typography>
                   <ReadingTime text={SECTION_CONTENT.apiReference} />
-                  <LastUpdated 
-                    date={SECTION_UPDATES.apiReference} 
+                  <LastUpdated
+                    date={SECTION_UPDATES.apiReference}
                     githubEditUrl={GITHUB_EDIT_URLS.apiReference}
                   />
                   <Box sx={{ flexGrow: 1 }} />
-                  <EditOnGitHub filePath="src/pages/Documentation.tsx" />
+                  <EditOnGitHub filePath='src/pages/Documentation.tsx' />
                 </Box>
                 <Typography variant='body1' paragraph>
                   For detailed API documentation, see the{' '}
@@ -904,11 +1199,11 @@ cargo build --features "debug-ui,profiler"`}
                   </a>
                   .
                 </Typography>
-                <RelatedArticles 
-                  currentSection="api-reference" 
-                  onNavigate={handleNavigateToSection} 
+                <RelatedArticles
+                  currentSection='api-reference'
+                  onNavigate={handleNavigateToSection}
                 />
-                <FeedbackWidget sectionId="api-reference" sectionTitle="API Reference" />
+                <FeedbackWidget sectionId='api-reference' sectionTitle='API Reference' />
               </Box>
             </Box>
           </Grid>

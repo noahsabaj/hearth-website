@@ -39,7 +39,7 @@ const faqData: FAQItem[] = [
     id: 'what-is-hearth',
     question: 'What is Hearth Engine?',
     answer:
-      'Hearth Engine is a next-generation voxel game engine built in Rust that features true physics simulation, GPU-first architecture, and emergent gameplay systems. It can handle 1M+ voxels at 60+ FPS with realistic physics interactions.',
+      'Hearth Engine is a next-generation voxel game engine built in Rust following strict Data-Oriented Programming (DOP) principles. It features GPU-first architecture with 8-phase automation eliminating all manual GPU operations, true per-voxel physics simulation (thermal, fluid, acoustic, structural), and emergent gameplay systems. Currently in Sprint 39 focusing on core system stabilization.',
     category: 'general',
     tags: ['voxel', 'physics', 'engine'],
   },
@@ -55,7 +55,7 @@ const faqData: FAQItem[] = [
     id: 'getting-started',
     question: 'How do I get started with Hearth Engine?',
     answer:
-      'The easiest way is to install via Cargo: `cargo install hearth-engine`. You can also download pre-built binaries from our releases page or build from source. Check our documentation for detailed setup instructions.',
+      'Clone the repository and build from source: `git clone https://github.com/noahsabaj/hearth-engine && cd hearth-engine && cargo run --example engine_testbed`. Check our documentation for detailed setup instructions and examples.',
     category: 'getting-started',
     tags: ['install', 'setup', 'cargo'],
   },
@@ -148,8 +148,8 @@ const FAQ: React.FC = memo(() => {
             Frequently Asked Questions
           </Typography>
           <Typography variant='body1' color='text.secondary' paragraph>
-            Find answers to common questions about Hearth Engine. Can't find what you're looking
-            for?{' '}
+            Find answers to common questions about Hearth Engine. Can&apos;t find what you&apos;re
+            looking for?{' '}
             <a
               href='https://github.com/noahsabaj/hearth-engine/discussions'
               target='_blank'
@@ -273,10 +273,10 @@ const FAQ: React.FC = memo(() => {
                       />
                       <Box sx={{ flexGrow: 1 }} />
                       {expandedAccordion === faq.id && (
-                        <EditOnGitHub 
-                          filePath="src/pages/FAQ.tsx" 
-                          variant="improve" 
-                          size="small"
+                        <EditOnGitHub
+                          filePath='src/pages/FAQ.tsx'
+                          variant='improve'
+                          size='small'
                           sx={{ mr: 1 }}
                         />
                       )}

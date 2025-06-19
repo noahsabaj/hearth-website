@@ -53,7 +53,7 @@ const Home: React.FC = memo(() => {
               <Typography variant='body1' sx={{ mb: 4, color: 'rgba(255, 255, 255, 0.7)' }}>
                 A next-generation voxel engine with true physics simulation. Every block has weight,
                 heat, and purpose. Create emergent gameplay from simple rules. Push the boundaries
-                of what's possible.
+                of what&apos;s possible.
               </Typography>
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <Button
@@ -63,7 +63,7 @@ const Home: React.FC = memo(() => {
                   to='/downloads'
                   startIcon={<Download />}
                 >
-                  Download v0.35
+                  Download Sprint 39
                 </Button>
                 <Button
                   variant='outlined'
@@ -285,7 +285,7 @@ const Home: React.FC = memo(() => {
       >
         <Container>
           <Typography variant='body2' color='text.secondary' align='center' component='p'>
-            © 2024 Hearth Engine. Built with <span aria-label='fire'>🔥</span> in Rust.
+            © 2025 Hearth Engine. Built with <span aria-label='fire'>🔥</span> in Rust.
           </Typography>
         </Container>
       </Box>
