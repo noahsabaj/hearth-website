@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 
+import { loadingConfig } from '../config/loadingConfig';
+
 interface UseLoadingTipsOptions {
   tips: string[];
   interval?: number;
@@ -55,13 +57,7 @@ export const useLoadingTips = ({
 
 // Pre-defined tip collections
 export const loadingTips = {
-  general: [
-    'Did you know? Hearth Engine supports both 2D and 3D voxel games',
-    'Tip: Use our built-in profiler to optimize your game performance',
-    'Fun fact: Hearth Engine uses Vulkan for cutting-edge graphics',
-    'Quick tip: Check out our example projects to get started faster',
-    'Remember: You can customize every aspect of the engine',
-  ],
+  general: loadingConfig.tips.general,
   documentation: [
     'Pro tip: Use Ctrl+K to quickly search the documentation',
     'Did you know? Our docs include interactive code examples',
@@ -83,4 +79,7 @@ export const loadingTips = {
     'Preparing development environment...',
     'Setting up project templates...',
   ],
+  voxel: loadingConfig.tips.voxel,
+  technical: loadingConfig.tips.technical,
+  performance: loadingConfig.tips.performance,
 };

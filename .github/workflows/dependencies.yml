@@ -1,0 +1,54 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    # Check for dependency updates daily at 6 AM UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Check for outdated dependencies
+        run: |
+          npm outdated > outdated.txt || true
+          if [ -s outdated.txt ]; then
+            echo "## Outdated Dependencies Found" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            cat outdated.txt >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "All dependencies are up to date! ✅" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Security audit
+        run: |
+          npm audit --audit-level=moderate > audit.txt || true
+          if [ -s audit.txt ]; then
+            echo "## Security Vulnerabilities Found" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            cat audit.txt >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No security vulnerabilities found! 🔒" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload dependency reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-reports
+          path: |
+            outdated.txt
+            audit.txt
+          retention-days: 7

@@ -18,14 +18,16 @@ import LoadingOverlay from '../components/LoadingOverlay';
 import LoadingProgress from '../components/LoadingProgress';
 import NavigationBar from '../components/NavigationBar';
 import SkeletonLoader from '../components/SkeletonLoader';
+import VoxelLoader from '../components/VoxelLoader';
+import { loadingConfig } from '../config/loadingConfig';
 import { useLoadingState } from '../hooks/useLoadingState';
 import { loadingTips } from '../hooks/useLoadingTips';
 import { useProgressSimulation } from '../hooks/useProgressSimulation';
 
 const LoadingDemo: React.FC = () => {
   const [selectedVariant, setSelectedVariant] = useState<
-    'linear' | 'circular' | 'dots' | 'spinner'
-  >('linear');
+    'linear' | 'circular' | 'dots' | 'spinner' | 'voxel'
+  >('voxel');
   const [selectedSize, setSelectedSize] = useState<'small' | 'medium' | 'large'>('medium');
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayVariant, setOverlayVariant] = useState<'full' | 'inline' | 'minimal'>('full');
@@ -89,6 +91,7 @@ const LoadingDemo: React.FC = () => {
                   <MenuItem value='circular'>Circular</MenuItem>
                   <MenuItem value='dots'>Dots</MenuItem>
                   <MenuItem value='spinner'>Spinner</MenuItem>
+                  <MenuItem value='voxel'>Voxel</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -128,6 +131,55 @@ const LoadingDemo: React.FC = () => {
               Restart Animation
             </Button>
           </Box>
+        </Paper>
+
+        {/* Voxel Loader Showcase */}
+        <Paper sx={{ p: 4, mb: 4 }}>
+          <Typography variant='h4' gutterBottom>
+            Voxel Loader Showcase
+          </Typography>
+          <Typography variant='body2' color='text.secondary' paragraph>
+            A 3D voxel-building animation that represents the engine's voxel-based nature.
+          </Typography>
+
+          <Grid container spacing={3} alignItems='center'>
+            <Grid item xs={12} md={4}>
+              <Typography variant='h6' gutterBottom>
+                Small
+              </Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <VoxelLoader size='small' indeterminate showPercentage={false} showTips={false} />
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant='h6' gutterBottom>
+                Medium with Progress
+              </Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <VoxelLoader
+                  size='medium'
+                  progress={progressSimulation.progress}
+                  indeterminate={false}
+                  showPercentage
+                  showTips={false}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant='h6' gutterBottom>
+                Large with Tips
+              </Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <VoxelLoader
+                  size='large'
+                  indeterminate
+                  showPercentage={false}
+                  showTips
+                  tips={loadingConfig.tips.voxel}
+                />
+              </Box>
+            </Grid>
+          </Grid>
         </Paper>
 
         {/* Skeleton Loaders */}
@@ -173,7 +225,7 @@ const LoadingDemo: React.FC = () => {
         {/* Loading Dots */}
         <Paper sx={{ p: 4, mb: 4 }}>
           <Typography variant='h4' gutterBottom>
-            Animated Loading Dots
+            Voxel Loading Dots
           </Typography>
 
           <Grid container spacing={3} alignItems='center'>

@@ -1,0 +1,133 @@
+# Percy Configuration for Hearth Engine Website
+# https://docs.percy.io/docs/configuration
+
+version: 2
+
+# Project settings
+project:
+  name: "Hearth Engine Website"
+
+# Snapshot configuration
+snapshot:
+  # Responsive breakpoints to test
+  widths: [375, 768, 1024, 1440, 1920]
+  
+  # Minimum height for snapshots
+  minHeight: 1024
+  
+  # Enable mobile device simulation
+  enableJavaScript: true
+  
+  # Percy DOM serialization settings
+  percyCSS: |
+    /* Hide dynamic content that changes between snapshots */
+    [data-testid="last-updated"],
+    [data-testid="build-timestamp"],
+    .loading-animation,
+    .ripple-effect {
+      visibility: hidden !important;
+    }
+    
+    /* Ensure consistent scrollbar rendering */
+    * {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    *::-webkit-scrollbar {
+      display: none;
+    }
+    
+    /* Disable animations for consistent snapshots */
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0s !important;
+      animation-delay: 0s !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }
+
+# Discovery configuration
+discovery:
+  # Network idle timeout
+  networkIdleTimeout: 100
+  
+  # Allowed hostnames for asset discovery
+  allowedHostnames:
+    - localhost
+    - 127.0.0.1
+    - hearth-engine.dev
+    - noahsabaj.github.io
+
+# Static snapshot options
+static:
+  # Base URL for static snapshots
+  baseUrl: http://localhost:3000
+  
+  # Include/exclude patterns
+  include:
+    - "**/*.html"
+    - "**/*.htm"
+  
+  exclude:
+    - "**/node_modules/**"
+    - "**/build/**"
+    - "**/dist/**"
+    - "**/.git/**"
+
+# Browser configuration
+browser:
+  # User agent override for consistent rendering
+  userAgent: "Percy/Chromium"
+
+# Upload configuration
+upload:
+  # Parallel upload workers
+  concurrency: 5
+
+# Comparison settings
+comparisons:
+  # Threshold for pixel differences (0-1)
+  threshold: 0.1
+  
+  # Include threshold percentage
+  includeThreshold: 0.1
+
+# Agent configuration for self-hosted Percy agent
+agent:
+  # Asset discovery settings
+  assetDiscovery:
+    # Network idle timeout
+    networkIdleTimeout: 125
+    
+    # Page load timeout
+    pageLoadTimeout: 30000
+    
+    # Allow request patterns
+    allowedHostnames:
+      - fonts.googleapis.com
+      - fonts.gstatic.com
+      - cdn.jsdelivr.net
+      - unpkg.com
+
+# Environment-specific overrides
+env:
+  # CI-specific settings
+  ci:
+    # Parallel execution in CI
+    parallel:
+      total: 4
+      
+  # Development settings  
+  development:
+    # Faster snapshots for development
+    widths: [768, 1440]
+    minHeight: 800
+
+# Debugging options
+debug: false
+
+# Percy CLI settings
+cli:
+  # Default project for CLI
+  defaultProject: "hearth-engine/website"

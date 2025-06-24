@@ -1,0 +1,37 @@
+{
+  "success": true,
+  "data": {
+    "searchResults": [
+      {
+        "id": 1,
+        "title": "Hearth Engine Documentation",
+        "excerpt": "Complete documentation for the Hearth Engine voxel game engine.",
+        "url": "/docs",
+        "type": "page",
+        "category": "documentation"
+      },
+      {
+        "id": 2,
+        "title": "Getting Started Guide",
+        "excerpt": "Learn how to get started with Hearth Engine development.",
+        "url": "/docs/getting-started",
+        "type": "guide",
+        "category": "documentation"
+      },
+      {
+        "id": 3,
+        "title": "API Reference",
+        "excerpt": "Complete API reference for Hearth Engine.",
+        "url": "/docs/api",
+        "type": "reference",
+        "category": "documentation"
+      }
+    ],
+    "totalResults": 3,
+    "hasMore": false
+  },
+  "metadata": {
+    "timestamp": "2024-01-01T00:00:00Z",
+    "version": "1.0.0"
+  }
+}

@@ -23,8 +23,11 @@ import React, { useState, useMemo, memo } from 'react';
 import { Link } from 'react-router-dom';
 
 import EditOnGitHub from '../components/EditOnGitHub';
+import Footer from '../components/Footer';
 import NavigationBar from '../components/NavigationBar';
 import { AnimatedSection } from '../components/PageTransition';
+import SEO from '../components/SEO';
+import { COLORS, MISC } from '../constants';
 
 interface FAQItem {
   id: string;
@@ -54,8 +57,7 @@ const faqData: FAQItem[] = [
   {
     id: 'getting-started',
     question: 'How do I get started with Hearth Engine?',
-    answer:
-      'Clone the repository and build from source: `git clone https://github.com/noahsabaj/hearth-engine && cd hearth-engine && cargo run --example engine_testbed`. Check our documentation for detailed setup instructions and examples.',
+    answer: `Clone the repository and build from source: \`git clone ${MISC.github.repoUrl} && cd hearth-engine && cargo run --example engine_testbed\`. Check our documentation for detailed setup instructions and examples.`,
     category: 'getting-started',
     tags: ['install', 'setup', 'cargo'],
   },
@@ -139,6 +141,12 @@ const FAQ: React.FC = memo(() => {
 
   return (
     <Box component='main' role='main'>
+      <SEO
+        title='FAQ - Hearth Engine'
+        description='Frequently asked questions about Hearth Engine. System requirements, performance, licensing, and development questions answered.'
+        keywords='hearth engine faq, questions, support, system requirements, performance, licensing, help'
+        pathname='/faq'
+      />
       {/* Navigation */}
       <NavigationBar variant='faq' />
 
@@ -151,7 +159,7 @@ const FAQ: React.FC = memo(() => {
             Find answers to common questions about Hearth Engine. Can&apos;t find what you&apos;re
             looking for?{' '}
             <a
-              href='https://github.com/noahsabaj/hearth-engine/discussions'
+              href={`${MISC.github.repoUrl}/discussions`}
               target='_blank'
               rel='noopener noreferrer'
               style={{ color: '#ff4500', textDecoration: 'none' }}
@@ -224,7 +232,7 @@ const FAQ: React.FC = memo(() => {
                 <Typography variant='body1' color='text.secondary'>
                   No FAQs found matching your search criteria. Try adjusting your search or{' '}
                   <a
-                    href='https://github.com/noahsabaj/hearth-engine/discussions'
+                    href={`${MISC.github.repoUrl}/discussions`}
                     target='_blank'
                     rel='noopener noreferrer'
                     style={{ color: '#ff4500', textDecoration: 'none' }}
@@ -242,11 +250,11 @@ const FAQ: React.FC = memo(() => {
                   expanded={expandedAccordion === faq.id}
                   onChange={handleAccordionChange(faq.id)}
                   sx={{
-                    bgcolor: 'rgba(30, 30, 30, 0.8)',
-                    border: '1px solid rgba(255, 69, 0, 0.1)',
+                    bgcolor: COLORS.background.overlayLight,
+                    border: `1px solid ${COLORS.primary.main}1A`,
                     '&:before': { display: 'none' },
                     '&.Mui-expanded': {
-                      borderColor: 'rgba(255, 69, 0, 0.3)',
+                      borderColor: `${COLORS.primary.main}4D`,
                     },
                   }}
                 >
@@ -296,7 +304,7 @@ const FAQ: React.FC = memo(() => {
                           sx={{
                             fontSize: '0.75rem',
                             height: 20,
-                            borderColor: 'rgba(255, 69, 0, 0.3)',
+                            borderColor: `${COLORS.primary.main}4D`,
                             color: 'text.secondary',
                           }}
                         />
@@ -346,7 +354,7 @@ const FAQ: React.FC = memo(() => {
                 Read Documentation
               </Link>
               <a
-                href='https://github.com/noahsabaj/hearth-engine/discussions'
+                href={`${MISC.github.repoUrl}/discussions`}
                 target='_blank'
                 rel='noopener noreferrer'
                 style={{
@@ -368,6 +376,7 @@ const FAQ: React.FC = memo(() => {
           </Paper>
         </AnimatedSection>
       </Container>
+      <Footer />
     </Box>
   );
 });

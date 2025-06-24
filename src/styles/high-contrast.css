@@ -1,0 +1,169 @@
+/* High Contrast Mode Styles */
+.high-contrast {
+  /* Override color variables */
+  --primary-main: #ff6b35;
+  --primary-light: #ff8c5a;
+  --primary-dark: #ff4500;
+  --text-primary: #ffffff;
+  --text-secondary: #ffffff;
+  --background-default: #000000;
+  --background-paper: #1a1a1a;
+  --divider: rgba(255, 255, 255, 0.3);
+  --border: rgba(255, 255, 255, 0.4);
+}
+
+/* Increase contrast for all text */
+.high-contrast * {
+  color: var(--text-primary) !important;
+}
+
+/* Ensure links are distinguishable */
+.high-contrast a {
+  color: var(--primary-main) !important;
+  text-decoration: underline !important;
+}
+
+.high-contrast a:hover {
+  color: var(--primary-light) !important;
+}
+
+/* High contrast buttons */
+.high-contrast button,
+.high-contrast .MuiButton-root {
+  border: 2px solid currentColor !important;
+  font-weight: 700 !important;
+}
+
+.high-contrast .MuiButton-contained {
+  background-color: var(--primary-main) !important;
+  color: #000000 !important;
+  border-color: var(--primary-main) !important;
+}
+
+.high-contrast .MuiButton-outlined {
+  background-color: transparent !important;
+  color: var(--primary-main) !important;
+  border-color: var(--primary-main) !important;
+}
+
+/* High contrast cards and papers */
+.high-contrast .MuiPaper-root {
+  border: 2px solid var(--border) !important;
+  background-color: var(--background-paper) !important;
+}
+
+/* High contrast inputs */
+.high-contrast input,
+.high-contrast textarea,
+.high-contrast .MuiInputBase-root {
+  border: 2px solid var(--border) !important;
+  background-color: var(--background-paper) !important;
+  color: var(--text-primary) !important;
+}
+
+.high-contrast input:focus,
+.high-contrast textarea:focus,
+.high-contrast .MuiInputBase-root.Mui-focused {
+  border-color: var(--primary-main) !important;
+  outline: 2px solid var(--primary-main) !important;
+  outline-offset: 2px !important;
+}
+
+/* High contrast icons */
+.high-contrast .MuiSvgIcon-root {
+  color: var(--text-primary) !important;
+}
+
+/* High contrast dividers */
+.high-contrast .MuiDivider-root {
+  border-color: var(--divider) !important;
+  border-width: 2px !important;
+}
+
+/* High contrast code blocks */
+.high-contrast pre,
+.high-contrast code {
+  border: 2px solid var(--border) !important;
+  background-color: var(--background-paper) !important;
+  color: var(--text-primary) !important;
+}
+
+/* High contrast focus indicators */
+.high-contrast *:focus {
+  outline: 3px solid var(--primary-main) !important;
+  outline-offset: 2px !important;
+}
+
+/* High contrast disabled states */
+.high-contrast .Mui-disabled,
+.high-contrast [disabled] {
+  opacity: 0.7 !important;
+  cursor: not-allowed !important;
+}
+
+/* High contrast selection */
+.high-contrast ::selection {
+  background-color: var(--primary-main) !important;
+  color: #000000 !important;
+}
+
+/* High contrast scrollbars */
+.high-contrast ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.high-contrast ::-webkit-scrollbar-track {
+  background: var(--background-paper);
+  border: 1px solid var(--border);
+}
+
+.high-contrast ::-webkit-scrollbar-thumb {
+  background: var(--primary-main);
+  border: 1px solid var(--border);
+}
+
+.high-contrast ::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light);
+}
+
+/* High contrast tooltips */
+.high-contrast .MuiTooltip-tooltip {
+  background-color: var(--primary-main) !important;
+  color: #000000 !important;
+  border: 2px solid var(--primary-main) !important;
+  font-weight: 700 !important;
+}
+
+/* High contrast alerts */
+.high-contrast .MuiAlert-root {
+  border: 2px solid currentColor !important;
+  font-weight: 600 !important;
+}
+
+/* High contrast navigation */
+.high-contrast .MuiAppBar-root {
+  border-bottom: 3px solid var(--border) !important;
+}
+
+/* High contrast active states */
+.high-contrast .active,
+.high-contrast .Mui-selected {
+  background-color: var(--primary-main) !important;
+  color: #000000 !important;
+}
+
+/* Ensure images have borders in high contrast mode */
+.high-contrast img {
+  border: 2px solid var(--border) !important;
+}
+
+/* High contrast progress indicators */
+.high-contrast .MuiLinearProgress-root,
+.high-contrast .MuiCircularProgress-root {
+  border: 2px solid var(--border) !important;
+}
+
+.high-contrast .MuiLinearProgress-bar {
+  background-color: var(--primary-main) !important;
+}

@@ -14,12 +14,20 @@ import {
 import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 
+import Footer from '../components/Footer';
 import NavigationBar from '../components/NavigationBar';
 import ReadingTime from '../components/ReadingTime';
+import SEO from '../components/SEO';
+import { COLORS, MISC } from '../constants';
 
 const Home: React.FC = memo(() => {
   return (
     <Box>
+      <SEO
+        title='Home'
+        description='Hearth Engine - A powerful and flexible game engine for creating amazing gaming experiences. Build your dream games with our cross-platform engine.'
+        keywords='hearth engine, game engine, game development, 3D engine, 2D engine, cross-platform, indie game development, game creation'
+      />
       {/* Navigation */}
       <NavigationBar variant='home' />
 
@@ -30,7 +38,7 @@ const Home: React.FC = memo(() => {
           display: 'flex',
           alignItems: 'center',
           pt: 8,
-          background: 'linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%)',
+          background: `linear-gradient(180deg, ${COLORS.background.default} 0%, ${COLORS.background.paper} 100%)`,
         }}
       >
         <Container maxWidth='lg'>
@@ -39,10 +47,10 @@ const Home: React.FC = memo(() => {
               <Typography
                 variant='h1'
                 sx={{
-                  background: 'linear-gradient(135deg, #ff4500 0%, #ff6b35 100%)',
+                  background: `linear-gradient(135deg, ${COLORS.primary.main} 0%, ${COLORS.primary.light} 100%)`,
                   backgroundClip: 'text',
                   WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
+                  WebkitTextFillColor: COLORS.utils.transparent,
                   mb: 2,
                 }}
               >
@@ -51,7 +59,7 @@ const Home: React.FC = memo(() => {
               <Typography variant='h5' color='text.secondary' sx={{ mb: 3 }}>
                 Build worlds that feel real. Destroy them too.
               </Typography>
-              <Typography variant='body1' sx={{ mb: 4, color: 'rgba(255, 255, 255, 0.7)' }}>
+              <Typography variant='body1' sx={{ mb: 4, color: COLORS.text.secondary }}>
                 A next-generation voxel engine with true physics simulation. Every block has weight,
                 heat, and purpose. Create emergent gameplay from simple rules. Push the boundaries
                 of what&apos;s possible.
@@ -83,7 +91,7 @@ const Home: React.FC = memo(() => {
                 sx={{
                   p: 2,
                   borderRadius: 2,
-                  background: 'rgba(17, 17, 17, 0.8)',
+                  background: COLORS.background.overlayLight,
                   position: 'relative',
                   overflow: 'hidden',
                 }}
@@ -109,7 +117,7 @@ const Home: React.FC = memo(() => {
                       width: 200,
                       height: 200,
                       objectFit: 'contain',
-                      filter: 'drop-shadow(0 0 40px #ff4500)',
+                      filter: `drop-shadow(0 0 40px ${COLORS.primary.main})`,
                       backgroundColor: 'transparent',
                     }}
                   />
@@ -144,7 +152,7 @@ const Home: React.FC = memo(() => {
       </Box>
 
       {/* Features Section */}
-      <Box sx={{ py: 10, background: '#1a1a1a' }}>
+      <Box sx={{ py: 10, background: COLORS.background.paper }}>
         <Container maxWidth='lg'>
           <Typography variant='h2' align='center' sx={{ mb: 6 }}>
             Built for the Future
@@ -154,13 +162,13 @@ const Home: React.FC = memo(() => {
               <Card
                 sx={{
                   height: '100%',
-                  background: '#222',
+                  background: COLORS.background.elevated,
                   cursor: 'pointer',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   '&:hover': {
                     transform: 'translateY(-8px) scale(1.02)',
-                    boxShadow: '0 20px 40px rgba(255, 69, 0, 0.2)',
-                    background: '#2a2a2a',
+                    boxShadow: `0 20px 40px ${COLORS.primary.main}33`,
+                    background: COLORS.background.elevated,
                   },
                 }}
               >
@@ -188,13 +196,13 @@ const Home: React.FC = memo(() => {
               <Card
                 sx={{
                   height: '100%',
-                  background: '#222',
+                  background: COLORS.background.elevated,
                   cursor: 'pointer',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   '&:hover': {
                     transform: 'translateY(-8px) scale(1.02)',
-                    boxShadow: '0 20px 40px rgba(255, 69, 0, 0.2)',
-                    background: '#2a2a2a',
+                    boxShadow: `0 20px 40px ${COLORS.primary.main}33`,
+                    background: COLORS.background.elevated,
                   },
                 }}
               >
@@ -222,13 +230,13 @@ const Home: React.FC = memo(() => {
               <Card
                 sx={{
                   height: '100%',
-                  background: '#222',
+                  background: COLORS.background.elevated,
                   cursor: 'pointer',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   '&:hover': {
                     transform: 'translateY(-8px) scale(1.02)',
-                    boxShadow: '0 20px 40px rgba(255, 69, 0, 0.2)',
-                    background: '#2a2a2a',
+                    boxShadow: `0 20px 40px ${COLORS.primary.main}33`,
+                    background: COLORS.background.elevated,
                   },
                 }}
               >
@@ -269,7 +277,7 @@ const Home: React.FC = memo(() => {
             <Button
               variant='contained'
               size='large'
-              href='https://github.com/noahsabaj/hearth-engine'
+              href={MISC.github.repoUrl}
               target='_blank'
               startIcon={<GitHub />}
             >
@@ -288,54 +296,7 @@ const Home: React.FC = memo(() => {
       </Box>
 
       {/* Footer */}
-      <Box
-        component='footer'
-        role='contentinfo'
-        sx={{ py: 6, borderTop: '1px solid rgba(255,255,255,0.1)' }}
-      >
-        <Container>
-          <Grid container spacing={4} justifyContent='center' sx={{ mb: 3 }}>
-            <Grid item>
-              <Button
-                color='inherit'
-                component='a'
-                href='https://github.com/noahsabaj/hearth-engine'
-                target='_blank'
-                rel='noopener noreferrer'
-                startIcon={<GitHub />}
-                sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#ff4500' } }}
-              >
-                GitHub
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                color='inherit'
-                component={Link}
-                to='/docs'
-                startIcon={<MenuBook />}
-                sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#ff4500' } }}
-              >
-                Documentation
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                color='inherit'
-                component={Link}
-                to='/downloads'
-                startIcon={<Download />}
-                sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: '#ff4500' } }}
-              >
-                Downloads
-              </Button>
-            </Grid>
-          </Grid>
-          <Typography variant='body2' color='text.secondary' align='center' component='p'>
-            © 2025 Hearth Engine. Built with <span aria-label='fire'>🔥</span> in Rust.
-          </Typography>
-        </Container>
-      </Box>
+      <Footer />
     </Box>
   );
 });

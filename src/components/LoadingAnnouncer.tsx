@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
 
+import { LOADING } from '../constants';
+
 interface LoadingAnnouncerProps {
   message: string;
   progress?: number;
@@ -14,7 +16,7 @@ const LoadingAnnouncer: React.FC<LoadingAnnouncerProps> = ({
   progress = 0,
   isComplete = false,
   announceProgress = true,
-  announceInterval = 10,
+  announceInterval = LOADING.announceInterval,
 }) => {
   const announcerRef = useRef<HTMLDivElement>(null);
   const lastAnnouncedProgress = useRef(0);

@@ -2,6 +2,8 @@ import { Box, Skeleton, Card, CardContent, Grid } from '@mui/material';
 import { motion } from 'framer-motion';
 import React from 'react';
 
+import { COLORS, LOADING } from '../constants';
+
 interface SkeletonLoaderProps {
   variant?: 'text' | 'card' | 'feature' | 'release' | 'documentation' | 'image' | 'table' | 'list';
   count?: number;
@@ -27,7 +29,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
         width={width}
         height={height || 40}
         sx={{
-          bgcolor: 'rgba(255, 255, 255, 0.1)',
+          bgcolor: COLORS.utils.divider,
           borderRadius: 1,
           animationDuration: `${1.5 / speed}s`,
         }}
@@ -40,8 +42,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
             left: 0,
             right: 0,
             bottom: 0,
-            background:
-              'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent)',
+            background: `linear-gradient(90deg, transparent, ${LOADING.voxel.colors.glow}, transparent)`,
             pointerEvents: 'none',
           }}
           animate={{ x: ['-100%', '100%'] }}
@@ -64,7 +65,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
       <Card
         sx={{
           height: '100%',
-          background: '#222',
+          background: COLORS.background.elevated,
           borderRadius: 2,
           overflow: 'hidden',
         }}
@@ -76,7 +77,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
             width={48}
             height={48}
             sx={{
-              bgcolor: 'rgba(255, 69, 0, 0.1)',
+              bgcolor: `${LOADING.voxel.colors.primary}20`,
               mb: 2,
             }}
           />
@@ -86,7 +87,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
             width='70%'
             height={32}
             sx={{
-              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              bgcolor: COLORS.utils.divider,
               mb: 1,
               borderRadius: 1,
             }}
@@ -131,7 +132,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
     <Card
       sx={{
         mb: 3,
-        bgcolor: '#1a1a1a',
+        bgcolor: COLORS.background.paper,
         borderRadius: 2,
         overflow: 'hidden',
       }}
@@ -144,7 +145,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
             width='60%'
             height={32}
             sx={{
-              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              bgcolor: COLORS.utils.divider,
               borderRadius: 1,
             }}
           />
@@ -154,7 +155,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
             width={80}
             height={24}
             sx={{
-              bgcolor: 'rgba(255, 69, 0, 0.1)',
+              bgcolor: `${LOADING.voxel.colors.primary}20`,
               borderRadius: 3,
             }}
           />
@@ -320,7 +321,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
               width: 60,
               height: 60,
               borderRadius: '50%',
-              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              bgcolor: COLORS.utils.divider,
             }}
           />
         </motion.div>
@@ -337,7 +338,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
           gap: 2,
           mb: 2,
           pb: 2,
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          borderBottom: `1px solid ${COLORS.utils.border}`,
         }}
       >
         {[...Array(4)].map((_, i) => (
@@ -347,7 +348,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
             variant='text'
             width={i === 0 ? '30%' : '23%'}
             height={24}
-            sx={{ bgcolor: 'rgba(255, 255, 255, 0.15)' }}
+            sx={{ bgcolor: COLORS.utils.shimmerLight }}
           />
         ))}
       </Box>
@@ -361,7 +362,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
               variant='text'
               width={colIndex === 0 ? '30%' : '23%'}
               height={20}
-              sx={{ bgcolor: 'rgba(255, 255, 255, 0.08)' }}
+              sx={{ bgcolor: COLORS.utils.shimmer }}
             />
           ))}
         </Box>
@@ -393,7 +394,7 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
               variant='text'
               width='90%'
               height={16}
-              sx={{ bgcolor: 'rgba(255, 255, 255, 0.08)' }}
+              sx={{ bgcolor: COLORS.utils.shimmer }}
             />
           </Box>
         </Box>

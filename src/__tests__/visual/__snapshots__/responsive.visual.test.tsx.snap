@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Responsive Visual Tests Desktop (1920x1080) should render InteractiveCard with responsive behavior: interactive-card-desktop 1`] = `
+<div>
+  <div
+    style="transform: none;"
+  >
+    <div
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-l22w6d-MuiPaper-root-MuiCard-root"
+      tabindex="0"
+    >
+      <div
+        style="transform: translateZ(20px);"
+      >
+        <div>
+          Test Content
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Responsive Visual Tests Ultrawide (2560x1440) should render InteractiveCard with responsive behavior: interactive-card-ultrawide 1`] = `
+<div>
+  <div
+    style="transform: none;"
+  >
+    <div
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-l22w6d-MuiPaper-root-MuiCard-root"
+      tabindex="0"
+    >
+      <div
+        style="transform: translateZ(20px);"
+      >
+        <div>
+          Test Content
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Responsive Visual Tests iPad (768x1024) should render InteractiveCard with responsive behavior: interactive-card-tablet 1`] = `
+<div>
+  <div
+    style="transform: none;"
+  >
+    <div
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-l22w6d-MuiPaper-root-MuiCard-root"
+      tabindex="0"
+    >
+      <div
+        style="transform: translateZ(20px);"
+      >
+        <div>
+          Test Content
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Responsive Visual Tests iPhone SE (375x667) should render InteractiveCard with responsive behavior: interactive-card-mobile 1`] = `
+<div>
+  <div
+    style="transform: none;"
+  >
+    <div
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-l22w6d-MuiPaper-root-MuiCard-root"
+      tabindex="0"
+    >
+      <div
+        style="transform: translateZ(20px);"
+      >
+        <div>
+          Test Content
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

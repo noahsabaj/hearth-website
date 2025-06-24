@@ -2,7 +2,9 @@ import { Box, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import React, { useState, useEffect } from 'react';
 
-import LoadingProgress from './LoadingProgress';
+import VoxelLoader from './VoxelLoader';
+import { loadingConfig } from '../config/loadingConfig';
+import { COLORS } from '../constants';
 
 interface PageLoaderProps {
   /** Page name being loaded */
@@ -42,13 +44,7 @@ const PageLoader: React.FC<PageLoaderProps> = ({ pageName, estimatedTime = 2, ti
     return () => clearInterval(interval);
   }, [estimatedTime]);
 
-  const defaultTips = [
-    'Optimizing your experience...',
-    'Loading high-performance components...',
-    'Preparing interactive elements...',
-    'Almost there, hang tight...',
-    'Initializing page resources...',
-  ];
+  const defaultTips = tips || loadingConfig.tips.voxel;
 
   return (
     <Box
@@ -58,7 +54,7 @@ const PageLoader: React.FC<PageLoaderProps> = ({ pageName, estimatedTime = 2, ti
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100vh',
-        backgroundColor: '#0a0a0a',
+        backgroundColor: COLORS.background.default,
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -71,7 +67,7 @@ const PageLoader: React.FC<PageLoaderProps> = ({ pageName, estimatedTime = 2, ti
           left: 0,
           right: 0,
           bottom: 0,
-          opacity: 0.1,
+          opacity: 0.05,
           pointerEvents: 'none',
         }}
       >
@@ -79,7 +75,7 @@ const PageLoader: React.FC<PageLoaderProps> = ({ pageName, estimatedTime = 2, ti
           style={{
             width: '200%',
             height: '200%',
-            background: 'radial-gradient(circle at center, #ff4500 0%, transparent 70%)',
+            background: `radial-gradient(circle at center, ${COLORS.primary.main} 0%, transparent 70%)`,
           }}
           animate={{
             scale: [1, 1.2, 1],
@@ -93,100 +89,21 @@ const PageLoader: React.FC<PageLoaderProps> = ({ pageName, estimatedTime = 2, ti
         />
       </Box>
 
-      {/* Logo animation */}
+      {/* Voxel Loader */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <Box
-          sx={{
-            width: 120,
-            height: 120,
-            mb: 4,
-            position: 'relative',
-          }}
-        >
-          <motion.img
-            src='/hearth-website/logo.png'
-            alt='Hearth Engine'
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-            }}
-            animate={{
-              filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)'],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          />
-
-          {/* Rotating ring */}
-          <motion.div
-            style={{
-              position: 'absolute',
-              top: -10,
-              left: -10,
-              right: -10,
-              bottom: -10,
-              border: '2px solid #ff4500',
-              borderRadius: '50%',
-              borderTopColor: 'transparent',
-              borderRightColor: 'transparent',
-            }}
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
-          />
-        </Box>
-      </motion.div>
-
-      {/* Page name */}
-      {pageName && (
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Typography
-            variant='h5'
-            sx={{
-              mb: 3,
-              color: 'text.secondary',
-              fontWeight: 300,
-              letterSpacing: 1,
-            }}
-          >
-            Loading {pageName}
-          </Typography>
-        </motion.div>
-      )}
-
-      {/* Progress bar */}
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        style={{ width: '100%', maxWidth: 400 }}
-      >
-        <LoadingProgress
-          variant='linear'
+        <VoxelLoader
           progress={progress}
           indeterminate={isIndeterminate}
+          size='large'
           showPercentage={!isIndeterminate}
-          showTimeRemaining={!isIndeterminate}
-          estimatedTime={estimatedTime}
-          tips={tips || defaultTips}
-          tipInterval={2000}
-          size='medium'
-          color='primary'
+          showTips
+          tips={defaultTips}
+          tipInterval={loadingConfig.timing.tipRotationInterval}
+          {...(pageName ? { message: `Loading ${pageName}` } : {})}
         />
       </motion.div>
 
@@ -196,7 +113,7 @@ const PageLoader: React.FC<PageLoaderProps> = ({ pageName, estimatedTime = 2, ti
           variant='caption'
           sx={{
             mt: 4,
-            color: 'text.secondary',
+            color: COLORS.text.secondary,
             opacity: 0.5,
           }}
         >

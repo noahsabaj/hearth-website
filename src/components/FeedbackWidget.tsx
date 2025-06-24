@@ -14,6 +14,8 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useState, useEffect } from 'react';
 
+import { COLORS } from '../constants';
+
 interface FeedbackData {
   sectionId: string;
   helpful: boolean;
@@ -175,9 +177,9 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
                   disabled={stats.hasVoted}
                   aria-label='Mark as helpful'
                   sx={{
-                    color: stats.userVote === 'up' ? '#4caf50' : 'inherit',
+                    color: stats.userVote === 'up' ? COLORS.status.success : 'inherit',
                     '&:hover': {
-                      backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                      backgroundColor: `${COLORS.status.success}1A`,
                     },
                   }}
                 >
@@ -189,7 +191,7 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
               {stats.thumbsUp}
             </Typography>
 
-            <Box sx={{ width: 1, height: 24, backgroundColor: 'rgba(255, 255, 255, 0.1)' }} />
+            <Box sx={{ width: 1, height: 24, backgroundColor: COLORS.utils.divider }} />
 
             <Typography variant='body2' sx={{ minWidth: 20, textAlign: 'center' }}>
               {stats.thumbsDown}
@@ -201,9 +203,9 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
                   disabled={stats.hasVoted}
                   aria-label='Mark as not helpful'
                   sx={{
-                    color: stats.userVote === 'down' ? '#f44336' : 'inherit',
+                    color: stats.userVote === 'down' ? COLORS.status.error : 'inherit',
                     '&:hover': {
-                      backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                      backgroundColor: `${COLORS.status.error}1A`,
                     },
                   }}
                 >
@@ -238,7 +240,7 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
                     aria-label='Feedback comment'
                     sx={{
                       '& .MuiOutlinedInput-root': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        backgroundColor: COLORS.utils.shimmer,
                       },
                     }}
                   />
@@ -260,9 +262,9 @@ const FeedbackWidget: React.FC<FeedbackWidgetProps> = ({ sectionId, sectionTitle
                       size='small'
                       onClick={handleCommentSubmit}
                       sx={{
-                        backgroundColor: '#ff4500',
+                        backgroundColor: COLORS.primary.main,
                         '&:hover': {
-                          backgroundColor: '#ff6500',
+                          backgroundColor: COLORS.primary.hover,
                         },
                       }}
                     >

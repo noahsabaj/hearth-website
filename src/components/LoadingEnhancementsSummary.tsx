@@ -2,12 +2,26 @@ import { CheckCircle } from '@mui/icons-material';
 import { Box, Typography, List, ListItem, ListItemIcon, ListItemText, Paper } from '@mui/material';
 import React from 'react';
 
+import { COLORS } from '../constants';
+
 const LoadingEnhancementsSummary: React.FC = () => {
   const enhancements = [
     {
+      title: 'VoxelLoader Component',
+      features: [
+        "3D voxel-building animation representing the engine's voxel nature",
+        'Animated voxel blocks building from center outwards',
+        'CSS-based 3D transforms (no WebGL required)',
+        'Progress tracking with visual voxel completion',
+        'Voxel-themed loading tips about engine features',
+        'Customizable sizes and color schemes',
+        'Smooth rotation and build animations',
+      ],
+    },
+    {
       title: 'LoadingProgress Component',
       features: [
-        'Multiple variants: linear, circular, dots, spinner, skeleton',
+        'Multiple variants: linear, circular, dots, spinner, skeleton, voxel',
         'Progress percentage display with smooth animations',
         'Estimated time remaining calculations',
         'Rotating loading tips with customizable messages',
@@ -88,8 +102,8 @@ const LoadingEnhancementsSummary: React.FC = () => {
   ];
 
   return (
-    <Paper sx={{ p: 4, backgroundColor: 'rgba(30, 30, 30, 0.8)' }}>
-      <Typography variant='h3' gutterBottom sx={{ color: '#ff4500' }}>
+    <Paper sx={{ p: 4, backgroundColor: `${COLORS.background.elevated}CC` }}>
+      <Typography variant='h3' gutterBottom sx={{ color: COLORS.primary.main }}>
         Loading Enhancement Summary
       </Typography>
 
@@ -100,14 +114,14 @@ const LoadingEnhancementsSummary: React.FC = () => {
 
       {enhancements.map((section, index) => (
         <Box key={index} sx={{ mb: 4 }}>
-          <Typography variant='h5' gutterBottom sx={{ color: '#ff6b35', mt: 3 }}>
+          <Typography variant='h5' gutterBottom sx={{ color: COLORS.primary.light, mt: 3 }}>
             {section.title}
           </Typography>
           <List dense>
             {section.features.map((feature, featureIndex) => (
               <ListItem key={featureIndex} sx={{ pl: 0 }}>
                 <ListItemIcon sx={{ minWidth: 32 }}>
-                  <CheckCircle sx={{ color: '#4caf50', fontSize: 20 }} />
+                  <CheckCircle sx={{ color: COLORS.status.success, fontSize: 20 }} />
                 </ListItemIcon>
                 <ListItemText
                   primary={feature}
@@ -122,7 +136,7 @@ const LoadingEnhancementsSummary: React.FC = () => {
         </Box>
       ))}
 
-      <Box sx={{ mt: 4, p: 3, backgroundColor: 'rgba(255, 69, 0, 0.1)', borderRadius: 2 }}>
+      <Box sx={{ mt: 4, p: 3, backgroundColor: `${COLORS.primary.main}1A`, borderRadius: 2 }}>
         <Typography variant='h6' gutterBottom>
           Key Benefits
         </Typography>

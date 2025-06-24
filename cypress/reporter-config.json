@@ -1,0 +1,18 @@
+{
+  "reporterEnabled": "cypress-mochawesome-reporter, mocha-junit-reporter",
+  "cypressMochawesomeReporterReporterOptions": {
+    "reportDir": "cypress/reports/mochawesome",
+    "charts": true,
+    "reportPageTitle": "Hearth Engine E2E Test Report",
+    "embeddedScreenshots": true,
+    "inlineAssets": true,
+    "saveAllAttempts": false,
+    "videoOnFailOnly": true,
+    "quiet": true
+  },
+  "mochaJunitReporterReporterOptions": {
+    "mochaFile": "cypress/reports/junit/results-[hash].xml",
+    "toConsole": false,
+    "attachments": true
+  }
+}

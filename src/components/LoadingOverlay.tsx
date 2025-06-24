@@ -3,7 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import React from 'react';
 
 import LoadingProgress from './LoadingProgress';
+import VoxelLoader from './VoxelLoader';
 import { loadingConfig } from '../config/loadingConfig';
+import { COLORS, Z_INDEX } from '../constants';
 
 interface LoadingOverlayProps {
   isLoading: boolean;
@@ -13,6 +15,7 @@ interface LoadingOverlayProps {
   tips?: string[];
   showProgress?: boolean;
   blur?: boolean;
+  useVoxelLoader?: boolean;
 }
 
 const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
@@ -20,9 +23,10 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   progress = 0,
   message = 'Loading...',
   variant = 'full',
-  tips = loadingConfig.tips.general,
+  tips = loadingConfig.tips.voxel,
   showProgress = true,
   blur = true,
+  useVoxelLoader = true,
 }) => {
   const overlayStyles = {
     full: {
@@ -31,8 +35,8 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
       left: 0,
       right: 0,
       bottom: 0,
-      zIndex: 9999,
-      backgroundColor: 'rgba(10, 10, 10, 0.95)',
+      zIndex: Z_INDEX.loadingOverlay,
+      backgroundColor: COLORS.background.overlay,
       backdropFilter: blur ? 'blur(10px)' : 'none',
     },
     inline: {
@@ -42,7 +46,7 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
       right: 0,
       bottom: 0,
       zIndex: 10,
-      backgroundColor: 'rgba(10, 10, 10, 0.9)',
+      backgroundColor: COLORS.background.overlayLight,
       backdropFilter: blur ? 'blur(5px)' : 'none',
     },
     minimal: {
@@ -106,46 +110,6 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
                 </Box>
               )}
 
-              {/* Logo or icon */}
-              {variant === 'full' && (
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.1 }}
-                >
-                  <Box
-                    component='img'
-                    src='/hearth-website/logo.png'
-                    alt='Loading'
-                    sx={{
-                      width: 80,
-                      height: 80,
-                      mb: 3,
-                      filter: 'drop-shadow(0 0 20px rgba(255, 69, 0, 0.5))',
-                    }}
-                  />
-                </motion.div>
-              )}
-
-              {/* Message */}
-              <motion.div
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Typography
-                  variant={variant === 'minimal' ? 'body2' : 'h6'}
-                  sx={{
-                    mb: 3,
-                    color: 'text.primary',
-                    textAlign: 'center',
-                    fontWeight: variant === 'minimal' ? 400 : 300,
-                  }}
-                >
-                  {message}
-                </Typography>
-              </motion.div>
-
               {/* Progress */}
               {showProgress && (
                 <motion.div
@@ -154,20 +118,56 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
                   transition={{ delay: 0.3 }}
                   style={{
                     width: '100%',
-                    maxWidth: variant === 'minimal' ? 200 : 400,
+                    maxWidth: variant === 'minimal' ? 200 : 600,
                   }}
                 >
-                  <LoadingProgress
-                    variant='linear'
-                    progress={progress}
-                    indeterminate={progress === 0}
-                    showPercentage={variant !== 'minimal'}
-                    showTimeRemaining={variant === 'full'}
-                    tips={variant === 'full' ? tips : []}
-                    tipInterval={loadingConfig.timing.tipRotationInterval}
-                    size={variant === 'minimal' ? 'small' : 'medium'}
-                    color='primary'
-                  />
+                  {useVoxelLoader && variant === 'full' ? (
+                    <VoxelLoader
+                      progress={progress}
+                      indeterminate={progress === 0}
+                      size='large'
+                      showPercentage
+                      showTips
+                      tips={tips}
+                      tipInterval={loadingConfig.timing.tipRotationInterval}
+                      message={message}
+                    />
+                  ) : (
+                    <>
+                      {/* Message for non-voxel loader */}
+                      {!useVoxelLoader && (
+                        <motion.div
+                          initial={{ y: 10, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ delay: 0.2 }}
+                        >
+                          <Typography
+                            variant={variant === 'minimal' ? 'body2' : 'h6'}
+                            sx={{
+                              mb: 3,
+                              color: COLORS.text.primary,
+                              textAlign: 'center',
+                              fontWeight: variant === 'minimal' ? 400 : 300,
+                            }}
+                          >
+                            {message}
+                          </Typography>
+                        </motion.div>
+                      )}
+                      <LoadingProgress
+                        variant={useVoxelLoader ? 'voxel' : 'linear'}
+                        progress={progress}
+                        indeterminate={progress === 0}
+                        showPercentage={variant !== 'minimal'}
+                        showTimeRemaining={variant === 'full'}
+                        tips={variant === 'full' ? tips : []}
+                        tipInterval={loadingConfig.timing.tipRotationInterval}
+                        size={variant === 'minimal' ? 'small' : 'medium'}
+                        color='primary'
+                        {...(useVoxelLoader && message ? { message } : {})}
+                      />
+                    </>
+                  )}
                 </motion.div>
               )}
             </Box>

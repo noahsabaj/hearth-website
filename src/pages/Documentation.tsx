@@ -1,4 +1,11 @@
-import { Menu as MenuIcon, Close } from '@mui/icons-material';
+import {
+  Menu as MenuIcon,
+  Close,
+  ExpandMore,
+  ExpandLess,
+  Link as LinkIcon,
+  KeyboardArrowUp,
+} from '@mui/icons-material';
 import {
   Box,
   Container,
@@ -14,16 +21,33 @@ import {
   IconButton,
   useTheme,
   useMediaQuery,
+  Collapse,
+  Tooltip,
+  Fade,
+  Fab,
 } from '@mui/material';
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 
+import APIReferenceSearch from '../components/APIReferenceSearch';
 import CodeBlock from '../components/CodeBlock';
 import EditOnGitHub from '../components/EditOnGitHub';
 import FeedbackWidget from '../components/FeedbackWidget';
+import Footer from '../components/Footer';
 import LastUpdated from '../components/LastUpdated';
 import NavigationBar from '../components/NavigationBar';
 import ReadingTime from '../components/ReadingTime';
 import RelatedArticles from '../components/RelatedArticles';
+import SEO from '../components/SEO';
+import {
+  COLORS,
+  MISC,
+  SPACING,
+  ANIMATION,
+  LAYOUT,
+  Z_INDEX,
+  LOADING,
+  TYPOGRAPHY,
+} from '../constants';
 import { useKeyboardShortcutsContext } from '../contexts/KeyboardShortcutsContext';
 
 // Last updated dates for each documentation section
@@ -328,7 +352,9 @@ Performance Architecture
 
 The architecture prioritizes GPU residence - data lives where it&apos;s processed, eliminating costly CPU-GPU transfers.`,
 
-  apiReference: `For detailed API documentation, see the docs.rs page or browse the source code on GitHub.`,
+  apiReference: `Search through Hearth Engine's API reference to find functions, structs, traits, and more. Use the interactive search above to explore the API with instant previews, parameter details, and code examples. The search supports fuzzy matching to help you find what you need quickly.
+
+For complete API documentation, see the docs.rs page or browse the source code on GitHub.`,
 };
 
 const Documentation: React.FC = () => {
@@ -337,13 +363,19 @@ const Documentation: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState('getting-started');
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>(() => {
+    // Load collapsed state from localStorage
+    const saved = localStorage.getItem('docSidebarCollapsed');
+    return saved ? JSON.parse(saved) : {};
+  });
   const { setSidebarToggleCallback, setNavigationCallbacks, showToast } =
     useKeyboardShortcutsContext();
 
   const handleNavigateToSection = useCallback((sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const headerHeight = 80; // AppBar height + some padding
+      const headerHeight = SPACING.navbar.height + SPACING.md; // AppBar height + some padding
       const elementPosition = element.offsetTop - headerHeight;
       window.scrollTo({
         top: elementPosition,
@@ -351,6 +383,23 @@ const Documentation: React.FC = () => {
       });
     }
   }, []);
+
+  const toggleSectionCollapse = useCallback((sectionId: string) => {
+    setCollapsedSections(prev => {
+      const newState = { ...prev, [sectionId]: !prev[sectionId] };
+      localStorage.setItem('docSidebarCollapsed', JSON.stringify(newState));
+      return newState;
+    });
+  }, []);
+
+  const handleCopyLink = useCallback(
+    (sectionId: string) => {
+      const url = `${window.location.origin}${window.location.pathname}#${sectionId}`;
+      navigator.clipboard.writeText(url);
+      showToast('Link copied to clipboard');
+    },
+    [showToast],
+  );
 
   const sections = useMemo(
     () => [
@@ -361,6 +410,38 @@ const Documentation: React.FC = () => {
       { title: 'Architecture', id: 'architecture' },
       { title: 'Cargo Commands', id: 'cargo-commands' },
       { title: 'API Reference', id: 'api-reference' },
+    ],
+    []
+  );
+
+  // Grouped sections for collapsible sidebar
+  const sectionGroups = useMemo(
+    () => [
+      {
+        title: 'Getting Started',
+        id: 'getting-started-group',
+        sections: [
+          { title: 'Getting Started', id: 'getting-started' },
+          { title: 'Installation', id: 'installation' },
+          { title: 'Basic Usage', id: 'basic-usage' },
+        ],
+      },
+      {
+        title: 'Advanced Topics',
+        id: 'advanced-group',
+        sections: [
+          { title: 'Core Concepts', id: 'core-concepts' },
+          { title: 'Architecture', id: 'architecture' },
+        ],
+      },
+      {
+        title: 'Reference',
+        id: 'reference-group',
+        sections: [
+          { title: 'Cargo Commands', id: 'cargo-commands' },
+          { title: 'API Reference', id: 'api-reference' },
+        ],
+      },
     ],
     []
   );
@@ -417,13 +498,16 @@ const Documentation: React.FC = () => {
           const progress = Math.min((scrollTop / docHeight) * 100, 100);
           setScrollProgress(progress);
 
+          // Show back to top button when scrolled down
+          setShowBackToTop(scrollTop > LOADING.scrollThreshold);
+
           // Find active section with better detection
           const sectionElements = sections.map(section => ({
             id: section.id,
             element: document.getElementById(section.id),
           }));
 
-          const headerOffset = 120;
+          const headerOffset = SPACING.navbar.height + SPACING.xl + SPACING.md;
           const isAtBottom =
             window.innerHeight + scrollTop >= document.documentElement.scrollHeight - 10;
 
@@ -472,6 +556,12 @@ const Documentation: React.FC = () => {
 
   return (
     <Box component='main' role='main'>
+      <SEO
+        title='Documentation'
+        description='Comprehensive documentation for Hearth Engine. Learn how to install, configure, and use Hearth Engine to build amazing games.'
+        keywords='hearth engine documentation, game engine docs, hearth tutorial, game development guide, hearth API reference'
+        pathname='/documentation'
+      />
       {/* Navigation */}
       <NavigationBar variant='docs' />
 
@@ -482,14 +572,15 @@ const Documentation: React.FC = () => {
         aria-label={`Reading progress: ${Math.round(scrollProgress)}% complete`}
         sx={{
           position: 'fixed',
-          top: 64, // Below AppBar
+          top: SPACING.navbar.height,
           left: 0,
           right: 0,
-          zIndex: 1200,
-          height: 3,
-          backgroundColor: 'transparent',
+          zIndex: Z_INDEX.sticky + 50,
+          height: LAYOUT.height.progress.small,
+          backgroundColor: COLORS.utils.transparent,
           '& .MuiLinearProgress-bar': {
-            backgroundColor: '#ff4500',
+            backgroundColor: COLORS.primary.main,
+            transition: ANIMATION.transition.fast,
           },
         }}
       />
@@ -523,58 +614,105 @@ const Documentation: React.FC = () => {
               component='nav'
               role='navigation'
               aria-label='Documentation sections'
-              sx={{ p: 2, position: 'sticky', top: 80 }}
+              sx={{
+                p: 2,
+                position: 'sticky',
+                top: SPACING.navbar.height + SPACING.md,
+                border: `1px solid ${COLORS.utils.border}`,
+              }}
             >
               <Typography variant='h6' gutterBottom component='h2'>
                 Documentation
               </Typography>
               <List role='list'>
-                {sections.map(section => (
-                  <ListItem
-                    key={section.id}
-                    component='button'
-                    onClick={() => {
-                      const element = document.getElementById(section.id);
-                      if (element) {
-                        const headerHeight = 80; // AppBar height + some padding
-                        const elementPosition = element.offsetTop - headerHeight;
-                        window.scrollTo({
-                          top: elementPosition,
-                          behavior: 'smooth',
-                        });
-                      }
-                    }}
-                    sx={{
-                      cursor: 'pointer',
-                      borderRadius: 1,
-                      mb: 0.5,
-                      transition: 'all 0.2s ease',
-                      backgroundColor:
-                        activeSection === section.id ? 'rgba(255, 69, 0, 0.1)' : 'transparent',
-                      borderLeft:
-                        activeSection === section.id
-                          ? '3px solid #ff4500'
-                          : '3px solid transparent',
-                      '&:hover': {
-                        backgroundColor:
-                          activeSection === section.id
-                            ? 'rgba(255, 69, 0, 0.15)'
-                            : 'rgba(255, 255, 255, 0.05)',
-                        transform: 'translateX(4px)',
-                      },
-                    }}
-                  >
-                    <ListItemText
-                      primary={section.title}
+                {sectionGroups.map(group => (
+                  <Box key={group.id} sx={{ mb: 1 }}>
+                    <ListItem
+                      component='button'
+                      onClick={() => toggleSectionCollapse(group.id)}
                       sx={{
-                        '& .MuiListItemText-primary': {
-                          fontWeight: activeSection === section.id ? 600 : 400,
-                          color:
-                            activeSection === section.id ? '#ff4500' : 'rgba(255, 255, 255, 0.9)',
+                        cursor: 'pointer',
+                        borderRadius: LAYOUT.borderRadius.sm,
+                        mb: 0.5,
+                        transition: ANIMATION.transition.fast,
+                        backgroundColor: COLORS.utils.shimmer,
+                        border: `1px solid ${COLORS.utils.border}`,
+                        '&:hover': {
+                          backgroundColor: COLORS.utils.shimmerLight,
+                          borderColor: `${COLORS.text.primary}1F`,
                         },
                       }}
-                    />
-                  </ListItem>
+                    >
+                      <ListItemText
+                        primary={group.title}
+                        sx={{
+                          '& .MuiListItemText-primary': {
+                            fontWeight: TYPOGRAPHY.fontWeight.semibold,
+                            color: COLORS.text.primary,
+                          },
+                        }}
+                      />
+                      {collapsedSections[group.id] ? <ExpandMore /> : <ExpandLess />}
+                    </ListItem>
+                    <Collapse
+                      in={!collapsedSections[group.id]}
+                      timeout={ANIMATION.duration.normal}
+                      unmountOnExit
+                    >
+                      <List sx={{ pl: 2 }}>
+                        {group.sections.map(section => (
+                          <ListItem
+                            key={section.id}
+                            component='button'
+                            onClick={() => handleNavigateToSection(section.id)}
+                            sx={{
+                              cursor: 'pointer',
+                              borderRadius: LAYOUT.borderRadius.sm,
+                              mb: 0.5,
+                              transition: ANIMATION.transition.fast,
+                              position: 'relative',
+                              backgroundColor:
+                                activeSection === section.id
+                                  ? `${COLORS.primary.main}1A`
+                                  : COLORS.utils.transparent,
+                              border: `1px solid ${COLORS.utils.border}`,
+                              borderLeft:
+                                activeSection === section.id
+                                  ? `3px solid ${COLORS.primary.main}`
+                                  : `1px solid ${COLORS.utils.border}`,
+                              '&:hover': {
+                                backgroundColor:
+                                  activeSection === section.id
+                                    ? `${COLORS.primary.main}26`
+                                    : COLORS.utils.shimmer,
+                                borderColor: `${COLORS.text.primary}1F`,
+                                borderLeftColor:
+                                  activeSection === section.id
+                                    ? COLORS.primary.main
+                                    : `${COLORS.text.primary}1F`,
+                              },
+                            }}
+                          >
+                            <ListItemText
+                              primary={section.title}
+                              sx={{
+                                '& .MuiListItemText-primary': {
+                                  fontWeight:
+                                    activeSection === section.id
+                                      ? TYPOGRAPHY.fontWeight.semibold
+                                      : TYPOGRAPHY.fontWeight.normal,
+                                  color:
+                                    activeSection === section.id
+                                      ? COLORS.primary.main
+                                      : COLORS.text.secondary,
+                                },
+                              }}
+                            />
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Collapse>
+                  </Box>
                 ))}
               </List>
             </Paper>
@@ -590,7 +728,8 @@ const Documentation: React.FC = () => {
               '& .MuiDrawer-paper': {
                 width: 280,
                 backgroundColor: theme.palette.background.paper,
-                top: 64,
+                top: SPACING.navbar.height,
+                border: `1px solid ${COLORS.utils.border}`,
               },
             }}
           >
@@ -599,45 +738,97 @@ const Documentation: React.FC = () => {
                 Documentation
               </Typography>
               <List role='list'>
-                {sections.map(section => (
-                  <ListItem
-                    key={section.id}
-                    component='button'
-                    onClick={() => {
-                      handleNavigateToSection(section.id);
-                      setSidebarOpen(false);
-                    }}
-                    sx={{
-                      cursor: 'pointer',
-                      borderRadius: 1,
-                      mb: 0.5,
-                      transition: 'all 0.2s ease',
-                      backgroundColor:
-                        activeSection === section.id ? 'rgba(255, 69, 0, 0.1)' : 'transparent',
-                      borderLeft:
-                        activeSection === section.id
-                          ? '3px solid #ff4500'
-                          : '3px solid transparent',
-                      '&:hover': {
-                        backgroundColor:
-                          activeSection === section.id
-                            ? 'rgba(255, 69, 0, 0.15)'
-                            : 'rgba(255, 255, 255, 0.05)',
-                        transform: 'translateX(4px)',
-                      },
-                    }}
-                  >
-                    <ListItemText
-                      primary={section.title}
+                {sectionGroups.map(group => (
+                  <Box key={group.id} sx={{ mb: 1 }}>
+                    <ListItem
+                      component='button'
+                      onClick={() => toggleSectionCollapse(group.id)}
                       sx={{
-                        '& .MuiListItemText-primary': {
-                          fontWeight: activeSection === section.id ? 600 : 400,
-                          color:
-                            activeSection === section.id ? '#ff4500' : 'rgba(255, 255, 255, 0.9)',
+                        cursor: 'pointer',
+                        borderRadius: LAYOUT.borderRadius.sm,
+                        mb: 0.5,
+                        transition: ANIMATION.transition.fast,
+                        backgroundColor: COLORS.utils.shimmer,
+                        border: `1px solid ${COLORS.utils.border}`,
+                        '&:hover': {
+                          backgroundColor: COLORS.utils.shimmerLight,
+                          borderColor: `${COLORS.text.primary}1F`,
                         },
                       }}
-                    />
-                  </ListItem>
+                    >
+                      <ListItemText
+                        primary={group.title}
+                        sx={{
+                          '& .MuiListItemText-primary': {
+                            fontWeight: TYPOGRAPHY.fontWeight.semibold,
+                            color: COLORS.text.primary,
+                          },
+                        }}
+                      />
+                      {collapsedSections[group.id] ? <ExpandMore /> : <ExpandLess />}
+                    </ListItem>
+                    <Collapse
+                      in={!collapsedSections[group.id]}
+                      timeout={ANIMATION.duration.normal}
+                      unmountOnExit
+                    >
+                      <List sx={{ pl: 2 }}>
+                        {group.sections.map(section => (
+                          <ListItem
+                            key={section.id}
+                            component='button'
+                            onClick={() => {
+                              handleNavigateToSection(section.id);
+                              setSidebarOpen(false);
+                            }}
+                            sx={{
+                              cursor: 'pointer',
+                              borderRadius: LAYOUT.borderRadius.sm,
+                              mb: 0.5,
+                              transition: ANIMATION.transition.fast,
+                              position: 'relative',
+                              backgroundColor:
+                                activeSection === section.id
+                                  ? `${COLORS.primary.main}1A`
+                                  : COLORS.utils.transparent,
+                              border: `1px solid ${COLORS.utils.border}`,
+                              borderLeft:
+                                activeSection === section.id
+                                  ? `3px solid ${COLORS.primary.main}`
+                                  : `1px solid ${COLORS.utils.border}`,
+                              '&:hover': {
+                                backgroundColor:
+                                  activeSection === section.id
+                                    ? `${COLORS.primary.main}26`
+                                    : COLORS.utils.shimmer,
+                                borderColor: `${COLORS.text.primary}1F`,
+                                borderLeftColor:
+                                  activeSection === section.id
+                                    ? COLORS.primary.main
+                                    : `${COLORS.text.primary}1F`,
+                              },
+                            }}
+                          >
+                            <ListItemText
+                              primary={section.title}
+                              sx={{
+                                '& .MuiListItemText-primary': {
+                                  fontWeight:
+                                    activeSection === section.id
+                                      ? TYPOGRAPHY.fontWeight.semibold
+                                      : TYPOGRAPHY.fontWeight.normal,
+                                  color:
+                                    activeSection === section.id
+                                      ? COLORS.primary.main
+                                      : COLORS.text.secondary,
+                                },
+                              }}
+                            />
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Collapse>
+                  </Box>
                 ))}
               </List>
             </Box>
@@ -668,6 +859,18 @@ const Documentation: React.FC = () => {
                   <Typography variant='h3' id='getting-started-heading' component='h2'>
                     Getting Started
                   </Typography>
+                  <Tooltip title='Copy link to section'>
+                    <IconButton
+                      size='small'
+                      onClick={() => handleCopyLink('getting-started')}
+                      sx={{
+                        color: COLORS.text.secondary,
+                        '&:hover': { color: COLORS.primary.main },
+                      }}
+                    >
+                      <LinkIcon fontSize='small' />
+                    </IconButton>
+                  </Tooltip>
                   <ReadingTime text={SECTION_CONTENT.gettingStarted} />
                   <LastUpdated
                     date={SECTION_UPDATES.gettingStarted}
@@ -723,6 +926,18 @@ fn main() {
                   <Typography variant='h3' id='installation-heading' component='h2'>
                     Installation
                   </Typography>
+                  <Tooltip title='Copy link to section'>
+                    <IconButton
+                      size='small'
+                      onClick={() => handleCopyLink('installation')}
+                      sx={{
+                        color: COLORS.text.secondary,
+                        '&:hover': { color: COLORS.primary.main },
+                      }}
+                    >
+                      <LinkIcon fontSize='small' />
+                    </IconButton>
+                  </Tooltip>
                   <ReadingTime text={SECTION_CONTENT.installation} />
                   <LastUpdated
                     date={SECTION_UPDATES.installation}
@@ -774,6 +989,18 @@ cargo run --example engine_testbed`}
                   <Typography variant='h3' id='basic-usage-heading' component='h2'>
                     Basic Usage
                   </Typography>
+                  <Tooltip title='Copy link to section'>
+                    <IconButton
+                      size='small'
+                      onClick={() => handleCopyLink('basic-usage')}
+                      sx={{
+                        color: COLORS.text.secondary,
+                        '&:hover': { color: COLORS.primary.main },
+                      }}
+                    >
+                      <LinkIcon fontSize='small' />
+                    </IconButton>
+                  </Tooltip>
                   <ReadingTime text={SECTION_CONTENT.basicUsage} />
                   <LastUpdated
                     date={SECTION_UPDATES.basicUsage}
@@ -828,6 +1055,18 @@ sync_render_data(&world_buffer, &mut render_buffer);`}
                   <Typography variant='h3' id='core-concepts-heading' component='h2'>
                     Core Concepts
                   </Typography>
+                  <Tooltip title='Copy link to section'>
+                    <IconButton
+                      size='small'
+                      onClick={() => handleCopyLink('core-concepts')}
+                      sx={{
+                        color: COLORS.text.secondary,
+                        '&:hover': { color: COLORS.primary.main },
+                      }}
+                    >
+                      <LinkIcon fontSize='small' />
+                    </IconButton>
+                  </Tooltip>
                   <ReadingTime text={SECTION_CONTENT.coreConcepts} />
                   <LastUpdated
                     date={SECTION_UPDATES.coreConcepts}
@@ -888,6 +1127,18 @@ sync_render_data(&world_buffer, &mut render_buffer);`}
                   <Typography variant='h3' id='architecture-heading' component='h2'>
                     Architecture
                   </Typography>
+                  <Tooltip title='Copy link to section'>
+                    <IconButton
+                      size='small'
+                      onClick={() => handleCopyLink('architecture')}
+                      sx={{
+                        color: COLORS.text.secondary,
+                        '&:hover': { color: COLORS.primary.main },
+                      }}
+                    >
+                      <LinkIcon fontSize='small' />
+                    </IconButton>
+                  </Tooltip>
                   <ReadingTime text={SECTION_CONTENT.architecture} />
                   <LastUpdated
                     date={SECTION_UPDATES.architecture}
@@ -995,6 +1246,18 @@ sync_render_data(&world_buffer, &mut render_buffer);`}
                   <Typography variant='h3' id='cargo-commands-heading' component='h2'>
                     Cargo Commands Reference
                   </Typography>
+                  <Tooltip title='Copy link to section'>
+                    <IconButton
+                      size='small'
+                      onClick={() => handleCopyLink('cargo-commands')}
+                      sx={{
+                        color: COLORS.text.secondary,
+                        '&:hover': { color: COLORS.primary.main },
+                      }}
+                    >
+                      <LinkIcon fontSize='small' />
+                    </IconButton>
+                  </Tooltip>
                   <ReadingTime text={SECTION_CONTENT.cargoCommands} />
                   <LastUpdated
                     date={SECTION_UPDATES.cargoCommands}
@@ -1140,10 +1403,10 @@ cargo build --features "debug-ui,profiler"`}
                 <Typography variant='body1' paragraph sx={{ mt: 3 }}>
                   For a complete reference guide with advanced commands and troubleshooting, see the{' '}
                   <a
-                    href='https://github.com/noahsabaj/hearth-engine/blob/main/docs/guides/CARGO_COMMANDS_GUIDE.md'
+                    href={`${MISC.github.repoUrl}/blob/main/docs/guides/CARGO_COMMANDS_GUIDE.md`}
                     target='_blank'
                     rel='noopener noreferrer'
-                    style={{ color: '#ff4500', textDecoration: 'none' }}
+                    style={{ color: COLORS.primary.main, textDecoration: 'none' }}
                   >
                     full Cargo Commands Guide
                   </a>{' '}
@@ -1170,6 +1433,18 @@ cargo build --features "debug-ui,profiler"`}
                   <Typography variant='h3' id='api-reference-heading' component='h2'>
                     API Reference
                   </Typography>
+                  <Tooltip title='Copy link to section'>
+                    <IconButton
+                      size='small'
+                      onClick={() => handleCopyLink('api-reference')}
+                      sx={{
+                        color: COLORS.text.secondary,
+                        '&:hover': { color: COLORS.primary.main },
+                      }}
+                    >
+                      <LinkIcon fontSize='small' />
+                    </IconButton>
+                  </Tooltip>
                   <ReadingTime text={SECTION_CONTENT.apiReference} />
                   <LastUpdated
                     date={SECTION_UPDATES.apiReference}
@@ -1178,22 +1453,24 @@ cargo build --features "debug-ui,profiler"`}
                   <Box sx={{ flexGrow: 1 }} />
                   <EditOnGitHub filePath='src/pages/Documentation.tsx' />
                 </Box>
-                <Typography variant='body1' paragraph>
-                  For detailed API documentation, see the{' '}
+                <APIReferenceSearch />
+
+                <Typography variant='body1' paragraph sx={{ mt: 4 }}>
+                  For complete API documentation, see the{' '}
                   <a
                     href='https://docs.rs/hearth-engine'
                     target='_blank'
                     rel='noopener noreferrer'
-                    style={{ color: '#ff4500', textDecoration: 'none' }}
+                    style={{ color: COLORS.primary.main, textDecoration: 'none' }}
                   >
                     docs.rs page
                   </a>{' '}
                   or browse the source code on{' '}
                   <a
-                    href='https://github.com/noahsabaj/hearth-engine'
+                    href={MISC.github.repoUrl}
                     target='_blank'
                     rel='noopener noreferrer'
-                    style={{ color: '#ff4500', textDecoration: 'none' }}
+                    style={{ color: COLORS.primary.main, textDecoration: 'none' }}
                   >
                     GitHub
                   </a>
@@ -1209,6 +1486,32 @@ cargo build --features "debug-ui,profiler"`}
           </Grid>
         </Grid>
       </Container>
+
+      {/* Back to Top Button */}
+      <Fade in={showBackToTop}>
+        <Fab
+          color='primary'
+          size='medium'
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label='Back to top'
+          sx={{
+            position: 'fixed',
+            bottom: SPACING.fab.bottom,
+            right: SPACING.fab.right,
+            zIndex: Z_INDEX.fab,
+            backgroundColor: COLORS.primary.main,
+            '&:hover': {
+              backgroundColor: COLORS.primary.dark,
+              transform: `scale(${ANIMATION.scale.hoverSmall})`,
+            },
+            transition: ANIMATION.transition.fast,
+          }}
+        >
+          <KeyboardArrowUp />
+        </Fab>
+      </Fade>
+
+      <Footer />
     </Box>
   );
 };

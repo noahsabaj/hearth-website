@@ -43,7 +43,7 @@ async function fetchUserData(userId) {
         }
         
         const userData = await response.json();
-        console.log('User data:', userData);
+        // Process user data
         
         return userData;
     } catch (error) {
@@ -54,7 +54,7 @@ async function fetchUserData(userId) {
 
 // Usage
 fetchUserData(123)
-    .then(user => console.log('Success:', user))
+    .then(user => /* Handle success */
     .catch(err => console.error('Error:', err));`;
 
   const pythonExample = `# Python example with classes

@@ -5,22 +5,29 @@ import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-d
 
 import './styles/accessibility.css';
 import './styles/print.css';
+import './styles/high-contrast.css';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import PageLoader from './components/PageLoader';
 import PageTransition from './components/PageTransition';
 import ScrollToTop from './components/ScrollToTop';
 import { KeyboardShortcutsProvider } from './contexts/KeyboardShortcutsContext';
+import { ThemeProvider as CustomThemeProvider } from './contexts/ThemeContext';
 
 // Lazy load pages for better performance
 const Home = React.lazy(() => import('./pages/Home'));
 const Documentation = React.lazy(() => import('./pages/Documentation'));
+const Engine = React.lazy(() => import('./pages/Engine'));
 const Downloads = React.lazy(() => import('./pages/Downloads'));
+const Showcase = React.lazy(() => import('./pages/Showcase'));
 const FAQ = React.lazy(() => import('./pages/FAQ'));
+const Updates = React.lazy(() => import('./pages/Updates'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
 const FeedbackDemo = React.lazy(() => import('./pages/FeedbackDemo'));
 const CodeBlockDemo = React.lazy(() => import('./pages/CodeBlockDemo'));
 const LoadingDemo = React.lazy(() => import('./pages/LoadingDemo'));
+const ThemeDemo = React.lazy(() => import('./pages/ThemeDemo'));
+const Benchmarks = React.lazy(() => import('./pages/Benchmarks'));
 
 const theme = createTheme({
   palette: {
@@ -141,11 +148,16 @@ const RouteLoader: React.FC = () => {
     const path = location.pathname;
     if (path === '/') setPageName('Home');
     else if (path === '/docs') setPageName('Documentation');
+    else if (path === '/engine') setPageName('Engine');
     else if (path === '/downloads') setPageName('Downloads');
+    else if (path === '/showcase') setPageName('Showcase');
     else if (path === '/faq') setPageName('FAQ');
+    else if (path === '/updates') setPageName('Updates');
     else if (path === '/feedback-demo') setPageName('Feedback Demo');
     else if (path === '/codeblock-demo') setPageName('CodeBlock Demo');
     else if (path === '/loading-demo') setPageName('Loading Demo');
+    else if (path === '/theme-demo') setPageName('Theme Demo');
+    else if (path === '/benchmarks') setPageName('Benchmarks');
     else setPageName('Page');
   }, [location]);
 
@@ -186,10 +198,15 @@ const AppContent: React.FC = () => {
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/docs' element={<Documentation />} />
+            <Route path='/engine' element={<Engine />} />
             <Route path='/downloads' element={<Downloads />} />
+            <Route path='/showcase' element={<Showcase />} />
             <Route path='/faq' element={<FAQ />} />
+            <Route path='/updates' element={<Updates />} />
+            <Route path='/benchmarks' element={<Benchmarks />} />
             <Route path='/feedback-demo' element={<FeedbackDemo />} />
             <Route path='/loading-demo' element={<LoadingDemo />} />
+            <Route path='/theme-demo' element={<ThemeDemo />} />
             <Route path='/codeblock-demo' element={<CodeBlockDemo />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
@@ -206,9 +223,11 @@ const App = () => {
       <CssBaseline />
       <ErrorBoundary>
         <Router>
-          <KeyboardShortcutsProvider>
-            <AppContent />
-          </KeyboardShortcutsProvider>
+          <CustomThemeProvider>
+            <KeyboardShortcutsProvider>
+              <AppContent />
+            </KeyboardShortcutsProvider>
+          </CustomThemeProvider>
         </Router>
       </ErrorBoundary>
     </ThemeProvider>

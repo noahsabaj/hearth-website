@@ -1,0 +1,49 @@
+# Global code ownership
+* @noahsabaj
+
+# Core application files
+/src/ @noahsabaj
+/public/ @noahsabaj
+
+# Configuration files
+*.json @noahsabaj
+*.js @noahsabaj
+*.ts @noahsabaj
+/tsconfig.json @noahsabaj
+/package.json @noahsabaj
+
+# Testing files
+/src/**/*.test.* @noahsabaj
+/src/**/*.spec.* @noahsabaj
+/cypress/ @noahsabaj
+/tests/ @noahsabaj
+jest.config.js @noahsabaj
+cypress.config.js @noahsabaj
+TESTING.md @noahsabaj
+
+# CI/CD and GitHub configuration
+/.github/ @noahsabaj
+/.github/workflows/ @noahsabaj
+
+# Documentation
+/*.md @noahsabaj
+/docs/ @noahsabaj
+
+# Deployment and build
+/build/ @noahsabaj
+/dist/ @noahsabaj
+
+# Component-specific ownership (example for larger teams)
+# /src/components/SearchBar/ @frontend-team @search-team
+# /src/components/NavigationBar/ @frontend-team @ui-team
+# /src/pages/Documentation/ @docs-team
+# /src/hooks/ @frontend-team @state-management-team
+
+# Security and performance critical files
+/src/setupTests.ts @noahsabaj
+/src/reportWebVitals.ts @noahsabaj
+lighthouserc.js @noahsabaj
+
+# Styling and themes
+/src/styles/ @noahsabaj
+/src/themes/ @noahsabaj

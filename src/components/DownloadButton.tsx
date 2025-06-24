@@ -3,6 +3,8 @@ import { Button, Box, Typography, LinearProgress, Tooltip } from '@mui/material'
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useState, useCallback } from 'react';
 
+import { COLORS } from '../constants';
+
 interface DownloadButtonProps {
   url: string;
   filename: string;
@@ -126,7 +128,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
       case 'complete':
         return (
           <>
-            <CheckCircle sx={{ color: '#4caf50' }} />
+            <CheckCircle sx={{ color: COLORS.status.success }} />
             <Box sx={{ flexGrow: 1, mx: 2 }}>
               <Typography variant='body2'>Download Complete!</Typography>
               <Typography variant='caption' color='text.secondary'>
@@ -179,9 +181,9 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
           overflow: 'hidden',
           transition: 'all 0.3s ease',
           ...(downloadState === 'complete' && {
-            borderColor: '#4caf50',
+            borderColor: COLORS.status.success,
             '&:hover': {
-              borderColor: '#4caf50',
+              borderColor: COLORS.status.success,
               backgroundColor: 'rgba(76, 175, 80, 0.08)',
             },
           }),

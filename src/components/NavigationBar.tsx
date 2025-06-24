@@ -1,4 +1,16 @@
-import { GitHub, Download, MenuBook, Home, Help, Keyboard } from '@mui/icons-material';
+import {
+  GitHub,
+  Download,
+  MenuBook,
+  Home,
+  Help,
+  Keyboard,
+  Engineering,
+  Contrast,
+  CollectionsBookmark,
+  Speed,
+  Newspaper,
+} from '@mui/icons-material';
 import {
   AppBar,
   Toolbar,
@@ -8,22 +20,34 @@ import {
   IconButton,
   useTheme,
   useMediaQuery,
+  Tooltip,
 } from '@mui/material';
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import SearchBar from './SearchBar';
+import SearchBar, { SearchBarRef } from './SearchBar';
+import { COLORS, SPACING, LAYOUT, MISC, HIGH_CONTRAST_COLORS } from '../constants';
 import { useKeyboardShortcutsContext } from '../contexts/KeyboardShortcutsContext';
+import { useThemeContext } from '../contexts/ThemeContext';
 
 interface NavigationBarProps {
-  variant?: 'home' | 'docs' | 'downloads' | 'faq';
+  variant?: 'home' | 'docs' | 'downloads' | 'showcase' | 'faq';
 }
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ variant = 'home' }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();
-  const { showToast } = useKeyboardShortcutsContext();
+  const { showToast, setSearchFocusCallback } = useKeyboardShortcutsContext();
+  const { highContrastMode, toggleHighContrastMode } = useThemeContext();
+  const searchBarRef = useRef<SearchBarRef>(null);
+
+  // Connect search bar focus to keyboard shortcuts
+  useEffect(() => {
+    setSearchFocusCallback(() => {
+      searchBarRef.current?.focus();
+    });
+  }, [setSearchFocusCallback]);
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -33,8 +57,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ variant = 'home' }) => {
     <AppBar
       position='fixed'
       sx={{
-        background: 'rgba(10, 10, 10, 0.9)',
-        backdropFilter: 'blur(10px)',
+        background: COLORS.background.overlayLight,
+        backdropFilter: LAYOUT.backdropFilter.blur,
         borderBottom: `1px solid ${theme.palette.divider}`,
       }}
       component='nav'
@@ -54,12 +78,12 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ variant = 'home' }) => {
             }}
           >
             <img
-              src='/hearth-website/logo.png'
+              src={MISC.logo.path}
               alt='Hearth Engine'
               style={{
-                height: 40,
-                marginRight: 12,
-                backgroundColor: 'transparent',
+                height: SPACING.navbar.logoHeight,
+                marginRight: SPACING.navbar.logoMargin,
+                backgroundColor: COLORS.utils.transparent,
               }}
             />
             {!isMobile && (
@@ -71,7 +95,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ variant = 'home' }) => {
         </Box>
 
         {/* Search Bar */}
-        <SearchBar />
+        <SearchBar ref={searchBarRef} />
 
         {/* Navigation Links */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
@@ -116,6 +140,24 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ variant = 'home' }) => {
           <Button
             color='inherit'
             component={Link}
+            to='/engine'
+            startIcon={!isMobile && <Engineering />}
+            sx={{
+              borderBottom: isActive('/engine') ? '2px solid' : '2px solid transparent',
+              borderColor: theme.palette.primary.main,
+              borderRadius: 0,
+              '&:hover': {
+                borderBottom: '2px solid',
+                borderColor: theme.palette.primary.light,
+              },
+            }}
+          >
+            Engine
+          </Button>
+
+          <Button
+            color='inherit'
+            component={Link}
             to='/downloads'
             startIcon={!isMobile && <Download />}
             sx={{
@@ -129,6 +171,60 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ variant = 'home' }) => {
             }}
           >
             Downloads
+          </Button>
+
+          <Button
+            color='inherit'
+            component={Link}
+            to='/showcase'
+            startIcon={!isMobile && <CollectionsBookmark />}
+            sx={{
+              borderBottom: isActive('/showcase') ? '2px solid' : '2px solid transparent',
+              borderColor: theme.palette.primary.main,
+              borderRadius: 0,
+              '&:hover': {
+                borderBottom: '2px solid',
+                borderColor: theme.palette.primary.light,
+              },
+            }}
+          >
+            Showcase
+          </Button>
+
+          <Button
+            color='inherit'
+            component={Link}
+            to='/benchmarks'
+            startIcon={!isMobile && <Speed />}
+            sx={{
+              borderBottom: isActive('/benchmarks') ? '2px solid' : '2px solid transparent',
+              borderColor: theme.palette.primary.main,
+              borderRadius: 0,
+              '&:hover': {
+                borderBottom: '2px solid',
+                borderColor: theme.palette.primary.light,
+              },
+            }}
+          >
+            {isMobile ? 'Bench' : 'Benchmarks'}
+          </Button>
+
+          <Button
+            color='inherit'
+            component={Link}
+            to='/updates'
+            startIcon={!isMobile && <Newspaper />}
+            sx={{
+              borderBottom: isActive('/updates') ? '2px solid' : '2px solid transparent',
+              borderColor: theme.palette.primary.main,
+              borderRadius: 0,
+              '&:hover': {
+                borderBottom: '2px solid',
+                borderColor: theme.palette.primary.light,
+              },
+            }}
+          >
+            Updates
           </Button>
 
           {!isMobile && (
@@ -161,22 +257,50 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ variant = 'home' }) => {
             aria-label='Show keyboard shortcuts (?)'
             sx={{
               '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                backgroundColor: highContrastMode
+                  ? HIGH_CONTRAST_COLORS.utils.shimmer
+                  : COLORS.utils.shimmer,
               },
             }}
           >
             <Keyboard />
           </IconButton>
 
+          <Tooltip
+            title={highContrastMode ? 'Disable high contrast mode' : 'Enable high contrast mode'}
+          >
+            <IconButton
+              color='inherit'
+              onClick={() => {
+                toggleHighContrastMode();
+                showToast(
+                  highContrastMode ? 'High contrast mode disabled' : 'High contrast mode enabled',
+                );
+              }}
+              aria-label={
+                highContrastMode ? 'Disable high contrast mode' : 'Enable high contrast mode'
+              }
+              sx={{
+                '&:hover': {
+                  backgroundColor: highContrastMode
+                    ? HIGH_CONTRAST_COLORS.utils.shimmer
+                    : COLORS.utils.shimmer,
+                },
+              }}
+            >
+              <Contrast />
+            </IconButton>
+          </Tooltip>
+
           <IconButton
             color='inherit'
-            href='https://github.com/noahsabaj/hearth-engine'
+            href={MISC.github.repoUrl}
             target='_blank'
             rel='noopener noreferrer'
             aria-label='View Hearth Engine on GitHub (opens in new tab)'
             sx={{
               '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                backgroundColor: COLORS.utils.shimmer,
               },
             }}
           >

@@ -90,7 +90,7 @@ export const useKeyboardShortcuts = (config: ShortcutConfig) => {
     },
     {
       key: 'g',
-      description: 'Go to... (press G then H/D)',
+      description: 'Go to... (press G then H/D/E)',
       category: 'Navigation',
       action: () => {}, // This is handled in the sequence logic
     },
@@ -151,6 +151,12 @@ export const useKeyboardShortcuts = (config: ShortcutConfig) => {
         if (newSequence.join(' ') === 'g d') {
           event.preventDefault();
           navigate('/docs');
+          setKeySequence([]);
+          return;
+        }
+        if (newSequence.join(' ') === 'g e') {
+          event.preventDefault();
+          navigate('/engine');
           setKeySequence([]);
           return;
         }

@@ -16,10 +16,13 @@ import React, { useState, useEffect, memo } from 'react';
 
 import DownloadButton from '../components/DownloadButton';
 import EditOnGitHub from '../components/EditOnGitHub';
+import Footer from '../components/Footer';
 import LoadingProgress from '../components/LoadingProgress';
 import NavigationBar from '../components/NavigationBar';
 import ReadingTime from '../components/ReadingTime';
+import SEO from '../components/SEO';
 import SkeletonLoader from '../components/SkeletonLoader';
+import { COLORS, MISC } from '../constants';
 
 /**
  * Interface for GitHub release data
@@ -164,6 +167,12 @@ const Downloads: React.FC = memo(() => {
 
   return (
     <Box component='main' role='main'>
+      <SEO
+        title='Downloads - Hearth Engine'
+        description='Download Hearth Engine for Windows, macOS, and Linux. Get the latest releases, system requirements, and installation instructions.'
+        keywords='hearth engine download, voxel engine download, game engine, windows, macos, linux, rust engine'
+        pathname='/downloads'
+      />
       {/* Navigation */}
       <NavigationBar variant='downloads' />
 
@@ -182,7 +191,11 @@ const Downloads: React.FC = memo(() => {
 
         {/* Quick Download Section */}
         <Paper
-          sx={{ p: 4, mb: 6, background: 'linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%)' }}
+          sx={{
+            p: 4,
+            mb: 6,
+            background: `linear-gradient(135deg, ${COLORS.background.paper} 0%, ${COLORS.background.elevated} 100%)`,
+          }}
         >
           <Typography variant='h4' gutterBottom component='h2' id='quick-install-heading'>
             Quick Install
@@ -192,7 +205,7 @@ const Downloads: React.FC = memo(() => {
               <Typography variant='h6' gutterBottom component='h3'>
                 Using Cargo (Recommended)
               </Typography>
-              <Paper sx={{ p: 2, bgcolor: '#0a0a0a' }}>
+              <Paper sx={{ p: 2, bgcolor: COLORS.background.default }}>
                 <Typography variant='body2' component='pre' sx={{ fontFamily: 'monospace' }}>
                   cargo install hearth-engine
                 </Typography>
@@ -202,9 +215,9 @@ const Downloads: React.FC = memo(() => {
               <Typography variant='h6' gutterBottom component='h3'>
                 From Source
               </Typography>
-              <Paper sx={{ p: 2, bgcolor: '#0a0a0a' }}>
+              <Paper sx={{ p: 2, bgcolor: COLORS.background.default }}>
                 <Typography variant='body2' component='pre' sx={{ fontFamily: 'monospace' }}>
-                  {`git clone https://github.com/noahsabaj/hearth-engine
+                  {`git clone ${MISC.github.repoUrl}
 cd hearth-engine
 cargo build --release`}
                 </Typography>
@@ -329,13 +342,15 @@ cargo build --release`}
                         filename={asset.name}
                         size={asset.size}
                         icon={getOSIcon(asset.name)}
-                        onDownloadStart={() => console.log(`Downloading ${asset.name}...`)}
-                        onDownloadComplete={() =>
-                          console.log(`Downloaded ${asset.name} successfully!`)
-                        }
-                        onDownloadError={error =>
-                          console.error(`Failed to download ${asset.name}:`, error)
-                        }
+                        onDownloadStart={() => {
+                          /* Download started */
+                        }}
+                        onDownloadComplete={() => {
+                          // Download completed successfully
+                        }}
+                        onDownloadError={() => {
+                          // Download error handled by DownloadButton component
+                        }}
                       />
                     </Grid>
                   ))}
@@ -387,6 +402,7 @@ cargo build --release`}
           </Grid>
         </Paper>
       </Container>
+      <Footer />
     </Box>
   );
 });

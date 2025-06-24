@@ -44,6 +44,16 @@ export const loadingConfig = {
       'Batch similar voxels for improved rendering',
       'Consider using occlusion culling for complex scenes',
     ],
+    voxel: [
+      'Building voxel worlds block by block...',
+      'Each voxel can have unique properties and behaviors',
+      'Voxel chunks are optimized for streaming and LOD',
+      'GPU instancing renders millions of voxels efficiently',
+      'Procedural generation creates infinite worlds',
+      'Voxel physics enables destructible environments',
+      'Ray marching algorithms power voxel rendering',
+      'Mesh optimization reduces polygon count automatically',
+    ],
   },
 
   // Timing configurations

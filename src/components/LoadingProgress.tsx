@@ -2,9 +2,11 @@ import { Box, LinearProgress, CircularProgress, Typography, Fade, Paper } from '
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useState, useEffect, useRef } from 'react';
 
+import VoxelLoader from './VoxelLoader';
+
 interface LoadingProgressProps {
   /** Loading variant type */
-  variant?: 'linear' | 'circular' | 'skeleton' | 'dots' | 'spinner';
+  variant?: 'linear' | 'circular' | 'skeleton' | 'dots' | 'spinner' | 'voxel';
   /** Current progress percentage (0-100) */
   progress?: number;
   /** Whether loading is indeterminate */
@@ -194,6 +196,20 @@ const LoadingProgress: React.FC<LoadingProgressProps> = ({
 
       case 'spinner':
         return renderSpinner();
+
+      case 'voxel':
+        return (
+          <VoxelLoader
+            progress={progress}
+            indeterminate={indeterminate}
+            size={size}
+            showPercentage={showPercentage}
+            showTips={tips.length > 0}
+            tips={tips}
+            tipInterval={tipInterval}
+            {...(message ? { message } : {})}
+          />
+        );
 
       case 'skeleton':
         return (
